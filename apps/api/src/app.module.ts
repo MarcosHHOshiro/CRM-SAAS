@@ -6,6 +6,7 @@ import { AuthModule } from './modules/auth/auth.module';
 import { ClientsModule } from './modules/clients/clients.module';
 import { HealthModule } from './modules/health/health.module';
 import { LeadsModule } from './modules/leads/leads.module';
+import { OpportunitiesModule } from './modules/opportunities/opportunities.module';
 import { OrganizationsModule } from './modules/organizations/organizations.module';
 import { UsersModule } from './modules/users/users.module';
 import { PrismaModule } from './prisma/prisma.module';
@@ -22,6 +23,7 @@ import { PrismaModule } from './prisma/prisma.module';
     ClientsModule,
     HealthModule,
     LeadsModule,
+    OpportunitiesModule,
     OrganizationsModule,
     UsersModule,
   ],
