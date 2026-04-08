@@ -1,0 +1,30 @@
+{
+  "name": "crm-saas",
+  "version": "0.1.0",
+  "private": true,
+  "packageManager": "npm@11.6.2",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "turbo dev",
+    "dev:web": "turbo -F @crm-saas/web dev",
+    "dev:api": "turbo -F @crm-saas/api dev",
+    "build": "turbo build",
+    "build:web": "turbo -F @crm-saas/web build",
+    "build:api": "turbo -F @crm-saas/api build",
+    "lint": "turbo lint",
+    "check-types": "turbo check-types"
+  },
+  "devDependencies": {
+    "@types/node": "^25.5.2",
+    "@typescript-eslint/eslint-plugin": "^8.58.1",
+    "@typescript-eslint/parser": "^8.58.1",
+    "cross-env": "^10.1.0",
+    "eslint": "^9.39.4",
+    "eslint-config-next": "^16.2.2",
+    "turbo": "^2.5.0",
+    "typescript": "^6.0.2"
+  }
+}

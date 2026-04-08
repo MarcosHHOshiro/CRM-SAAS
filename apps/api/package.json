@@ -1,0 +1,27 @@
+{
+  "name": "@crm-saas/api",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "nest start --watch",
+    "build": "nest build",
+    "start": "node build/main.js",
+    "start:prod": "node build/main.js",
+    "lint": "cross-env ESLINT_USE_FLAT_CONFIG=false eslint \"src/**/*.ts\"",
+    "check-types": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@crm-saas/types": "0.1.0",
+    "@nestjs/common": "^11.1.18",
+    "@nestjs/core": "^11.1.18",
+    "@nestjs/platform-express": "^11.1.18",
+    "reflect-metadata": "^0.2.2",
+    "rxjs": "^7.8.2"
+  },
+  "devDependencies": {
+    "@crm-saas/eslint-config": "0.1.0",
+    "@crm-saas/tsconfig": "0.1.0",
+    "@nestjs/cli": "^11.0.18",
+    "@nestjs/schematics": "^11.0.10"
+  }
+}

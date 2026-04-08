@@ -1,0 +1,4 @@
+{
+  "extends": "@crm-saas/tsconfig/base.json"
+}
+
