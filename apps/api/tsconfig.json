@@ -1,6 +1,7 @@
 {
   "extends": "@crm-saas/tsconfig/nestjs.json",
   "compilerOptions": {
+    "rootDir": "./src",
     "outDir": "./build"
   },
   "include": [
