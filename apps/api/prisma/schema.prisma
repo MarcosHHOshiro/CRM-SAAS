@@ -26,7 +26,8 @@ enum OpportunityStage {
   QUALIFICATION
   PROPOSAL
   NEGOTIATION
-  CLOSED
+  WON
+  LOST
 }
 
 enum OpportunityStatus {
@@ -61,7 +62,7 @@ model User {
   id                 String         @id @default(uuid()) @db.Uuid
   organizationId     String         @db.Uuid
   name               String
-  email              String
+  email              String         @unique
   passwordHash       String
   role               UserRole
   isActive           Boolean        @default(true)
@@ -74,16 +75,14 @@ model User {
   ownedOpportunities Opportunity[]  @relation("opportunity-owner")
   activities         Activity[]     @relation("activity-user")
 
-  @@unique([organizationId, email])
   @@index([organizationId])
-  @@index([email])
 }
 
 model RefreshToken {
   id             String       @id @default(uuid()) @db.Uuid
   organizationId String       @db.Uuid
   userId         String       @db.Uuid
-  tokenHash      String
+  tokenHash      String       @unique
   expiresAt      DateTime
   revokedAt      DateTime?
   createdAt      DateTime     @default(now())
@@ -93,6 +92,7 @@ model RefreshToken {
 
   @@index([organizationId])
   @@index([userId])
+  @@index([expiresAt])
 }
 
 model Lead {
