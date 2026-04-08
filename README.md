@@ -56,6 +56,8 @@ Start PostgreSQL with Docker:
 npm run db:up
 ```
 
+The Docker PostgreSQL service uses port `15432` by default to avoid conflicts with local PostgreSQL services on common ports like `5432`.
+
 Stop it when you are done:
 
 ```bash
