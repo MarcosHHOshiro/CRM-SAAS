@@ -5,6 +5,7 @@ import { validateEnv } from './config/env.validation';
 import { ActivitiesModule } from './modules/activities/activities.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { ClientsModule } from './modules/clients/clients.module';
+import { DashboardModule } from './modules/dashboard/dashboard.module';
 import { HealthModule } from './modules/health/health.module';
 import { LeadsModule } from './modules/leads/leads.module';
 import { OpportunitiesModule } from './modules/opportunities/opportunities.module';
@@ -23,6 +24,7 @@ import { PrismaModule } from './prisma/prisma.module';
     ActivitiesModule,
     AuthModule,
     ClientsModule,
+    DashboardModule,
     HealthModule,
     LeadsModule,
     OpportunitiesModule,
