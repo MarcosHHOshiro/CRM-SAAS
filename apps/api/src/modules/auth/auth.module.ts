@@ -6,6 +6,7 @@ import { PrismaModule } from '../../prisma/prisma.module';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
+import { RolesGuard } from './guards/roles.guard';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { GetCurrentUserUseCase } from './use-cases/get-current-user.use-case';
 import { LoginUseCase } from './use-cases/login.use-case';
@@ -19,6 +20,7 @@ import { RegisterUseCase } from './use-cases/register.use-case';
   providers: [
     AuthService,
     JwtAuthGuard,
+    RolesGuard,
     JwtStrategy,
     RegisterUseCase,
     LoginUseCase,
@@ -26,6 +28,6 @@ import { RegisterUseCase } from './use-cases/register.use-case';
     LogoutUseCase,
     GetCurrentUserUseCase,
   ],
-  exports: [AuthService],
+  exports: [AuthService, JwtAuthGuard, RolesGuard],
 })
 export class AuthModule {}

@@ -1,33 +1,37 @@
-# SaaS CRM — Checklist
+﻿# SaaS CRM - Checklist
 
 ## Setup
-- [ ] Criar monorepo com Turborepo
-- [ ] Criar apps/web (Next.js)
-- [ ] Criar apps/api (NestJS)
-- [ ] Criar packages/types
-- [ ] Configurar ESLint
-- [ ] Configurar TS compartilhado
+- [x] Criar monorepo com Turborepo
+- [x] Criar apps/web (Next.js)
+- [x] Criar apps/api (NestJS)
+- [x] Criar packages/types
+- [x] Configurar ESLint
+- [x] Configurar TS compartilhado
 
 ## Banco
-- [ ] Docker PostgreSQL
-- [ ] Prisma
-- [ ] Migration inicial
+- [x] Docker PostgreSQL
+- [x] Prisma
+- [x] Migration inicial
 - [ ] Seed
 
 ## Auth
-- [ ] Register organization
-- [ ] Login
-- [ ] Refresh token
-- [ ] /auth/me
+- [x] Register organization
+- [x] Login
+- [x] Refresh token
+- [x] Logout
+- [x] /auth/me
+- [x] JWT access token
+- [x] Refresh token persistido
+- [x] Password hash
 
 ## Multi-tenant
-- [ ] organizationId em todas tabelas
+- [x] organizationId em todas tabelas de negocio
 - [ ] Guard tenant
-- [ ] Isolamento dados
+- [x] Base de isolamento de dados no schema
 
 ## Users
 - [ ] CRUD users
-- [ ] Roles (owner, manager, sales)
+- [x] Roles (owner, manager, sales)
 
 ## Leads
 - [ ] Criar lead
@@ -51,8 +55,8 @@
 - [ ] Listar atividades
 
 ## Dashboard
-- [ ] Métricas
-- [ ] Gráficos
+- [ ] Metricas
+- [ ] Graficos
 
 ## Frontend
 - [ ] Login
@@ -61,6 +65,9 @@
 - [ ] Clients UI
 - [ ] Pipeline UI
 
+## Dev Experience
+- [x] README inicial
+- [x] Postman collection para auth
+
 ## Final
-- [ ] README
 - [ ] Deploy
