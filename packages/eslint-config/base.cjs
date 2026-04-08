@@ -9,9 +9,8 @@ module.exports = {
   },
   plugins: ['@typescript-eslint'],
   extends: ['eslint:recommended', 'plugin:@typescript-eslint/recommended'],
-  ignorePatterns: ['dist', 'node_modules'],
+  ignorePatterns: ['.next', '.turbo', 'build', 'dist', 'node_modules'],
   rules: {
     '@typescript-eslint/consistent-type-imports': 'error',
   },
 };
-

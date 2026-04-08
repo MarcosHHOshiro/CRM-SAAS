@@ -1,9 +1,19 @@
 import { Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
 
+import { validateEnv } from './config/env.validation';
 import { HealthModule } from './modules/health/health.module';
+import { PrismaModule } from './prisma/prisma.module';
 
 @Module({
-  imports: [HealthModule],
+  imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+      envFilePath: ['.env.local', '.env', '../../.env'],
+      validate: validateEnv,
+    }),
+    PrismaModule,
+    HealthModule,
+  ],
 })
 export class AppModule {}
-

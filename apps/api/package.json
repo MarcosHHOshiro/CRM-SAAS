@@ -8,13 +8,19 @@
     "start": "node build/main.js",
     "start:prod": "node build/main.js",
     "lint": "cross-env ESLINT_USE_FLAT_CONFIG=false eslint \"src/**/*.ts\"",
-    "check-types": "tsc --noEmit"
+    "check-types": "tsc --noEmit",
+    "prisma:generate": "prisma generate",
+    "prisma:migrate:dev": "prisma migrate dev",
+    "prisma:migrate:deploy": "prisma migrate deploy",
+    "prisma:studio": "prisma studio"
   },
   "dependencies": {
     "@crm-saas/types": "0.1.0",
     "@nestjs/common": "^11.1.18",
+    "@nestjs/config": "^4.0.3",
     "@nestjs/core": "^11.1.18",
     "@nestjs/platform-express": "^11.1.18",
+    "@prisma/client": "^6.19.3",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.2"
   },
@@ -22,6 +28,7 @@
     "@crm-saas/eslint-config": "0.1.0",
     "@crm-saas/tsconfig": "0.1.0",
     "@nestjs/cli": "^11.0.18",
-    "@nestjs/schematics": "^11.0.10"
+    "@nestjs/schematics": "^11.0.10",
+    "prisma": "^6.19.3"
   }
 }

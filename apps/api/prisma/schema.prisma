@@ -1,0 +1,184 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  OWNER
+  MANAGER
+  SALES_REP
+}
+
+enum LeadStatus {
+  NEW
+  QUALIFIED
+  CONTACTED
+  CONVERTED
+  LOST
+}
+
+enum OpportunityStage {
+  NEW
+  QUALIFICATION
+  PROPOSAL
+  NEGOTIATION
+  WON
+  LOST
+}
+
+enum ActivityType {
+  NOTE
+  CALL
+  EMAIL
+  MEETING
+  TASK
+}
+
+model Organization {
+  id            String         @id @default(uuid()) @db.Uuid
+  name          String
+  slug          String         @unique
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  users         User[]
+  refreshTokens RefreshToken[]
+  leads         Lead[]
+  clients       Client[]
+  opportunities Opportunity[]
+  activities    Activity[]
+}
+
+model User {
+  id                  String         @id @default(uuid()) @db.Uuid
+  organizationId      String         @db.Uuid
+  name                String
+  email               String
+  passwordHash        String
+  role                UserRole
+  isActive            Boolean        @default(true)
+  createdAt           DateTime       @default(now())
+  updatedAt           DateTime       @updatedAt
+  organization        Organization   @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  refreshTokens       RefreshToken[]
+  ownedLeads          Lead[]         @relation("lead-owner")
+  ownedClients        Client[]       @relation("client-owner")
+  ownedOpportunities  Opportunity[]  @relation("opportunity-owner")
+  activities          Activity[]     @relation("activity-user")
+
+  @@unique([organizationId, email])
+  @@index([organizationId])
+  @@index([email])
+}
+
+model RefreshToken {
+  id             String       @id @default(uuid()) @db.Uuid
+  organizationId String       @db.Uuid
+  userId         String       @db.Uuid
+  tokenHash      String
+  expiresAt      DateTime
+  revokedAt      DateTime?
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  user           User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([organizationId])
+  @@index([userId])
+}
+
+model Lead {
+  id             String       @id @default(uuid()) @db.Uuid
+  organizationId String       @db.Uuid
+  ownerId        String?      @db.Uuid
+  name           String
+  email          String?
+  phone          String?
+  company        String?
+  status         LeadStatus   @default(NEW)
+  notes          String?
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  owner          User?        @relation("lead-owner", fields: [ownerId], references: [id], onDelete: SetNull)
+  client         Client?
+  activities     Activity[]   @relation("activity-lead")
+
+  @@index([organizationId])
+  @@index([ownerId])
+  @@index([status])
+}
+
+model Client {
+  id             String        @id @default(uuid()) @db.Uuid
+  organizationId String        @db.Uuid
+  ownerId        String?       @db.Uuid
+  sourceLeadId   String?       @unique @db.Uuid
+  name           String
+  email          String?
+  phone          String?
+  company        String?
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+  organization   Organization  @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  owner          User?         @relation("client-owner", fields: [ownerId], references: [id], onDelete: SetNull)
+  sourceLead     Lead?         @relation(fields: [sourceLeadId], references: [id], onDelete: SetNull)
+  opportunities  Opportunity[]
+  activities     Activity[]    @relation("activity-client")
+
+  @@index([organizationId])
+  @@index([ownerId])
+}
+
+model Opportunity {
+  id                String           @id @default(uuid()) @db.Uuid
+  organizationId    String           @db.Uuid
+  clientId          String           @db.Uuid
+  ownerId           String?          @db.Uuid
+  title             String
+  stage             OpportunityStage @default(NEW)
+  value             Decimal          @db.Decimal(12, 2)
+  expectedCloseDate DateTime?
+  createdAt         DateTime         @default(now())
+  updatedAt         DateTime         @updatedAt
+  organization      Organization     @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  client            Client           @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  owner             User?            @relation("opportunity-owner", fields: [ownerId], references: [id], onDelete: SetNull)
+  activities        Activity[]       @relation("activity-opportunity")
+
+  @@index([organizationId])
+  @@index([clientId])
+  @@index([ownerId])
+  @@index([stage])
+}
+
+model Activity {
+  id             String       @id @default(uuid()) @db.Uuid
+  organizationId String       @db.Uuid
+  userId         String?      @db.Uuid
+  leadId         String?      @db.Uuid
+  clientId       String?      @db.Uuid
+  opportunityId  String?      @db.Uuid
+  type           ActivityType
+  title          String
+  description    String?
+  scheduledAt    DateTime?
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  user           User?        @relation("activity-user", fields: [userId], references: [id], onDelete: SetNull)
+  lead           Lead?        @relation("activity-lead", fields: [leadId], references: [id], onDelete: SetNull)
+  client         Client?      @relation("activity-client", fields: [clientId], references: [id], onDelete: SetNull)
+  opportunity    Opportunity? @relation("activity-opportunity", fields: [opportunityId], references: [id], onDelete: SetNull)
+
+  @@index([organizationId])
+  @@index([userId])
+  @@index([leadId])
+  @@index([clientId])
+  @@index([opportunityId])
+  @@index([type])
+}
+

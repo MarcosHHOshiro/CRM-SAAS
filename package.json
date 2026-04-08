@@ -11,11 +11,17 @@
     "dev": "turbo dev",
     "dev:web": "turbo -F @crm-saas/web dev",
     "dev:api": "turbo -F @crm-saas/api dev",
+    "db:up": "docker compose up -d postgres",
+    "db:down": "docker compose down",
+    "db:logs": "docker compose logs -f postgres",
     "build": "turbo build",
     "build:web": "turbo -F @crm-saas/web build",
     "build:api": "turbo -F @crm-saas/api build",
     "lint": "turbo lint",
-    "check-types": "turbo check-types"
+    "check-types": "turbo check-types",
+    "prisma:generate": "npm run prisma:generate -w apps/api",
+    "prisma:migrate:dev": "npm run prisma:migrate:dev -w apps/api",
+    "prisma:studio": "npm run prisma:studio -w apps/api"
   },
   "devDependencies": {
     "@types/node": "^25.5.2",
