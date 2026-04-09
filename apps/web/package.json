@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --port 3000",
+    "dev": "node -e \"try{require('fs').rmSync('.next/dev',{recursive:true,force:true})}catch{}\" && next dev --webpack --port 3000",
     "build": "next build --webpack",
     "start": "next start --port 3000",
     "lint": "cross-env ESLINT_USE_FLAT_CONFIG=false eslint . --ext .ts,.tsx",

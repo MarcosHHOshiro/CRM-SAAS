@@ -1,57 +1,64 @@
-import { FeaturePlaceholder } from '@/components/FeaturePlaceholder';
-import { PageIntro } from '@/components/PageIntro';
+'use client';
 
-const summaryCards = [
-  {
-    label: 'API integration',
-    value: 'Ready',
-    detail: 'Central client with token refresh and predictable error handling.',
-  },
-  {
-    label: 'Session state',
-    value: 'Connected',
-    detail: 'TanStack Query keeps `/auth/me` and private screens in sync.',
-  },
-  {
-    label: 'Workspace shell',
-    value: 'Online',
-    detail: 'Sidebar, header, and navigation are prepared for the next feature pages.',
-  },
-];
+import { PageIntro } from '@/components/PageIntro';
+import { getApiErrorMessage } from '@/services/api/api-error';
+
+import { getDashboardIsEmpty } from '../lib/dashboard-format';
+import { useDashboardSummaryQuery } from '../hooks/use-dashboard-summary';
+import { DashboardEmptyState } from './DashboardEmptyState';
+import { DashboardErrorState } from './DashboardErrorState';
+import { DashboardMetricGrid } from './DashboardMetricGrid';
+import { DashboardPipelineSummary } from './DashboardPipelineSummary';
+import { DashboardRecentActivities } from './DashboardRecentActivities';
+import { DashboardSkeleton } from './DashboardSkeleton';
 
 export function DashboardOverview() {
+  const dashboardSummaryQuery = useDashboardSummaryQuery();
+
+  if (dashboardSummaryQuery.isPending) {
+    return <DashboardSkeleton />;
+  }
+
+  if (dashboardSummaryQuery.isError) {
+    return (
+      <div className="space-y-6">
+        <PageIntro
+          description="Track your sales funnel, client base, recent activity, and conversion performance in one place."
+          eyebrow="Dashboard"
+          title="Commercial performance overview"
+        />
+        <DashboardErrorState
+          message={getApiErrorMessage(
+            dashboardSummaryQuery.error,
+            'Please confirm the backend is running and try again.',
+          )}
+          onRetry={() => {
+            void dashboardSummaryQuery.refetch();
+          }}
+        />
+      </div>
+    );
+  }
+
+  const summary = dashboardSummaryQuery.data;
+  const isEmpty = getDashboardIsEmpty(summary.metrics, summary.recentActivities.length);
+
   return (
     <div className="space-y-6">
       <PageIntro
-        description="The frontend foundation is now connected to the NestJS backend, with authentication, route protection, and the private application shell ready for the next CRM modules."
+        description="Track your sales funnel, client base, recent activity, and conversion performance in one place."
         eyebrow="Dashboard"
-        title="A strong base for the CRM product experience"
+        title="Commercial performance overview"
       />
 
-      <section className="grid gap-4 lg:grid-cols-3">
-        {summaryCards.map((card) => (
-          <article
-            key={card.label}
-            className="rounded-[1.8rem] border border-[var(--border)] bg-[var(--card-strong)] p-6 shadow-[var(--shadow-soft)]"
-          >
-            <p className="text-sm font-semibold uppercase tracking-[0.2em] text-[var(--accent)]">
-              {card.label}
-            </p>
-            <h2 className="mt-4 text-3xl font-semibold text-[var(--foreground)]">{card.value}</h2>
-            <p className="mt-4 text-sm leading-7 text-[var(--foreground-muted)]">{card.detail}</p>
-          </article>
-        ))}
-      </section>
+      {isEmpty ? <DashboardEmptyState /> : null}
 
-      <FeaturePlaceholder
-        description="This area is ready for the first real dashboard queries such as KPIs, charts, pipeline counts, and activity summaries. The surrounding layout and auth flow are already in place so the next pages can stay focused on business logic."
-        highlights={[
-          'Authenticated requests automatically attach the access token.',
-          'Expired access tokens can renew through the backend refresh endpoint.',
-          'Private routes redirect unauthenticated users back to login.',
-        ]}
-        title="Start adding business metrics without reworking the app shell"
-      />
+      <DashboardMetricGrid metrics={summary.metrics} />
+
+      <div className="grid gap-6 xl:grid-cols-[0.95fr_1.05fr]">
+        <DashboardPipelineSummary metrics={summary.metrics} />
+        <DashboardRecentActivities activities={summary.recentActivities} />
+      </div>
     </div>
   );
 }
