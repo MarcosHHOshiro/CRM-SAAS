@@ -2,10 +2,10 @@
 
 import Link from 'next/link';
 import { useParams, useRouter, useSearchParams } from 'next/navigation';
-import { useState } from 'react';
 
-import { InlineBanner } from '@/components/InlineBanner';
 import { PageIntro } from '@/components/PageIntro';
+import { useToast } from '@/components/ToastProvider';
+import { useQueryFeedbackToast } from '@/hooks/use-query-feedback-toast';
 import { getApiErrorMessage } from '@/services/api/api-error';
 
 import { getLeadCanConvert, getLeadSuccessMessage } from '../lib/leads-format';
@@ -22,7 +22,10 @@ export function LeadDetailsPage() {
   const leadQuery = useLeadQuery(leadId);
   const deleteLeadMutation = useDeleteLeadMutation();
   const convertLeadMutation = useConvertLeadMutation();
-  const [feedbackMessage, setFeedbackMessage] = useState<string | null>(null);
+  const { showToast } = useToast();
+  const successMessage = getLeadSuccessMessage(searchParams.get('success'));
+
+  useQueryFeedbackToast(successMessage);
 
   if (leadQuery.isPending) {
     return <LeadDetailsSkeleton />;
@@ -40,9 +43,7 @@ export function LeadDetailsPage() {
       </div>
     );
   }
-
   const lead = leadQuery.data.lead;
-  const successMessage = getLeadSuccessMessage(searchParams.get('success'));
   const canConvert = getLeadCanConvert(lead);
 
   async function handleDelete() {
@@ -56,7 +57,10 @@ export function LeadDetailsPage() {
       await deleteLeadMutation.mutateAsync(lead.id);
       router.replace('/leads?success=deleted');
     } catch (error) {
-      setFeedbackMessage(getApiErrorMessage(error, 'Unable to delete this lead right now.'));
+      showToast({
+        message: getApiErrorMessage(error, 'Unable to delete this lead right now.'),
+        tone: 'error',
+      });
     }
   }
 
@@ -71,7 +75,10 @@ export function LeadDetailsPage() {
       await convertLeadMutation.mutateAsync(lead.id);
       router.replace(`/leads/${lead.id}?success=converted`);
     } catch (error) {
-      setFeedbackMessage(getApiErrorMessage(error, 'Unable to convert this lead right now.'));
+      showToast({
+        message: getApiErrorMessage(error, 'Unable to convert this lead right now.'),
+        tone: 'error',
+      });
     }
   }
 
@@ -82,10 +89,6 @@ export function LeadDetailsPage() {
         eyebrow="Leads"
         title={lead.name}
       />
-
-      {successMessage ? <InlineBanner tone="success">{successMessage}</InlineBanner> : null}
-      {feedbackMessage ? <InlineBanner tone="error">{feedbackMessage}</InlineBanner> : null}
-
       <section className="flex flex-wrap gap-3">
         <Link
           className="inline-flex min-h-11 items-center justify-center rounded-full border border-[var(--border)] bg-white/80 px-5 text-sm font-semibold text-[var(--foreground)] hover:border-[var(--accent)] hover:text-[var(--accent)]"

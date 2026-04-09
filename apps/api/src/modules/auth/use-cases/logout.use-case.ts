@@ -1,13 +1,12 @@
 import { Injectable } from '@nestjs/common';
 
 import { AuthService } from '../auth.service';
-import type { LogoutDto } from '../dto/logout.dto';
 
 @Injectable()
 export class LogoutUseCase {
   constructor(private readonly authService: AuthService) {}
 
-  async execute(dto: LogoutDto) {
+  async execute(dto: { refreshToken: string }) {
     try {
       const payload = await this.authService.verifyRefreshToken(dto.refreshToken);
       const storedToken = await this.authService.ensureRefreshTokenIsActive(
@@ -25,4 +24,3 @@ export class LogoutUseCase {
     };
   }
 }
-

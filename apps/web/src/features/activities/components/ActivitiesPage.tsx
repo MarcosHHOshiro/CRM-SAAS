@@ -4,7 +4,11 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useMemo, useState } from 'react';
 
 import { InlineBanner } from '@/components/InlineBanner';
+import { PaginationControls } from '@/components/PaginationControls';
 import { PageIntro } from '@/components/PageIntro';
+import { useToast } from '@/components/ToastProvider';
+import { useQueryFeedbackToast } from '@/hooks/use-query-feedback-toast';
+import { buildPageQueryString, getPageFromSearchParams, paginateItems } from '@/lib/pagination';
 import { getApiErrorMessage } from '@/services/api/api-error';
 
 import {
@@ -62,9 +66,8 @@ export function ActivitiesPage() {
   const opportunitiesQuery = useActivityOpportunitiesQuery();
   const createActivityMutation = useCreateActivityMutation();
   const [formKey, setFormKey] = useState(0);
-  const [feedback, setFeedback] = useState<{ message: string; tone: 'error' | 'success' } | null>(
-    null,
-  );
+  const [formErrorMessage, setFormErrorMessage] = useState<string | null>(null);
+  const { showToast } = useToast();
   const [filtersState, setFiltersState] = useState<ActivityFiltersState>({
     authorUserId: searchParams.get('authorUserId') ?? '',
     clientId: searchParams.get('clientId') ?? '',
@@ -85,6 +88,9 @@ export function ActivitiesPage() {
 
   const successMessage = getActivitySuccessMessage(searchParams.get('success'));
   const showUserFilter = (usersQuery.data?.length ?? 0) > 1;
+  const currentPage = getPageFromSearchParams(searchParams);
+
+  useQueryFeedbackToast(successMessage);
 
   function handleFilterChange(event: React.ChangeEvent<HTMLSelectElement>) {
     const { name, value } = event.target;
@@ -114,17 +120,27 @@ export function ActivitiesPage() {
     router.replace('/activities');
   }
 
+  function handlePageChange(page: number) {
+    const queryString = buildPageQueryString(searchParams, page);
+
+    router.replace(queryString ? `/activities?${queryString}` : '/activities');
+  }
+
   async function handleCreate(values: ActivityFormValues) {
     try {
+      setFormErrorMessage(null);
       await createActivityMutation.mutateAsync(mapCreateActivityPayload(values));
-      setFeedback({
+      showToast({
         message: 'Activity created successfully.',
         tone: 'success',
       });
       setFormKey((currentKey) => currentKey + 1);
     } catch (error) {
-      setFeedback({
-        message: getApiErrorMessage(error, 'Unable to create this activity right now.'),
+      const message = getApiErrorMessage(error, 'Unable to create this activity right now.');
+
+      setFormErrorMessage(message);
+      showToast({
+        message,
         tone: 'error',
       });
     }
@@ -160,6 +176,8 @@ export function ActivitiesPage() {
     );
   }
 
+  const paginatedActivities = paginateItems(activitiesQuery.data.activities, currentPage, 8);
+
   return (
     <div className="space-y-6">
       <PageIntro
@@ -168,8 +186,6 @@ export function ActivitiesPage() {
         title="Activity feed"
       />
 
-      {successMessage ? <InlineBanner tone="success">{successMessage}</InlineBanner> : null}
-      {feedback ? <InlineBanner tone={feedback.tone}>{feedback.message}</InlineBanner> : null}
       {usersQuery.isError ? (
         <InlineBanner tone="info">
           Author filtering is not available for your current access level.
@@ -208,7 +224,7 @@ export function ActivitiesPage() {
           <ActivityForm
             key={formKey}
             clientOptions={clientsQuery.data}
-            errorMessage={feedback?.tone === 'error' ? feedback.message : null}
+            errorMessage={formErrorMessage}
             isSubmitting={createActivityMutation.isPending}
             leadOptions={leadsQuery.data}
             onSubmit={handleCreate}
@@ -232,7 +248,17 @@ export function ActivitiesPage() {
           {activitiesQuery.data.activities.length === 0 ? (
             <ActivitiesEmptyState />
           ) : (
-            <ActivitiesFeed activities={activitiesQuery.data.activities} />
+            <>
+              <ActivitiesFeed activities={paginatedActivities.items} />
+              <PaginationControls
+                currentPage={paginatedActivities.currentPage}
+                itemLabel="activities"
+                onPageChange={handlePageChange}
+                pageSize={8}
+                totalItems={paginatedActivities.totalItems}
+                totalPages={paginatedActivities.totalPages}
+              />
+            </>
           )}
         </section>
       </div>

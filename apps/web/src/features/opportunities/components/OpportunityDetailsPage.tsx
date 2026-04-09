@@ -2,11 +2,11 @@
 
 import Link from 'next/link';
 import { useParams, useRouter, useSearchParams } from 'next/navigation';
-import { useState } from 'react';
 
-import { InlineBanner } from '@/components/InlineBanner';
 import { SelectField } from '@/components/SelectField';
 import { PageIntro } from '@/components/PageIntro';
+import { useToast } from '@/components/ToastProvider';
+import { useQueryFeedbackToast } from '@/hooks/use-query-feedback-toast';
 import { getApiErrorMessage } from '@/services/api/api-error';
 
 import {
@@ -29,9 +29,10 @@ export function OpportunityDetailsPage() {
   const opportunityId = params.opportunityId;
   const opportunityQuery = useOpportunityQuery(opportunityId);
   const updateStageMutation = useUpdateOpportunityStageMutation();
-  const [feedback, setFeedback] = useState<{ message: string; tone: 'error' | 'success' } | null>(
-    null,
-  );
+  const { showToast } = useToast();
+  const successMessage = getOpportunitySuccessMessage(searchParams.get('success'));
+
+  useQueryFeedbackToast(successMessage);
 
   if (opportunityQuery.isPending) {
     return <OpportunityDetailsSkeleton />;
@@ -51,9 +52,7 @@ export function OpportunityDetailsPage() {
       </div>
     );
   }
-
   const opportunity = opportunityQuery.data.opportunity;
-  const successMessage = getOpportunitySuccessMessage(searchParams.get('success'));
 
   async function handleStageChange(event: React.ChangeEvent<HTMLSelectElement>) {
     const stage = event.target.value;
@@ -63,13 +62,9 @@ export function OpportunityDetailsPage() {
         opportunityId: opportunity.id,
         stage,
       });
-      setFeedback({
-        message: 'Opportunity stage updated successfully.',
-        tone: 'success',
-      });
       router.replace(`/opportunities/${opportunity.id}?success=stageUpdated`);
     } catch (error) {
-      setFeedback({
+      showToast({
         message: getApiErrorMessage(error, 'Unable to update the opportunity stage right now.'),
         tone: 'error',
       });
@@ -83,10 +78,6 @@ export function OpportunityDetailsPage() {
         eyebrow="Opportunities"
         title={opportunity.title}
       />
-
-      {successMessage ? <InlineBanner tone="success">{successMessage}</InlineBanner> : null}
-      {feedback ? <InlineBanner tone={feedback.tone}>{feedback.message}</InlineBanner> : null}
-
       <section className="flex flex-wrap gap-3">
         <Link
           className="inline-flex min-h-11 items-center justify-center rounded-full border border-[var(--border)] bg-white/80 px-5 text-sm font-semibold text-[var(--foreground)] hover:border-[var(--accent)] hover:text-[var(--accent)]"

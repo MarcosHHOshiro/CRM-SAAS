@@ -4,7 +4,9 @@ import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useState } from 'react';
 
+import { InlineBanner } from '@/components/InlineBanner';
 import { TextField } from '@/components/TextField';
+import { useToast } from '@/components/ToastProvider';
 import { DEFAULT_PRIVATE_ROUTE } from '@/lib/routes';
 import { getApiErrorMessage } from '@/services/api/api-error';
 
@@ -26,6 +28,7 @@ export function LoginForm() {
   const [values, setValues] = useState<LoginValues>(initialValues);
   const [fieldErrors, setFieldErrors] = useState<LoginFieldErrors>({});
   const [formError, setFormError] = useState<string | null>(null);
+  const { showToast } = useToast();
 
   function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
     const { name, value } = event.target;
@@ -62,7 +65,10 @@ export function LoginForm() {
       await loginMutation.mutateAsync(result.data);
       router.replace(searchParams.get('next') || DEFAULT_PRIVATE_ROUTE);
     } catch (error) {
-      setFormError(getApiErrorMessage(error, 'Unable to sign in right now.'));
+      const message = getApiErrorMessage(error, 'Unable to sign in right now.');
+
+      setFormError(message);
+      showToast({ message, tone: 'error' });
     }
   }
 
@@ -89,9 +95,7 @@ export function LoginForm() {
         value={values.password}
       />
       {formError ? (
-        <div className="rounded-2xl border border-[color:rgba(181,69,69,0.18)] bg-[color:rgba(181,69,69,0.08)] px-4 py-3 text-sm text-[var(--danger)]">
-          {formError}
-        </div>
+        <InlineBanner tone="error">{formError}</InlineBanner>
       ) : null}
       <button
         className="inline-flex min-h-12 w-full items-center justify-center rounded-full bg-[var(--accent)] px-5 text-sm font-semibold text-white hover:bg-[var(--accent-strong)] disabled:cursor-not-allowed disabled:opacity-70"

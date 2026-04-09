@@ -1,6 +1,7 @@
 import { ConflictException, Injectable } from '@nestjs/common';
 import { UserRole } from '@prisma/client';
 
+import { isPrismaUniqueConstraintError } from '../../../common/prisma/prisma-error.util';
 import { PrismaService } from '../../../prisma/prisma.service';
 import { AuthService } from '../auth.service';
 import type { RegisterDto } from '../dto/register.dto';
@@ -48,21 +49,11 @@ export class RegisterUseCase {
         return this.authService.createSession(user, prismaClient);
       });
     } catch (error) {
-      if (this.isUniqueConstraintError(error)) {
+      if (isPrismaUniqueConstraintError(error)) {
         throw new ConflictException('Organization or email already exists.');
       }
 
       throw error;
     }
   }
-
-  private isUniqueConstraintError(error: unknown) {
-    return (
-      typeof error === 'object' &&
-      error !== null &&
-      'code' in error &&
-      error.code === 'P2002'
-    );
-  }
 }
-

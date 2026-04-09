@@ -3,8 +3,10 @@
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useMemo, useState } from 'react';
 
-import { InlineBanner } from '@/components/InlineBanner';
+import { PaginationControls } from '@/components/PaginationControls';
 import { PageIntro } from '@/components/PageIntro';
+import { useQueryFeedbackToast } from '@/hooks/use-query-feedback-toast';
+import { buildPageQueryString, getPageFromSearchParams, paginateItems } from '@/lib/pagination';
 import { getApiErrorMessage } from '@/services/api/api-error';
 
 import {
@@ -32,6 +34,9 @@ export function ClientsListPage() {
 
   const successMessage = getClientSuccessMessage(searchParams.get('success'));
   const hasFilters = Boolean(filters.search);
+  const currentPage = getPageFromSearchParams(searchParams);
+
+  useQueryFeedbackToast(successMessage);
 
   function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
     setSearchValue(event.target.value);
@@ -48,6 +53,12 @@ export function ClientsListPage() {
   function handleReset() {
     setSearchValue('');
     router.replace('/clients');
+  }
+
+  function handlePageChange(page: number) {
+    const queryString = buildPageQueryString(searchParams, page);
+
+    router.replace(queryString ? `/clients?${queryString}` : '/clients');
   }
 
   if (clientsQuery.isPending) {
@@ -72,6 +83,8 @@ export function ClientsListPage() {
     );
   }
 
+  const paginatedClients = paginateItems(clientsQuery.data.clients, currentPage, 10);
+
   return (
     <div className="space-y-6">
       <PageIntro
@@ -79,8 +92,6 @@ export function ClientsListPage() {
         eyebrow="Clients"
         title="Client management"
       />
-
-      {successMessage ? <InlineBanner tone="success">{successMessage}</InlineBanner> : null}
 
       <ClientsSearch
         onChange={handleChange}
@@ -92,7 +103,17 @@ export function ClientsListPage() {
       {clientsQuery.data.clients.length === 0 ? (
         <ClientsEmptyState hasFilters={hasFilters} />
       ) : (
-        <ClientsTable clients={clientsQuery.data.clients} />
+        <>
+          <ClientsTable clients={paginatedClients.items} />
+          <PaginationControls
+            currentPage={paginatedClients.currentPage}
+            itemLabel="clients"
+            onPageChange={handlePageChange}
+            pageSize={10}
+            totalItems={paginatedClients.totalItems}
+            totalPages={paginatedClients.totalPages}
+          />
+        </>
       )}
     </div>
   );

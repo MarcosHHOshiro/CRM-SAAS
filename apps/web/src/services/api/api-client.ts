@@ -1,5 +1,4 @@
-import { clearAuthSession, getAccessToken, getRefreshToken, persistAuthSession } from '@/features/auth/lib/auth-storage';
-import type { AuthSession } from '@/features/auth/types/auth';
+import type { CurrentSession } from '@/features/auth/types/auth';
 import { env } from '@/lib/env';
 
 import { ApiError, parseApiErrorMessage } from './api-error';
@@ -16,7 +15,7 @@ type ApiRequestOptions = Omit<RequestInit, 'body' | 'headers' | 'method'> & {
   retryOnAuthError?: boolean;
 };
 
-let refreshSessionPromise: Promise<AuthSession | null> | null = null;
+let refreshSessionPromise: Promise<CurrentSession | null> | null = null;
 
 function buildApiUrl(path: string) {
   return `${env.apiUrl}${path.startsWith('/') ? path : `/${path}`}`;
@@ -62,27 +61,22 @@ async function refreshSession() {
     return null;
   }
 
-  const refreshToken = getRefreshToken();
-
-  if (!refreshToken) {
-    return null;
-  }
-
   if (!refreshSessionPromise) {
     refreshSessionPromise = (async () => {
       try {
-        const session = await request<AuthSession>('/auth/refresh', {
+        const session = await request<CurrentSession>('/auth/refresh', {
           auth: false,
-          body: { refreshToken },
           method: 'POST',
           retryOnAuthError: false,
         });
 
-        persistAuthSession(session);
-
         return session;
       } catch {
-        clearAuthSession();
+        await request('/auth/logout', {
+          auth: false,
+          method: 'POST',
+          retryOnAuthError: false,
+        }).catch(() => null);
 
         return null;
       } finally {
@@ -112,18 +106,11 @@ async function request<T>(path: string, options: ApiRequestOptions = {}) {
     requestHeaders.set('content-type', 'application/json');
   }
 
-  if (auth) {
-    const accessToken = getAccessToken();
-
-    if (accessToken) {
-      requestHeaders.set('authorization', `Bearer ${accessToken}`);
-    }
-  }
-
   const response = await fetch(buildApiUrl(path), {
     ...init,
     body: serializeBody(body),
     cache: 'no-store',
+    credentials: 'include',
     headers: requestHeaders,
     method,
   });
@@ -134,8 +121,6 @@ async function request<T>(path: string, options: ApiRequestOptions = {}) {
     if (session) {
       return request<T>(path, { ...options, retryOnAuthError: false });
     }
-
-    clearAuthSession();
   }
 
   const data = await parseResponse(response);

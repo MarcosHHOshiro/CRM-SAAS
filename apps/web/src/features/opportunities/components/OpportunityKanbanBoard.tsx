@@ -2,8 +2,8 @@
 
 import { useState } from 'react';
 
-import { InlineBanner } from '@/components/InlineBanner';
 import { SelectField } from '@/components/SelectField';
+import { useToast } from '@/components/ToastProvider';
 import { getApiErrorMessage } from '@/services/api/api-error';
 
 import {
@@ -22,16 +22,13 @@ type OpportunityKanbanBoardProps = Readonly<{
 }>;
 
 type OpportunityKanbanCardProps = Readonly<{
-  onStageUpdated: (message: { message: string; tone: 'error' | 'success' } | null) => void;
   opportunity: Opportunity;
 }>;
 
-function OpportunityKanbanCard({
-  onStageUpdated,
-  opportunity,
-}: OpportunityKanbanCardProps) {
+function OpportunityKanbanCard({ opportunity }: OpportunityKanbanCardProps) {
   const updateStageMutation = useUpdateOpportunityStageMutation();
   const [selectedStage, setSelectedStage] = useState(opportunity.stage);
+  const { showToast } = useToast();
 
   async function handleStageChange(event: React.ChangeEvent<HTMLSelectElement>) {
     const nextStage = event.target.value;
@@ -42,13 +39,13 @@ function OpportunityKanbanCard({
         opportunityId: opportunity.id,
         stage: nextStage,
       });
-      onStageUpdated({
+      showToast({
         message: 'Opportunity stage updated successfully.',
         tone: 'success',
       });
     } catch (error) {
       setSelectedStage(opportunity.stage);
-      onStageUpdated({
+      showToast({
         message: getApiErrorMessage(error, 'Unable to update the opportunity stage right now.'),
         tone: 'error',
       });
@@ -89,13 +86,8 @@ function OpportunityKanbanCard({
 }
 
 export function OpportunityKanbanBoard({ groups }: OpportunityKanbanBoardProps) {
-  const [feedback, setFeedback] = useState<{ message: string; tone: 'error' | 'success' } | null>(
-    null,
-  );
-
   return (
     <div className="space-y-6">
-      {feedback ? <InlineBanner tone={feedback.tone}>{feedback.message}</InlineBanner> : null}
       <section className="grid gap-4 xl:grid-cols-6">
         {groups.map((group) => (
           <section
@@ -117,11 +109,7 @@ export function OpportunityKanbanBoard({ groups }: OpportunityKanbanBoardProps) 
                 </div>
               ) : (
                 group.opportunities.map((opportunity) => (
-                  <OpportunityKanbanCard
-                    key={opportunity.id}
-                    onStageUpdated={setFeedback}
-                    opportunity={opportunity}
-                  />
+                  <OpportunityKanbanCard key={opportunity.id} opportunity={opportunity} />
                 ))
               )}
             </div>

@@ -13,7 +13,7 @@ export function ClientsTable({ clients }: ClientsTableProps) {
   return (
     <section className="overflow-hidden rounded-[2rem] border border-[var(--border)] bg-[var(--card)] shadow-[var(--shadow-soft)]">
       <div className="overflow-x-auto">
-        <table className="min-w-full text-left">
+        <table className="min-w-[760px] text-left">
           <thead className="border-b border-[var(--border)] bg-white/65">
             <tr className="text-xs uppercase tracking-[0.16em] text-[var(--foreground-muted)]">
               <th className="px-6 py-4 font-semibold">Client</th>

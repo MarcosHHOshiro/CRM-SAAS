@@ -25,7 +25,9 @@ type AuthenticatedUserRecord = User & {
 
 type AuthSessionResult = {
   accessToken: string;
+  accessTokenExpiresAt: Date;
   refreshToken: string;
+  refreshTokenExpiresAt: Date;
   user: ReturnType<AuthService['serializeUser']>;
   organization: ReturnType<AuthService['serializeOrganization']>;
 };
@@ -170,9 +172,14 @@ export class AuthService {
       },
     });
 
+    const accessTokenExpiresAt = this.decodeExpirationDate(accessToken);
+    const refreshTokenExpiresAt = this.decodeExpirationDate(refreshToken);
+
     return {
       accessToken,
+      accessTokenExpiresAt,
       refreshToken,
+      refreshTokenExpiresAt,
       user: this.serializeUser(user),
       organization: this.serializeOrganization(user.organization),
     };

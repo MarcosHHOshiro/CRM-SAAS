@@ -4,7 +4,10 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useMemo, useState } from 'react';
 
 import { InlineBanner } from '@/components/InlineBanner';
+import { PaginationControls } from '@/components/PaginationControls';
 import { PageIntro } from '@/components/PageIntro';
+import { useQueryFeedbackToast } from '@/hooks/use-query-feedback-toast';
+import { buildPageQueryString, getPageFromSearchParams, paginateItems } from '@/lib/pagination';
 import { getApiErrorMessage } from '@/services/api/api-error';
 
 import {
@@ -78,6 +81,9 @@ export function OpportunitiesListPage() {
     filters.search || filters.stage || filters.status || filters.ownerUserId,
   );
   const successMessage = getOpportunitySuccessMessage(searchParams.get('success'));
+  const currentPage = getPageFromSearchParams(searchParams);
+
+  useQueryFeedbackToast(successMessage);
 
   function handleChange(event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) {
     const { name, value } = event.target;
@@ -115,6 +121,12 @@ export function OpportunitiesListPage() {
     router.replace('/opportunities');
   }
 
+  function handlePageChange(page: number) {
+    const queryString = buildPageQueryString(searchParams, page);
+
+    router.replace(queryString ? `/opportunities?${queryString}` : '/opportunities');
+  }
+
   if (opportunitiesQuery.isPending) {
     return <OpportunitiesListSkeleton />;
   }
@@ -140,6 +152,12 @@ export function OpportunitiesListPage() {
     );
   }
 
+  const paginatedOpportunities = paginateItems(
+    opportunitiesQuery.data.opportunities,
+    currentPage,
+    10,
+  );
+
   return (
     <div className="space-y-6">
       <PageIntro
@@ -150,7 +168,6 @@ export function OpportunitiesListPage() {
 
       <OpportunitiesViewSwitch view="list" />
 
-      {successMessage ? <InlineBanner tone="success">{successMessage}</InlineBanner> : null}
       {ownersQuery.isError ? (
         <InlineBanner tone="info">
           Owner filters are not available for your current access level.
@@ -181,7 +198,17 @@ export function OpportunitiesListPage() {
       {opportunitiesQuery.data.opportunities.length === 0 ? (
         <OpportunitiesEmptyState hasFilters={hasFilters} />
       ) : (
-        <OpportunitiesTable opportunities={opportunitiesQuery.data.opportunities} />
+        <>
+          <OpportunitiesTable opportunities={paginatedOpportunities.items} />
+          <PaginationControls
+            currentPage={paginatedOpportunities.currentPage}
+            itemLabel="opportunities"
+            onPageChange={handlePageChange}
+            pageSize={10}
+            totalItems={paginatedOpportunities.totalItems}
+            totalPages={paginatedOpportunities.totalPages}
+          />
+        </>
       )}
     </div>
   );

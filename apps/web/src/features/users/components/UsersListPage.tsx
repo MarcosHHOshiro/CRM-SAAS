@@ -2,12 +2,14 @@
 
 import Link from 'next/link';
 import { UserRole } from '@crm-saas/types';
-import { useSearchParams } from 'next/navigation';
-import { useState } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 
-import { InlineBanner } from '@/components/InlineBanner';
+import { PaginationControls } from '@/components/PaginationControls';
 import { PageIntro } from '@/components/PageIntro';
+import { useToast } from '@/components/ToastProvider';
 import { useCurrentSessionQuery } from '@/features/auth/hooks/use-auth';
+import { useQueryFeedbackToast } from '@/hooks/use-query-feedback-toast';
+import { buildPageQueryString, getPageFromSearchParams, paginateItems } from '@/lib/pagination';
 import { ApiError, getApiErrorMessage } from '@/services/api/api-error';
 
 import { useUpdateUserStatusMutation, useUsersQuery } from '../hooks/use-users';
@@ -20,26 +22,39 @@ import { UsersListSkeleton } from './UsersListSkeleton';
 import { UsersTable } from './UsersTable';
 
 export function UsersListPage() {
+  const router = useRouter();
   const searchParams = useSearchParams();
   const currentSessionQuery = useCurrentSessionQuery();
   const usersQuery = useUsersQuery();
   const updateUserStatusMutation = useUpdateUserStatusMutation();
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const { showToast } = useToast();
   const successMessage = getUsersSuccessMessage(searchParams.get('success'));
+  const currentPage = getPageFromSearchParams(searchParams);
+
+  useQueryFeedbackToast(successMessage);
 
   async function handleToggleStatus(user: UserRecord) {
-    setErrorMessage(null);
-
     try {
       await updateUserStatusMutation.mutateAsync({
         isActive: !user.isActive,
         userId: user.id,
       });
+      showToast({
+        message: user.isActive ? 'User deactivated successfully.' : 'User activated successfully.',
+        tone: 'success',
+      });
     } catch (error) {
-      setErrorMessage(
-        getApiErrorMessage(error, 'Unable to update this user status right now.'),
-      );
+      showToast({
+        message: getApiErrorMessage(error, 'Unable to update this user status right now.'),
+        tone: 'error',
+      });
     }
+  }
+
+  function handlePageChange(page: number) {
+    const queryString = buildPageQueryString(searchParams, page);
+
+    router.replace(queryString ? `/users?${queryString}` : '/users');
   }
 
   if (currentSessionQuery.isPending || usersQuery.isPending) {
@@ -116,6 +131,7 @@ export function UsersListPage() {
   const users = usersQuery.data.users;
   const activeUsersCount = users.filter((user) => user.isActive).length;
   const inactiveUsersCount = users.length - activeUsersCount;
+  const paginatedUsers = paginateItems(users, currentPage, 10);
 
   return (
     <div className="space-y-6">
@@ -168,23 +184,30 @@ export function UsersListPage() {
         </section>
       </section>
 
-      {successMessage ? <InlineBanner tone="success">{successMessage}</InlineBanner> : null}
-      {errorMessage ? <InlineBanner tone="error">{errorMessage}</InlineBanner> : null}
-
       {users.length === 0 ? (
         <UsersEmptyState />
       ) : (
-        <UsersTable
-          actorRole={actor.role}
-          currentUserId={actor.id}
-          isUpdatingStatusUserId={
-            updateUserStatusMutation.isPending
-              ? updateUserStatusMutation.variables?.userId ?? null
-              : null
-          }
-          onToggleStatus={handleToggleStatus}
-          users={users}
-        />
+        <>
+          <UsersTable
+            actorRole={actor.role}
+            currentUserId={actor.id}
+            isUpdatingStatusUserId={
+              updateUserStatusMutation.isPending
+                ? updateUserStatusMutation.variables?.userId ?? null
+                : null
+            }
+            onToggleStatus={handleToggleStatus}
+            users={paginatedUsers.items}
+          />
+          <PaginationControls
+            currentPage={paginatedUsers.currentPage}
+            itemLabel="users"
+            onPageChange={handlePageChange}
+            pageSize={10}
+            totalItems={paginatedUsers.totalItems}
+            totalPages={paginatedUsers.totalPages}
+          />
+        </>
       )}
     </div>
   );

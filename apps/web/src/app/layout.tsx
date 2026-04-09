@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 
+import { ToastProvider } from '@/components/ToastProvider';
 import { QueryProvider } from '@/services/query/query-provider';
 import './globals.css';
 
@@ -16,7 +17,9 @@ export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <html lang="en">
       <body className="bg-[var(--background)] text-[var(--foreground)] antialiased">
-        <QueryProvider>{children}</QueryProvider>
+        <QueryProvider>
+          <ToastProvider>{children}</ToastProvider>
+        </QueryProvider>
       </body>
     </html>
   );

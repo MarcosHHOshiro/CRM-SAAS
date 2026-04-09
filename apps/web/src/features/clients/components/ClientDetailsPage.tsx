@@ -3,8 +3,8 @@
 import Link from 'next/link';
 import { useParams, useSearchParams } from 'next/navigation';
 
-import { InlineBanner } from '@/components/InlineBanner';
 import { PageIntro } from '@/components/PageIntro';
+import { useQueryFeedbackToast } from '@/hooks/use-query-feedback-toast';
 import { getApiErrorMessage } from '@/services/api/api-error';
 
 import { getClientSuccessMessage } from '../lib/clients-format';
@@ -18,6 +18,9 @@ export function ClientDetailsPage() {
   const searchParams = useSearchParams();
   const clientId = params.clientId;
   const clientQuery = useClientQuery(clientId);
+  const successMessage = getClientSuccessMessage(searchParams.get('success'));
+
+  useQueryFeedbackToast(successMessage);
 
   if (clientQuery.isPending) {
     return <ClientDetailsSkeleton />;
@@ -35,9 +38,7 @@ export function ClientDetailsPage() {
       </div>
     );
   }
-
   const client = clientQuery.data.client;
-  const successMessage = getClientSuccessMessage(searchParams.get('success'));
 
   return (
     <div className="space-y-6">
@@ -46,9 +47,6 @@ export function ClientDetailsPage() {
         eyebrow="Clients"
         title={client.name}
       />
-
-      {successMessage ? <InlineBanner tone="success">{successMessage}</InlineBanner> : null}
-
       <section className="flex flex-wrap gap-3">
         <Link
           className="inline-flex min-h-11 items-center justify-center rounded-full border border-[var(--border)] bg-white/80 px-5 text-sm font-semibold text-[var(--foreground)] hover:border-[var(--accent)] hover:text-[var(--accent)]"

@@ -2,6 +2,7 @@ import { ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 
+import { ApiExceptionFilter } from './common/filters/api-exception.filter';
 import { AppModule } from './app.module';
 
 async function bootstrap() {
@@ -10,6 +11,7 @@ async function bootstrap() {
 
   app.setGlobalPrefix('api');
   app.enableCors({
+    credentials: true,
     origin: configService.get<string>('CORS_ORIGIN') ?? 'http://localhost:3000',
   });
   app.useGlobalPipes(
@@ -19,6 +21,7 @@ async function bootstrap() {
       transform: true,
     }),
   );
+  app.useGlobalFilters(new ApiExceptionFilter());
 
   const port = configService.get<number>('PORT') ?? 3333;
 

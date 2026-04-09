@@ -6,6 +6,7 @@ import {
 } from '@nestjs/common';
 import type { Prisma, User, UserRole } from '@prisma/client';
 
+import { isPrismaUniqueConstraintError } from '../../common/prisma/prisma-error.util';
 import { PrismaService } from '../../prisma/prisma.service';
 import type { AuthUserPayload } from '../auth/interfaces/auth-user-payload.interface';
 
@@ -33,12 +34,7 @@ export class UsersService {
     try {
       return await this.prismaService.user.create({ data });
     } catch (error) {
-      if (
-        typeof error === 'object' &&
-        error !== null &&
-        'code' in error &&
-        error.code === 'P2002'
-      ) {
+      if (isPrismaUniqueConstraintError(error)) {
         throw new ConflictException('Email is already in use.');
       }
 
@@ -108,4 +104,3 @@ export class UsersService {
     };
   }
 }
-

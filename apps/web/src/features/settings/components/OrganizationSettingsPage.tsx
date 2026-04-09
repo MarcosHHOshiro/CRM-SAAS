@@ -4,9 +4,10 @@ import { UserRole } from '@crm-saas/types';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useState } from 'react';
 
-import { InlineBanner } from '@/components/InlineBanner';
 import { PageIntro } from '@/components/PageIntro';
+import { useToast } from '@/components/ToastProvider';
 import { useCurrentSessionQuery } from '@/features/auth/hooks/use-auth';
+import { useQueryFeedbackToast } from '@/hooks/use-query-feedback-toast';
 import { getApiErrorMessage } from '@/services/api/api-error';
 
 import {
@@ -39,7 +40,10 @@ export function OrganizationSettingsPage() {
   const organizationQuery = useOrganizationSettingsQuery();
   const updateOrganizationMutation = useUpdateOrganizationSettingsMutation();
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const { showToast } = useToast();
   const successMessage = getOrganizationSuccessMessage(searchParams.get('success'));
+
+  useQueryFeedbackToast(successMessage);
 
   async function handleSubmit(values: OrganizationFormValues) {
     setErrorMessage(null);
@@ -48,9 +52,10 @@ export function OrganizationSettingsPage() {
       await updateOrganizationMutation.mutateAsync(values);
       router.replace('/settings?success=updated');
     } catch (error) {
-      setErrorMessage(
-        getApiErrorMessage(error, 'Unable to update the organization right now.'),
-      );
+      const message = getApiErrorMessage(error, 'Unable to update the organization right now.');
+
+      setErrorMessage(message);
+      showToast({ message, tone: 'error' });
     }
   }
 
@@ -107,9 +112,6 @@ export function OrganizationSettingsPage() {
         eyebrow="Settings"
         title="Organization settings"
       />
-
-      {successMessage ? <InlineBanner tone="success">{successMessage}</InlineBanner> : null}
-
       <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_320px]">
         <OrganizationSettingsForm
           actorRole={actor.role}

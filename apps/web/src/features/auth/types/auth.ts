@@ -24,11 +24,6 @@ export type CurrentSession = {
   organization: SessionOrganization;
 };
 
-export type AuthSession = CurrentSession & {
-  accessToken: string;
-  refreshToken: string;
-};
-
 export type LoginValues = {
   email: string;
   password: string;

@@ -4,7 +4,11 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useMemo, useState } from 'react';
 
 import { InlineBanner } from '@/components/InlineBanner';
+import { PaginationControls } from '@/components/PaginationControls';
 import { PageIntro } from '@/components/PageIntro';
+import { useToast } from '@/components/ToastProvider';
+import { useQueryFeedbackToast } from '@/hooks/use-query-feedback-toast';
+import { buildPageQueryString, getPageFromSearchParams, paginateItems } from '@/lib/pagination';
 import { getApiErrorMessage } from '@/services/api/api-error';
 
 import {
@@ -35,7 +39,7 @@ export function LeadsListPage() {
   const ownersQuery = useLeadOwnersQuery();
   const deleteLeadMutation = useDeleteLeadMutation();
   const convertLeadMutation = useConvertLeadMutation();
-  const [feedback, setFeedback] = useState<{ message: string; tone: 'error' | 'success' } | null>(null);
+  const { showToast } = useToast();
   const [filtersState, setFiltersState] = useState<FiltersFormState>({
     ownerUserId: searchParams.get('ownerUserId') ?? '',
     search: searchParams.get('search') ?? '',
@@ -54,6 +58,9 @@ export function LeadsListPage() {
   const ownerOptions = ownersQuery.data ? getLeadOwnerOptions(ownersQuery.data) : [];
   const showOwnerFilter = ownerOptions.length > 1;
   const hasFilters = Boolean(filters.search || filters.status || filters.ownerUserId);
+  const currentPage = getPageFromSearchParams(searchParams);
+
+  useQueryFeedbackToast(successMessage);
 
   function handleChange(event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) {
     const { name, value } = event.target;
@@ -81,6 +88,12 @@ export function LeadsListPage() {
     router.replace('/leads');
   }
 
+  function handlePageChange(page: number) {
+    const queryString = buildPageQueryString(searchParams, page);
+
+    router.replace(queryString ? `/leads?${queryString}` : '/leads');
+  }
+
   async function handleDelete(lead: Lead) {
     const confirmed = window.confirm(`Delete the lead "${lead.name}"?`);
 
@@ -90,9 +103,9 @@ export function LeadsListPage() {
 
     try {
       await deleteLeadMutation.mutateAsync(lead.id);
-      setFeedback({ message: 'Lead deleted successfully.', tone: 'success' });
+      showToast({ message: 'Lead deleted successfully.', tone: 'success' });
     } catch (error) {
-      setFeedback({
+      showToast({
         message: getApiErrorMessage(error, 'Unable to delete this lead right now.'),
         tone: 'error',
       });
@@ -108,9 +121,12 @@ export function LeadsListPage() {
 
     try {
       await convertLeadMutation.mutateAsync(lead.id);
-      setFeedback({ message: 'Lead converted into a client successfully.', tone: 'success' });
+      showToast({
+        message: 'Lead converted into a client successfully.',
+        tone: 'success',
+      });
     } catch (error) {
-      setFeedback({
+      showToast({
         message: getApiErrorMessage(error, 'Unable to convert this lead right now.'),
         tone: 'error',
       });
@@ -139,6 +155,8 @@ export function LeadsListPage() {
     );
   }
 
+  const paginatedLeads = paginateItems(leadsQuery.data.leads, currentPage, 10);
+
   return (
     <div className="space-y-6">
       <PageIntro
@@ -147,8 +165,6 @@ export function LeadsListPage() {
         title="Lead management"
       />
 
-      {successMessage ? <InlineBanner tone="success">{successMessage}</InlineBanner> : null}
-      {feedback ? <InlineBanner tone={feedback.tone}>{feedback.message}</InlineBanner> : null}
       {ownersQuery.isError ? (
         <InlineBanner tone="info">
           Owner filters are not available for your current access level.
@@ -167,13 +183,23 @@ export function LeadsListPage() {
       {leadsQuery.data.leads.length === 0 ? (
         <LeadsEmptyState hasFilters={hasFilters} />
       ) : (
-        <LeadsTable
-          isDeletingLeadId={deleteLeadMutation.isPending ? deleteLeadMutation.variables ?? null : null}
-          isMutatingConvertLeadId={convertLeadMutation.isPending ? convertLeadMutation.variables ?? null : null}
-          leads={leadsQuery.data.leads}
-          onConvert={handleConvert}
-          onDelete={handleDelete}
-        />
+        <>
+          <LeadsTable
+            isDeletingLeadId={deleteLeadMutation.isPending ? deleteLeadMutation.variables ?? null : null}
+            isMutatingConvertLeadId={convertLeadMutation.isPending ? convertLeadMutation.variables ?? null : null}
+            leads={paginatedLeads.items}
+            onConvert={handleConvert}
+            onDelete={handleDelete}
+          />
+          <PaginationControls
+            currentPage={paginatedLeads.currentPage}
+            itemLabel="leads"
+            onPageChange={handlePageChange}
+            pageSize={10}
+            totalItems={paginatedLeads.totalItems}
+            totalPages={paginatedLeads.totalPages}
+          />
+        </>
       )}
     </div>
   );

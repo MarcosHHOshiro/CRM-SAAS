@@ -1,13 +1,12 @@
 import { Injectable } from '@nestjs/common';
 
 import { AuthService } from '../auth.service';
-import type { RefreshTokenDto } from '../dto/refresh-token.dto';
 
 @Injectable()
 export class RefreshSessionUseCase {
   constructor(private readonly authService: AuthService) {}
 
-  async execute(dto: RefreshTokenDto) {
+  async execute(dto: { refreshToken: string }) {
     const payload = await this.authService.verifyRefreshToken(dto.refreshToken);
     const storedToken = await this.authService.ensureRefreshTokenIsActive(
       dto.refreshToken,
@@ -25,4 +24,3 @@ export class RefreshSessionUseCase {
     return this.authService.createSession(activeUser);
   }
 }
-
