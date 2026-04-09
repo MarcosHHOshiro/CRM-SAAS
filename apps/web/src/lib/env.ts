@@ -1,4 +1,9 @@
-export const env = {
-  apiUrl: process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:3333',
-};
+const apiUrl = process.env.NEXT_PUBLIC_API_URL?.trim();
 
+if (!apiUrl) {
+  throw new Error('NEXT_PUBLIC_API_URL is required.');
+}
+
+export const env = {
+  apiUrl: apiUrl.replace(/\/+$/, ''),
+};

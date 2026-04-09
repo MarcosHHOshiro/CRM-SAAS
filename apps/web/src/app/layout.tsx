@@ -1,10 +1,11 @@
 import type { Metadata } from 'next';
 
+import { QueryProvider } from '@/services/query/query-provider';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'CRM SaaS',
-  description: 'Multi-tenant SaaS CRM starter workspace.',
+  title: 'Pulse CRM',
+  description: 'Multi-tenant SaaS CRM frontend foundation.',
 };
 
 type RootLayoutProps = Readonly<{
@@ -14,8 +15,8 @@ type RootLayoutProps = Readonly<{
 export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <html lang="en">
-      <body className="bg-slate-950 text-slate-50 antialiased">
-        {children}
+      <body className="bg-[var(--background)] text-[var(--foreground)] antialiased">
+        <QueryProvider>{children}</QueryProvider>
       </body>
     </html>
   );
