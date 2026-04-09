@@ -61,6 +61,65 @@ export type AppMessages = {
       passwordMax: string;
     };
   };
+  dashboard: {
+    overview: {
+      eyebrow: string;
+      title: string;
+      description: string;
+      errorFallback: string;
+    };
+    empty: {
+      eyebrow: string;
+      title: string;
+      description: string;
+    };
+    metrics: {
+      totalLeads: string;
+      totalLeadsDescription: string;
+      totalClients: string;
+      totalClientsDescription: string;
+      openOpportunities: string;
+      openOpportunitiesDescription: string;
+      wonOpportunities: string;
+      wonOpportunitiesDescription: string;
+      lostOpportunities: string;
+      lostOpportunitiesDescription: string;
+      totalPipelineValue: string;
+      totalPipelineValueDescription: string;
+      conversionRate: string;
+      conversionRateDescription: string;
+    };
+    pipeline: {
+      eyebrow: string;
+      description: string;
+      trackedOpportunities: string;
+      open: string;
+      won: string;
+      lost: string;
+    };
+    recentActivities: {
+      eyebrow: string;
+      title: string;
+      description: string;
+      items: string;
+      emptyTitle: string;
+      emptyDescription: string;
+      system: string;
+      byAuthor: string;
+    };
+    activityTypes: {
+      CALL: string;
+      EMAIL: string;
+      MEETING: string;
+      NOTE: string;
+      TASK: string;
+    };
+    shared: {
+      unknownDate: string;
+      linkedTo: string;
+      newRecorded: string;
+    };
+  };
   common: {
     brand: string;
     loading: {
@@ -184,6 +243,145 @@ export type AppMessages = {
       emailInvalid: string;
       nameMin: string;
       nameMax: string;
+      ownerInvalid: string;
+      phoneMax: string;
+    };
+  };
+  leads: {
+    list: {
+      eyebrow: string;
+      title: string;
+      description: string;
+      errorFallback: string;
+      ownerUnavailable: string;
+      itemLabel: string;
+      deleteConfirm: string;
+      convertConfirm: string;
+      deleteSuccess: string;
+      deleteError: string;
+      convertSuccess: string;
+      convertError: string;
+    };
+    filters: {
+      eyebrow: string;
+      title: string;
+      description: string;
+      createButton: string;
+      searchLabel: string;
+      searchPlaceholder: string;
+      statusLabel: string;
+      ownerLabel: string;
+    };
+    empty: {
+      eyebrow: string;
+      noResultsTitle: string;
+      noResultsDescription: string;
+      noItemsTitle: string;
+      noItemsDescription: string;
+      createButton: string;
+    };
+    error: {
+      eyebrow: string;
+      title: string;
+    };
+    table: {
+      lead: string;
+      status: string;
+      owner: string;
+      createdAt: string;
+      actions: string;
+      noEmail: string;
+      noPhone: string;
+      noCompany: string;
+      unassigned: string;
+      converting: string;
+      convert: string;
+      deleting: string;
+      delete: string;
+    };
+    details: {
+      eyebrow: string;
+      title: string;
+      description: string;
+      loadError: string;
+      editButton: string;
+      convertButton: string;
+      converting: string;
+      deleteButton: string;
+      deleting: string;
+      deleteConfirm: string;
+      convertConfirm: string;
+      deleteError: string;
+      convertError: string;
+      profileEyebrow: string;
+      email: string;
+      phone: string;
+      company: string;
+      createdAt: string;
+      notes: string;
+      noNotes: string;
+      ownershipEyebrow: string;
+      unassigned: string;
+      conversionEyebrow: string;
+      converted: string;
+      canConvert: string;
+      cannotConvert: string;
+    };
+    create: {
+      eyebrow: string;
+      title: string;
+      description: string;
+      submit: string;
+      errorFallback: string;
+    };
+    edit: {
+      eyebrow: string;
+      title: string;
+      titleWithName: string;
+      description: string;
+      submit: string;
+      errorFallback: string;
+      loadError: string;
+    };
+    form: {
+      name: string;
+      namePlaceholder: string;
+      email: string;
+      emailPlaceholder: string;
+      phone: string;
+      phonePlaceholder: string;
+      company: string;
+      companyPlaceholder: string;
+      status: string;
+      owner: string;
+      ownerHint: string;
+      ownerUnavailable: string;
+      notes: string;
+      notesHint: string;
+      notesPlaceholder: string;
+      ownerInactiveSuffix: string;
+      ownerUnassigned: string;
+      allOwners: string;
+      allStatuses: string;
+    };
+    shared: {
+      statusNew: string;
+      statusQualified: string;
+      statusContacted: string;
+      statusConverted: string;
+      statusLost: string;
+      unknownDate: string;
+      successCreated: string;
+      successUpdated: string;
+      successDeleted: string;
+      successConverted: string;
+    };
+    validation: {
+      companyMax: string;
+      emailInvalid: string;
+      nameMin: string;
+      nameMax: string;
+      notesMax: string;
       ownerInvalid: string;
       phoneMax: string;
     };

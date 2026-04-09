@@ -8,6 +8,7 @@ import { PaginationControls } from '@/components/PaginationControls';
 import { PageIntro } from '@/components/PageIntro';
 import { useToast } from '@/components/ToastProvider';
 import { useQueryFeedbackToast } from '@/hooks/use-query-feedback-toast';
+import { useTranslation } from '@/i18n/use-translation';
 import { buildPageQueryString, getPageFromSearchParams, paginateItems } from '@/lib/pagination';
 import { getApiErrorMessage } from '@/services/api/api-error';
 
@@ -40,6 +41,7 @@ export function LeadsListPage() {
   const deleteLeadMutation = useDeleteLeadMutation();
   const convertLeadMutation = useConvertLeadMutation();
   const { showToast } = useToast();
+  const { messages } = useTranslation();
   const [filtersState, setFiltersState] = useState<FiltersFormState>({
     ownerUserId: searchParams.get('ownerUserId') ?? '',
     search: searchParams.get('search') ?? '',
@@ -54,8 +56,8 @@ export function LeadsListPage() {
     });
   }, [searchParams]);
 
-  const successMessage = getLeadSuccessMessage(searchParams.get('success'));
-  const ownerOptions = ownersQuery.data ? getLeadOwnerOptions(ownersQuery.data) : [];
+  const successMessage = getLeadSuccessMessage(searchParams.get('success'), messages);
+  const ownerOptions = ownersQuery.data ? getLeadOwnerOptions(ownersQuery.data, messages) : [];
   const showOwnerFilter = ownerOptions.length > 1;
   const hasFilters = Boolean(filters.search || filters.status || filters.ownerUserId);
   const currentPage = getPageFromSearchParams(searchParams);
@@ -95,7 +97,7 @@ export function LeadsListPage() {
   }
 
   async function handleDelete(lead: Lead) {
-    const confirmed = window.confirm(`Delete the lead "${lead.name}"?`);
+    const confirmed = window.confirm(messages.leads.list.deleteConfirm.replace('{name}', lead.name));
 
     if (!confirmed) {
       return;
@@ -103,17 +105,17 @@ export function LeadsListPage() {
 
     try {
       await deleteLeadMutation.mutateAsync(lead.id);
-      showToast({ message: 'Lead deleted successfully.', tone: 'success' });
+      showToast({ message: messages.leads.list.deleteSuccess, tone: 'success' });
     } catch (error) {
       showToast({
-        message: getApiErrorMessage(error, 'Unable to delete this lead right now.'),
+        message: getApiErrorMessage(error, messages.leads.list.deleteError),
         tone: 'error',
       });
     }
   }
 
   async function handleConvert(lead: Lead) {
-    const confirmed = window.confirm(`Convert the lead "${lead.name}" into a client?`);
+    const confirmed = window.confirm(messages.leads.list.convertConfirm.replace('{name}', lead.name));
 
     if (!confirmed) {
       return;
@@ -122,12 +124,12 @@ export function LeadsListPage() {
     try {
       await convertLeadMutation.mutateAsync(lead.id);
       showToast({
-        message: 'Lead converted into a client successfully.',
+        message: messages.leads.list.convertSuccess,
         tone: 'success',
       });
     } catch (error) {
       showToast({
-        message: getApiErrorMessage(error, 'Unable to convert this lead right now.'),
+        message: getApiErrorMessage(error, messages.leads.list.convertError),
         tone: 'error',
       });
     }
@@ -141,12 +143,12 @@ export function LeadsListPage() {
     return (
       <div className="space-y-6">
         <PageIntro
-          description="Manage prospects across the organization, keep pipeline data clean, and move qualified records toward conversion."
-          eyebrow="Leads"
-          title="Lead management"
+          description={messages.leads.list.description}
+          eyebrow={messages.leads.list.eyebrow}
+          title={messages.leads.list.title}
         />
         <LeadsErrorState
-          message={getApiErrorMessage(leadsQuery.error, 'Please try loading the leads again.')}
+          message={getApiErrorMessage(leadsQuery.error, messages.leads.list.errorFallback)}
           onRetry={() => {
             void leadsQuery.refetch();
           }}
@@ -160,14 +162,14 @@ export function LeadsListPage() {
   return (
     <div className="space-y-6">
       <PageIntro
-        description="Manage prospects across the organization, keep pipeline data clean, and move qualified records toward conversion."
-        eyebrow="Leads"
-        title="Lead management"
+        description={messages.leads.list.description}
+        eyebrow={messages.leads.list.eyebrow}
+        title={messages.leads.list.title}
       />
 
       {ownersQuery.isError ? (
         <InlineBanner tone="info">
-          Owner filters are not available for your current access level.
+          {messages.leads.list.ownerUnavailable}
         </InlineBanner>
       ) : null}
 
@@ -193,7 +195,7 @@ export function LeadsListPage() {
           />
           <PaginationControls
             currentPage={paginatedLeads.currentPage}
-            itemLabel="leads"
+            itemLabel={messages.leads.list.itemLabel}
             onPageChange={handlePageChange}
             pageSize={10}
             totalItems={paginatedLeads.totalItems}

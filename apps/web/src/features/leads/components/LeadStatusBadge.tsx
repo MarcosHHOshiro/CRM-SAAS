@@ -1,3 +1,4 @@
+import { useTranslation } from '@/i18n/use-translation';
 import { formatLeadStatus } from '../lib/leads-format';
 import type { LeadStatus } from '../types/leads';
 
@@ -14,9 +15,11 @@ const statusClasses: Record<LeadStatus, string> = {
 };
 
 export function LeadStatusBadge({ status }: LeadStatusBadgeProps) {
+  const { messages } = useTranslation();
+
   return (
     <span className={`inline-flex rounded-full px-3 py-1 text-xs font-semibold ${statusClasses[status]}`}>
-      {formatLeadStatus(status)}
+      {formatLeadStatus(status, messages)}
     </span>
   );
 }

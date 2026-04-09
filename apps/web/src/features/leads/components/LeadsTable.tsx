@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { useTranslation } from '@/i18n/use-translation';
 
 import { formatLeadDate, getLeadCanConvert } from '../lib/leads-format';
 import type { Lead } from '../types/leads';
@@ -22,17 +23,19 @@ export function LeadsTable({
   onConvert,
   onDelete,
 }: LeadsTableProps) {
+  const { locale, messages } = useTranslation();
+
   return (
     <section className="overflow-hidden rounded-[2rem] border border-[var(--border)] bg-[var(--card)] shadow-[var(--shadow-soft)]">
       <div className="overflow-x-auto">
         <table className="min-w-[920px] text-left">
           <thead className="border-b border-[var(--border)] bg-white/65">
             <tr className="text-xs uppercase tracking-[0.16em] text-[var(--foreground-muted)]">
-              <th className="px-6 py-4 font-semibold">Lead</th>
-              <th className="px-6 py-4 font-semibold">Status</th>
-              <th className="px-6 py-4 font-semibold">Responsavel</th>
-              <th className="px-6 py-4 font-semibold">Criado em</th>
-              <th className="px-6 py-4 font-semibold">Acoes</th>
+              <th className="px-6 py-4 font-semibold">{messages.leads.table.lead}</th>
+              <th className="px-6 py-4 font-semibold">{messages.leads.table.status}</th>
+              <th className="px-6 py-4 font-semibold">{messages.leads.table.owner}</th>
+              <th className="px-6 py-4 font-semibold">{messages.leads.table.createdAt}</th>
+              <th className="px-6 py-4 font-semibold">{messages.leads.table.actions}</th>
             </tr>
           </thead>
           <tbody>
@@ -50,9 +53,9 @@ export function LeadsTable({
                         {lead.name}
                       </Link>
                       <div className="mt-2 space-y-1 text-sm text-[var(--foreground-muted)]">
-                        <p>{lead.email || 'Sem email informado'}</p>
-                        <p>{lead.phone || 'Sem telefone informado'}</p>
-                        <p>{lead.company || 'Sem empresa informada'}</p>
+                        <p>{lead.email || messages.leads.table.noEmail}</p>
+                        <p>{lead.phone || messages.leads.table.noPhone}</p>
+                        <p>{lead.company || messages.leads.table.noCompany}</p>
                       </div>
                     </div>
                   </td>
@@ -66,11 +69,11 @@ export function LeadsTable({
                         <p className="mt-1">{lead.owner.email}</p>
                       </div>
                     ) : (
-                      'Sem responsavel'
+                      messages.leads.table.unassigned
                     )}
                   </td>
                   <td className="px-6 py-5 align-top text-sm text-[var(--foreground-muted)]">
-                    {formatLeadDate(lead.createdAt)}
+                    {formatLeadDate(lead.createdAt, locale, messages)}
                   </td>
                   <td className="px-6 py-5 align-top">
                     <div className="flex flex-wrap gap-2">
@@ -78,13 +81,13 @@ export function LeadsTable({
                         className="inline-flex min-h-10 items-center justify-center rounded-full border border-[var(--border)] bg-white/80 px-4 text-sm font-semibold text-[var(--foreground)] hover:border-[var(--accent)] hover:text-[var(--accent)]"
                         href={`/leads/${lead.id}`}
                     >
-                      Ver
+                      {messages.common.actions.view}
                     </Link>
                       <Link
                         className="inline-flex min-h-10 items-center justify-center rounded-full border border-[var(--border)] bg-white/80 px-4 text-sm font-semibold text-[var(--foreground)] hover:border-[var(--accent)] hover:text-[var(--accent)]"
                         href={`/leads/${lead.id}/edit`}
                     >
-                      Editar
+                      {messages.common.actions.edit}
                     </Link>
                       {canConvert ? (
                         <button
@@ -93,7 +96,9 @@ export function LeadsTable({
                           onClick={() => onConvert(lead)}
                           type="button"
                         >
-                          {isMutatingConvertLeadId === lead.id ? 'Convertendo...' : 'Converter'}
+                          {isMutatingConvertLeadId === lead.id
+                            ? messages.leads.table.converting
+                            : messages.leads.table.convert}
                         </button>
                       ) : null}
                       <button
@@ -102,7 +107,9 @@ export function LeadsTable({
                         onClick={() => onDelete(lead)}
                         type="button"
                       >
-                        {isDeletingLeadId === lead.id ? 'Removendo...' : 'Excluir'}
+                        {isDeletingLeadId === lead.id
+                          ? messages.leads.table.deleting
+                          : messages.leads.table.delete}
                       </button>
                     </div>
                   </td>

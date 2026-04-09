@@ -2,6 +2,7 @@
 
 import { useParams, useRouter } from 'next/navigation';
 import { useState } from 'react';
+import { useTranslation } from '@/i18n/use-translation';
 
 import { PageIntro } from '@/components/PageIntro';
 import { getApiErrorMessage } from '@/services/api/api-error';
@@ -32,13 +33,14 @@ export function LeadEditPage() {
   const updateLeadMutation = useUpdateLeadMutation(leadId);
   const ownersQuery = useLeadOwnersQuery();
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const { messages } = useTranslation();
 
   async function handleSubmit(values: LeadFormValues) {
     try {
       await updateLeadMutation.mutateAsync(mapUpdateLeadPayload(values));
       router.replace(`/leads/${leadId}?success=updated`);
     } catch (error) {
-      setErrorMessage(getApiErrorMessage(error, 'Nao foi possivel atualizar este lead agora.'));
+      setErrorMessage(getApiErrorMessage(error, messages.leads.edit.errorFallback));
     }
   }
 
@@ -50,11 +52,11 @@ export function LeadEditPage() {
     return (
       <div className="space-y-6">
         <PageIntro
-          description="Atualize dados do lead, responsavel e status de qualificacao sem sair do workspace privado."
-          eyebrow="Leads"
-          title="Editar lead"
+          description={messages.leads.edit.description}
+          eyebrow={messages.leads.edit.eyebrow}
+          title={messages.leads.edit.title}
         />
-        <LeadsErrorState message={getApiErrorMessage(leadQuery.error, 'Nao foi possivel carregar este lead.')} />
+        <LeadsErrorState message={getApiErrorMessage(leadQuery.error, messages.leads.edit.loadError)} />
       </div>
     );
   }
@@ -62,9 +64,9 @@ export function LeadEditPage() {
   return (
     <div className="space-y-6">
       <PageIntro
-        description="Atualize dados do lead, responsavel e status de qualificacao sem sair do workspace privado."
-        eyebrow="Leads"
-        title={`Editar ${leadQuery.data.lead.name}`}
+        description={messages.leads.edit.description}
+        eyebrow={messages.leads.edit.eyebrow}
+        title={messages.leads.edit.titleWithName.replace('{name}', leadQuery.data.lead.name)}
       />
       <LeadForm
         errorMessage={errorMessage}
@@ -72,7 +74,7 @@ export function LeadEditPage() {
         lead={leadQuery.data.lead}
         onSubmit={handleSubmit}
         ownerOptions={ownersQuery.data}
-        submitLabel="Salvar alteracoes"
+        submitLabel={messages.leads.edit.submit}
       />
     </div>
   );

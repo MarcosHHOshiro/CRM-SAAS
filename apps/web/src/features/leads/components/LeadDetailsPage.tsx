@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { useParams, useRouter, useSearchParams } from 'next/navigation';
+import { useTranslation } from '@/i18n/use-translation';
 
 import { PageIntro } from '@/components/PageIntro';
 import { useToast } from '@/components/ToastProvider';
@@ -23,7 +24,8 @@ export function LeadDetailsPage() {
   const deleteLeadMutation = useDeleteLeadMutation();
   const convertLeadMutation = useConvertLeadMutation();
   const { showToast } = useToast();
-  const successMessage = getLeadSuccessMessage(searchParams.get('success'));
+  const { messages } = useTranslation();
+  const successMessage = getLeadSuccessMessage(searchParams.get('success'), messages);
 
   useQueryFeedbackToast(successMessage);
 
@@ -35,11 +37,11 @@ export function LeadDetailsPage() {
     return (
       <div className="space-y-6">
         <PageIntro
-          description="Revise o perfil do lead, o status atual de qualificacao, a responsabilidade e a prontidao para conversao."
-          eyebrow="Leads"
-          title="Detalhes do lead"
+          description={messages.leads.details.description}
+          eyebrow={messages.leads.details.eyebrow}
+          title={messages.leads.details.title}
         />
-        <LeadsErrorState message={getApiErrorMessage(leadQuery.error, 'Nao foi possivel carregar este lead.')} />
+        <LeadsErrorState message={getApiErrorMessage(leadQuery.error, messages.leads.details.loadError)} />
       </div>
     );
   }
@@ -47,7 +49,7 @@ export function LeadDetailsPage() {
   const canConvert = getLeadCanConvert(lead);
 
   async function handleDelete() {
-    const confirmed = window.confirm(`Excluir o lead "${lead.name}"?`);
+    const confirmed = window.confirm(messages.leads.details.deleteConfirm.replace('{name}', lead.name));
 
     if (!confirmed) {
       return;
@@ -58,14 +60,14 @@ export function LeadDetailsPage() {
       router.replace('/leads?success=deleted');
     } catch (error) {
       showToast({
-        message: getApiErrorMessage(error, 'Nao foi possivel excluir este lead agora.'),
+        message: getApiErrorMessage(error, messages.leads.details.deleteError),
         tone: 'error',
       });
     }
   }
 
   async function handleConvert() {
-    const confirmed = window.confirm(`Converter o lead "${lead.name}" em cliente?`);
+    const confirmed = window.confirm(messages.leads.details.convertConfirm.replace('{name}', lead.name));
 
     if (!confirmed) {
       return;
@@ -76,7 +78,7 @@ export function LeadDetailsPage() {
       router.replace(`/leads/${lead.id}?success=converted`);
     } catch (error) {
       showToast({
-        message: getApiErrorMessage(error, 'Nao foi possivel converter este lead agora.'),
+        message: getApiErrorMessage(error, messages.leads.details.convertError),
         tone: 'error',
       });
     }
@@ -85,8 +87,8 @@ export function LeadDetailsPage() {
   return (
     <div className="space-y-6">
       <PageIntro
-        description="Revise o perfil do lead, o status atual de qualificacao, a responsabilidade e a prontidao para conversao."
-        eyebrow="Leads"
+        description={messages.leads.details.description}
+        eyebrow={messages.leads.details.eyebrow}
         title={lead.name}
       />
       <section className="flex flex-wrap gap-3">
@@ -94,13 +96,13 @@ export function LeadDetailsPage() {
           className="inline-flex min-h-11 items-center justify-center rounded-full border border-[var(--border)] bg-white/80 px-5 text-sm font-semibold text-[var(--foreground)] hover:border-[var(--accent)] hover:text-[var(--accent)]"
           href="/leads"
         >
-          Voltar para a lista
+          {messages.common.actions.backToList}
         </Link>
         <Link
           className="inline-flex min-h-11 items-center justify-center rounded-full bg-[var(--accent)] px-5 text-sm font-semibold text-white hover:bg-[var(--accent-strong)]"
           href={`/leads/${lead.id}/edit`}
         >
-          Editar lead
+          {messages.leads.details.editButton}
         </Link>
         {canConvert ? (
           <button
@@ -109,7 +111,7 @@ export function LeadDetailsPage() {
             onClick={handleConvert}
             type="button"
           >
-            {convertLeadMutation.isPending ? 'Convertendo...' : 'Converter em cliente'}
+            {convertLeadMutation.isPending ? messages.leads.details.converting : messages.leads.details.convertButton}
           </button>
         ) : null}
         <button
@@ -118,7 +120,7 @@ export function LeadDetailsPage() {
           onClick={handleDelete}
           type="button"
         >
-          {deleteLeadMutation.isPending ? 'Excluindo...' : 'Excluir lead'}
+          {deleteLeadMutation.isPending ? messages.leads.details.deleting : messages.leads.details.deleteButton}
         </button>
       </section>
 

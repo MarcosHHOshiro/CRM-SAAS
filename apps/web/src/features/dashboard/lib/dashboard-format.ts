@@ -1,23 +1,13 @@
+import type { AppLocale, AppMessages } from '@/i18n/messages/types';
 import type { DashboardActivity, DashboardMetrics } from '../types/dashboard';
 
-const currencyFormatter = new Intl.NumberFormat('en-US', {
-  currency: 'USD',
-  maximumFractionDigits: 0,
-  style: 'currency',
-});
-
-const percentageFormatter = new Intl.NumberFormat('en-US', {
-  maximumFractionDigits: 2,
-  style: 'percent',
-});
-
-const dateTimeFormatter = new Intl.DateTimeFormat('en-US', {
-  dateStyle: 'medium',
-  timeStyle: 'short',
-});
-
-export function formatDashboardCurrency(value: string) {
+export function formatDashboardCurrency(value: string, locale: AppLocale) {
   const parsedValue = Number(value);
+  const currencyFormatter = new Intl.NumberFormat(locale, {
+    currency: 'USD',
+    maximumFractionDigits: 0,
+    style: 'currency',
+  });
 
   if (Number.isNaN(parsedValue)) {
     return currencyFormatter.format(0);
@@ -26,45 +16,55 @@ export function formatDashboardCurrency(value: string) {
   return currencyFormatter.format(parsedValue);
 }
 
-export function formatDashboardPercentage(value: number) {
+export function formatDashboardPercentage(value: number, locale: AppLocale) {
+  const percentageFormatter = new Intl.NumberFormat(locale, {
+    maximumFractionDigits: 2,
+    style: 'percent',
+  });
+
   return percentageFormatter.format(value / 100);
 }
 
-export function formatDashboardDateTime(value: string) {
+export function formatDashboardDateTime(value: string, locale: AppLocale, messages: AppMessages) {
   const parsedDate = new Date(value);
 
   if (Number.isNaN(parsedDate.getTime())) {
-    return 'Unknown date';
+    return messages.dashboard.shared.unknownDate;
   }
+
+  const dateTimeFormatter = new Intl.DateTimeFormat(locale, {
+    dateStyle: 'medium',
+    timeStyle: 'short',
+  });
 
   return dateTimeFormatter.format(parsedDate);
 }
 
-export function getDashboardActivityLabel(activity: DashboardActivity) {
+export function getDashboardActivityLabel(activity: DashboardActivity, messages: AppMessages) {
   const labels: Record<string, string> = {
-    CALL: 'Call',
-    EMAIL: 'Email',
-    MEETING: 'Meeting',
-    NOTE: 'Note',
-    TASK: 'Task',
+    CALL: messages.dashboard.activityTypes.CALL,
+    EMAIL: messages.dashboard.activityTypes.EMAIL,
+    MEETING: messages.dashboard.activityTypes.MEETING,
+    NOTE: messages.dashboard.activityTypes.NOTE,
+    TASK: messages.dashboard.activityTypes.TASK,
   };
 
   return labels[activity.type] ?? activity.type;
 }
 
-export function getDashboardActivityDescription(activity: DashboardActivity) {
+export function getDashboardActivityDescription(activity: DashboardActivity, messages: AppMessages) {
   if (activity.description) {
     return activity.description;
   }
 
   const relation = getDashboardActivityRelation(activity);
-  const activityLabel = getDashboardActivityLabel(activity).toLowerCase();
+  const activityLabel = getDashboardActivityLabel(activity, messages).toLowerCase();
 
   if (relation) {
-    return `${activityLabel} linked to ${relation}.`;
+    return `${activityLabel} ${messages.dashboard.shared.linkedTo} ${relation}.`;
   }
 
-  return `New ${activityLabel} activity recorded.`;
+  return `${messages.dashboard.shared.newRecorded} ${activityLabel}.`;
 }
 
 export function getDashboardActivityRelation(activity: DashboardActivity) {

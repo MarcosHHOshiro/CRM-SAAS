@@ -1,6 +1,7 @@
 'use client';
 
 import { PageIntro } from '@/components/PageIntro';
+import { useTranslation } from '@/i18n/use-translation';
 import { getApiErrorMessage } from '@/services/api/api-error';
 
 import { getDashboardIsEmpty } from '../lib/dashboard-format';
@@ -14,6 +15,7 @@ import { DashboardSkeleton } from './DashboardSkeleton';
 
 export function DashboardOverview() {
   const dashboardSummaryQuery = useDashboardSummaryQuery();
+  const { messages } = useTranslation();
 
   if (dashboardSummaryQuery.isPending) {
     return <DashboardSkeleton />;
@@ -23,14 +25,14 @@ export function DashboardOverview() {
     return (
       <div className="space-y-6">
         <PageIntro
-          description="Acompanhe funil de vendas, base de clientes, atividade recente e conversao em um unico lugar."
-          eyebrow="Dashboard"
-          title="Visao geral da performance comercial"
+          description={messages.dashboard.overview.description}
+          eyebrow={messages.dashboard.overview.eyebrow}
+          title={messages.dashboard.overview.title}
         />
         <DashboardErrorState
           message={getApiErrorMessage(
             dashboardSummaryQuery.error,
-            'Confirme se o backend esta rodando e tente novamente.',
+            messages.dashboard.overview.errorFallback,
           )}
           onRetry={() => {
             void dashboardSummaryQuery.refetch();
@@ -46,9 +48,9 @@ export function DashboardOverview() {
   return (
     <div className="space-y-6">
       <PageIntro
-        description="Acompanhe funil de vendas, base de clientes, atividade recente e conversao em um unico lugar."
-        eyebrow="Dashboard"
-        title="Visao geral da performance comercial"
+        description={messages.dashboard.overview.description}
+        eyebrow={messages.dashboard.overview.eyebrow}
+        title={messages.dashboard.overview.title}
       />
 
       {isEmpty ? <DashboardEmptyState /> : null}

@@ -2,6 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+import { useTranslation } from '@/i18n/use-translation';
 
 import { PageIntro } from '@/components/PageIntro';
 import { getApiErrorMessage } from '@/services/api/api-error';
@@ -27,29 +28,30 @@ export function LeadCreatePage() {
   const createLeadMutation = useCreateLeadMutation();
   const ownersQuery = useLeadOwnersQuery();
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const { messages } = useTranslation();
 
   async function handleSubmit(values: LeadFormValues) {
     try {
       const response = await createLeadMutation.mutateAsync(mapCreateLeadPayload(values));
       router.replace(`/leads/${response.lead.id}?success=created`);
     } catch (error) {
-      setErrorMessage(getApiErrorMessage(error, 'Nao foi possivel criar este lead agora.'));
+      setErrorMessage(getApiErrorMessage(error, messages.leads.create.errorFallback));
     }
   }
 
   return (
     <div className="space-y-6">
       <PageIntro
-        description="Crie um novo lead com as informacoes comerciais principais para follow-up e qualificacao."
-        eyebrow="Leads"
-        title="Criar lead"
+        description={messages.leads.create.description}
+        eyebrow={messages.leads.create.eyebrow}
+        title={messages.leads.create.title}
       />
       <LeadForm
         errorMessage={errorMessage}
         isSubmitting={createLeadMutation.isPending}
         onSubmit={handleSubmit}
         ownerOptions={ownersQuery.data}
-        submitLabel="Criar lead"
+        submitLabel={messages.leads.create.submit}
       />
     </div>
   );

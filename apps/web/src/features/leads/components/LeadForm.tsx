@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { useState } from 'react';
+import { useTranslation } from '@/i18n/use-translation';
 
 import { InlineBanner } from '@/components/InlineBanner';
 import { SelectField } from '@/components/SelectField';
@@ -9,10 +10,10 @@ import { TextAreaField } from '@/components/TextAreaField';
 import { TextField } from '@/components/TextField';
 
 import {
+  getLeadFormStatusOptions,
   getLeadFormOwnerOptions,
   getLeadInitialFormValues,
-  leadFormStatusOptions,
-  leadStatusLabels,
+  getLeadStatusLabels,
 } from '../lib/leads-format';
 import { leadSchema } from '../schemas/lead-schema';
 import type { Lead, LeadFormValues, LeadOwnerOption } from '../types/leads';
@@ -36,6 +37,7 @@ export function LeadForm({
   onSubmit,
   submitLabel,
 }: LeadFormProps) {
+  const { messages } = useTranslation();
   const [values, setValues] = useState<LeadFormValues>(() => getLeadInitialFormValues(lead));
   const [fieldErrors, setFieldErrors] = useState<LeadFormErrors>({});
 
@@ -57,7 +59,7 @@ export function LeadForm({
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
-    const result = leadSchema.safeParse(values);
+    const result = leadSchema(messages).safeParse(values);
 
     if (!result.success) {
       const flattened = result.error.flatten().fieldErrors;
@@ -86,44 +88,44 @@ export function LeadForm({
       <div className="grid gap-5 md:grid-cols-2">
         <TextField
           error={fieldErrors.name}
-          label="Nome do lead"
+          label={messages.leads.form.name}
           name="name"
           onChange={handleChange}
-          placeholder="Jamie Rivera"
+          placeholder={messages.leads.form.namePlaceholder}
           value={values.name}
         />
         <TextField
           error={fieldErrors.email}
-          label="Email"
+          label={messages.leads.form.email}
           name="email"
           onChange={handleChange}
-          placeholder="jamie@company.com"
+          placeholder={messages.leads.form.emailPlaceholder}
           type="email"
           value={values.email}
         />
         <TextField
           error={fieldErrors.phone}
-          label="Telefone"
+          label={messages.leads.form.phone}
           name="phone"
           onChange={handleChange}
-          placeholder="+1 (555) 000-1234"
+          placeholder={messages.leads.form.phonePlaceholder}
           value={values.phone}
         />
         <TextField
           error={fieldErrors.company}
-          label="Empresa"
+          label={messages.leads.form.company}
           name="company"
           onChange={handleChange}
-          placeholder="Northwind"
+          placeholder={messages.leads.form.companyPlaceholder}
           value={values.company}
         />
         <SelectField
           error={fieldErrors.status}
-          label="Status"
+          label={messages.leads.form.status}
           name="status"
           onChange={handleChange}
-          options={leadFormStatusOptions.map((option) => ({
-            label: leadStatusLabels[option.value as keyof typeof leadStatusLabels],
+          options={getLeadFormStatusOptions(messages).map((option) => ({
+            label: getLeadStatusLabels(messages)[option.value as keyof ReturnType<typeof getLeadStatusLabels>],
             value: option.value,
           }))}
           value={values.status}
@@ -131,16 +133,16 @@ export function LeadForm({
         {ownerOptions.length > 0 ? (
           <SelectField
             error={fieldErrors.ownerUserId}
-            hint="Defina um responsavel quando o lead ja pertencer a alguem."
-            label="Responsavel"
+            hint={messages.leads.form.ownerHint}
+            label={messages.leads.form.owner}
             name="ownerUserId"
             onChange={handleChange}
-            options={getLeadFormOwnerOptions(ownerOptions)}
+            options={getLeadFormOwnerOptions(ownerOptions, messages)}
             value={values.ownerUserId}
           />
         ) : (
           <div className="rounded-[1.5rem] border border-[var(--border)] bg-white/60 px-4 py-3 text-sm leading-6 text-[var(--foreground-muted)]">
-            A atribuicao de responsavel nao esta disponivel para o seu nivel de acesso.
+            {messages.leads.form.ownerUnavailable}
           </div>
         )}
       </div>
@@ -148,11 +150,11 @@ export function LeadForm({
       <div className="mt-5">
         <TextAreaField
           error={fieldErrors.notes}
-          hint="Notas internas opcionais sobre o lead."
-          label="Notas"
+          hint={messages.leads.form.notesHint}
+          label={messages.leads.form.notes}
           name="notes"
           onChange={handleChange}
-          placeholder="Contexto importante, contatos recentes ou notas de qualificacao."
+          placeholder={messages.leads.form.notesPlaceholder}
           rows={6}
           value={values.notes}
         />
@@ -170,13 +172,13 @@ export function LeadForm({
           disabled={isSubmitting}
           type="submit"
         >
-          {isSubmitting ? 'Salvando...' : submitLabel}
+          {isSubmitting ? messages.common.actions.saving : submitLabel}
         </button>
         <Link
           className="inline-flex min-h-11 items-center justify-center rounded-full border border-[var(--border)] bg-white/80 px-5 text-sm font-semibold text-[var(--foreground)] hover:border-[var(--accent)] hover:text-[var(--accent)]"
           href={lead ? `/leads/${lead.id}` : '/leads'}
         >
-          Cancelar
+          {messages.common.actions.cancel}
         </Link>
       </div>
     </form>

@@ -1,58 +1,67 @@
+import type { AppLocale, AppMessages } from '@/i18n/messages/types';
 import type { Lead, LeadFilters, LeadFormValues, LeadOwnerOption, LeadStatus } from '../types/leads';
 
-const dateTimeFormatter = new Intl.DateTimeFormat('en-US', {
-  dateStyle: 'medium',
-  timeStyle: 'short',
-});
-
-export const leadStatusLabels: Record<LeadStatus, string> = {
-  NEW: 'Novo',
-  QUALIFIED: 'Qualificado',
-  CONTACTED: 'Contatado',
-  CONVERTED: 'Convertido',
-  LOST: 'Perdido',
-};
-
-export const leadStatusOptions = [
-  { label: 'Todos os status', value: '' },
-  { label: leadStatusLabels.NEW, value: 'NEW' },
-  { label: leadStatusLabels.QUALIFIED, value: 'QUALIFIED' },
-  { label: leadStatusLabels.CONTACTED, value: 'CONTACTED' },
-  { label: leadStatusLabels.CONVERTED, value: 'CONVERTED' },
-  { label: leadStatusLabels.LOST, value: 'LOST' },
-] as const;
-
-export const leadFormStatusOptions = leadStatusOptions.filter((option) => option.value !== '');
-
-export function formatLeadStatus(status: LeadStatus) {
-  return leadStatusLabels[status];
+export function getLeadStatusLabels(messages: AppMessages): Record<LeadStatus, string> {
+  return {
+    NEW: messages.leads.shared.statusNew,
+    QUALIFIED: messages.leads.shared.statusQualified,
+    CONTACTED: messages.leads.shared.statusContacted,
+    CONVERTED: messages.leads.shared.statusConverted,
+    LOST: messages.leads.shared.statusLost,
+  };
 }
 
-export function formatLeadDate(value: string) {
+export function getLeadStatusOptions(messages: AppMessages) {
+  const leadStatusLabels = getLeadStatusLabels(messages);
+
+  return [
+    { label: messages.leads.form.allStatuses, value: '' },
+    { label: leadStatusLabels.NEW, value: 'NEW' },
+    { label: leadStatusLabels.QUALIFIED, value: 'QUALIFIED' },
+    { label: leadStatusLabels.CONTACTED, value: 'CONTACTED' },
+    { label: leadStatusLabels.CONVERTED, value: 'CONVERTED' },
+    { label: leadStatusLabels.LOST, value: 'LOST' },
+  ] as const;
+}
+
+export function getLeadFormStatusOptions(messages: AppMessages) {
+  return getLeadStatusOptions(messages).filter((option) => option.value !== '');
+}
+
+export function formatLeadStatus(status: LeadStatus, messages: AppMessages) {
+  return getLeadStatusLabels(messages)[status];
+}
+
+export function formatLeadDate(value: string, locale: AppLocale, messages: AppMessages) {
   const parsedDate = new Date(value);
 
   if (Number.isNaN(parsedDate.getTime())) {
-    return 'Data desconhecida';
+    return messages.leads.shared.unknownDate;
   }
+
+  const dateTimeFormatter = new Intl.DateTimeFormat(locale, {
+    dateStyle: 'medium',
+    timeStyle: 'short',
+  });
 
   return dateTimeFormatter.format(parsedDate);
 }
 
-export function getLeadOwnerOptions(users: LeadOwnerOption[]) {
+export function getLeadOwnerOptions(users: LeadOwnerOption[], messages: AppMessages) {
   return [
-    { label: 'Todos os responsaveis', value: '' },
+    { label: messages.leads.form.allOwners, value: '' },
     ...users.map((user) => ({
-      label: `${user.name}${user.isActive ? '' : ' (Inativo)'}`,
+      label: `${user.name}${user.isActive ? '' : ` (${messages.leads.form.ownerInactiveSuffix})`}`,
       value: user.id,
     })),
   ];
 }
 
-export function getLeadFormOwnerOptions(users: LeadOwnerOption[]) {
+export function getLeadFormOwnerOptions(users: LeadOwnerOption[], messages: AppMessages) {
   return [
-    { label: 'Sem responsavel', value: '' },
+    { label: messages.leads.form.ownerUnassigned, value: '' },
     ...users.map((user) => ({
-      label: `${user.name}${user.isActive ? '' : ' (Inativo)'}`,
+      label: `${user.name}${user.isActive ? '' : ` (${messages.leads.form.ownerInactiveSuffix})`}`,
       value: user.id,
     })),
   ];
@@ -108,13 +117,13 @@ export function getLeadInitialFormValues(lead?: Lead): LeadFormValues {
   };
 }
 
-export function getLeadSuccessMessage(success: string | null) {
-  const messages: Record<string, string> = {
-    converted: 'Lead convertido em cliente com sucesso.',
-    created: 'Lead criado com sucesso.',
-    deleted: 'Lead removido com sucesso.',
-    updated: 'Lead atualizado com sucesso.',
+export function getLeadSuccessMessage(success: string | null, appMessages: AppMessages) {
+  const successMessages: Record<string, string> = {
+    converted: appMessages.leads.shared.successConverted,
+    created: appMessages.leads.shared.successCreated,
+    deleted: appMessages.leads.shared.successDeleted,
+    updated: appMessages.leads.shared.successUpdated,
   };
 
-  return success ? messages[success] ?? null : null;
+  return success ? successMessages[success] ?? null : null;
 }

@@ -1,9 +1,11 @@
 'use client';
 
 import Link from 'next/link';
+import { useTranslation } from '@/i18n/use-translation';
 
 import { SelectField } from '@/components/SelectField';
 import { TextField } from '@/components/TextField';
+import { getLeadStatusOptions } from '../lib/leads-format';
 
 type LeadsFiltersProps = Readonly<{
   onChange: (
@@ -28,49 +30,47 @@ export function LeadsFilters({
   showOwnerFilter,
   values,
 }: LeadsFiltersProps) {
+  const { messages } = useTranslation();
+
   return (
     <section className="rounded-[2rem] border border-[var(--border)] bg-[var(--card)] p-6 shadow-[var(--shadow-soft)]">
       <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
         <div>
-          <p className="text-sm font-semibold uppercase tracking-[0.2em] text-[var(--accent)]">Filtros de leads</p>
-          <h2 className="mt-3 text-2xl font-semibold text-[var(--foreground)]">Lista de leads do pipeline</h2>
+          <p className="text-sm font-semibold uppercase tracking-[0.2em] text-[var(--accent)]">{messages.leads.filters.eyebrow}</p>
+          <h2 className="mt-3 text-2xl font-semibold text-[var(--foreground)]">{messages.leads.filters.title}</h2>
           <p className="mt-2 text-sm leading-6 text-[var(--foreground-muted)]">
-            Busque e filtre leads da organizacao atual, depois crie, atualize, converta ou remova registros.
+            {messages.leads.filters.description}
           </p>
         </div>
         <Link
           className="inline-flex min-h-11 items-center justify-center rounded-full bg-[var(--accent)] px-5 text-sm font-semibold text-white hover:bg-[var(--accent-strong)]"
           href="/leads/new"
         >
-          Criar lead
+          {messages.leads.filters.createButton}
         </Link>
       </div>
 
       <form className="mt-6 grid gap-4 lg:grid-cols-[1.6fr_0.8fr_0.8fr_auto]" onSubmit={onSubmit}>
         <TextField
-          label="Busca"
+          label={messages.leads.filters.searchLabel}
           name="search"
           onChange={onChange}
-          placeholder="Nome, email, empresa ou telefone"
+          placeholder={messages.leads.filters.searchPlaceholder}
           value={values.search}
         />
         <SelectField
-          label="Status"
+          label={messages.leads.filters.statusLabel}
           name="status"
           onChange={onChange}
-          options={[
-            { label: 'Todos os status', value: '' },
-            { label: 'Novo', value: 'NEW' },
-            { label: 'Qualificado', value: 'QUALIFIED' },
-            { label: 'Contatado', value: 'CONTACTED' },
-            { label: 'Convertido', value: 'CONVERTED' },
-            { label: 'Perdido', value: 'LOST' },
-          ]}
+          options={getLeadStatusOptions(messages).map((option) => ({
+            label: option.label,
+            value: option.value,
+          }))}
           value={values.status}
         />
         {showOwnerFilter ? (
           <SelectField
-            label="Responsavel"
+            label={messages.leads.filters.ownerLabel}
             name="ownerUserId"
             onChange={onChange}
             options={ownerOptions}
@@ -84,14 +84,14 @@ export function LeadsFilters({
             className="inline-flex min-h-12 items-center justify-center rounded-full bg-[var(--accent)] px-5 text-sm font-semibold text-white hover:bg-[var(--accent-strong)]"
             type="submit"
           >
-            Aplicar
+            {messages.common.actions.apply}
           </button>
           <button
             className="inline-flex min-h-12 items-center justify-center rounded-full border border-[var(--border)] bg-white/80 px-5 text-sm font-semibold text-[var(--foreground)] hover:border-[var(--accent)] hover:text-[var(--accent)]"
             onClick={onReset}
             type="button"
           >
-            Limpar
+            {messages.common.actions.reset}
           </button>
         </div>
       </form>
