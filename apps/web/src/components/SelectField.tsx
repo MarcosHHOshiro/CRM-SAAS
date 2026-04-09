@@ -4,6 +4,7 @@ type SelectFieldOption = {
 };
 
 type SelectFieldProps = Readonly<{
+  disabled?: boolean;
   error?: string;
   hint?: string;
   label: string;
@@ -14,6 +15,7 @@ type SelectFieldProps = Readonly<{
 }>;
 
 export function SelectField({
+  disabled = false,
   error,
   hint,
   label,
@@ -26,7 +28,8 @@ export function SelectField({
     <label className="flex flex-col gap-2">
       <span className="text-sm font-semibold text-[var(--foreground)]">{label}</span>
       <select
-        className="min-h-12 rounded-2xl border border-[var(--border)] bg-white/90 px-4 py-3 text-sm text-[var(--foreground)] outline-none ring-0 focus:border-[var(--accent)] focus:bg-white focus:shadow-[0_0_0_4px_rgba(17,122,86,0.12)]"
+        className="min-h-12 rounded-2xl border border-[var(--border)] bg-white/90 px-4 py-3 text-sm text-[var(--foreground)] outline-none ring-0 focus:border-[var(--accent)] focus:bg-white focus:shadow-[0_0_0_4px_rgba(17,122,86,0.12)] disabled:cursor-not-allowed disabled:bg-slate-50 disabled:text-[var(--foreground-muted)] disabled:opacity-80"
+        disabled={disabled}
         name={name}
         onChange={onChange}
         value={value}

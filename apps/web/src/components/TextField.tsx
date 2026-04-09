@@ -1,5 +1,6 @@
 type TextFieldProps = Readonly<{
   autoComplete?: string;
+  disabled?: boolean;
   error?: string;
   hint?: string;
   label: string;
@@ -12,6 +13,7 @@ type TextFieldProps = Readonly<{
 
 export function TextField({
   autoComplete,
+  disabled = false,
   error,
   hint,
   label,
@@ -26,7 +28,8 @@ export function TextField({
       <span className="text-sm font-semibold text-[var(--foreground)]">{label}</span>
       <input
         autoComplete={autoComplete}
-        className="min-h-12 rounded-2xl border border-[var(--border)] bg-white/90 px-4 py-3 text-sm text-[var(--foreground)] outline-none ring-0 placeholder:text-[var(--foreground-muted)] focus:border-[var(--accent)] focus:bg-white focus:shadow-[0_0_0_4px_rgba(17,122,86,0.12)]"
+        className="min-h-12 rounded-2xl border border-[var(--border)] bg-white/90 px-4 py-3 text-sm text-[var(--foreground)] outline-none ring-0 placeholder:text-[var(--foreground-muted)] focus:border-[var(--accent)] focus:bg-white focus:shadow-[0_0_0_4px_rgba(17,122,86,0.12)] disabled:cursor-not-allowed disabled:bg-slate-50 disabled:text-[var(--foreground-muted)] disabled:opacity-80"
+        disabled={disabled}
         name={name}
         onChange={onChange}
         placeholder={placeholder}
