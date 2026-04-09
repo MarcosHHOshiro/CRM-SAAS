@@ -44,6 +44,27 @@ enum ActivityType {
   TASK
 }
 
+enum FeedbackType {
+  FEATURE
+  IMPROVEMENT
+  BUG
+  IDEA
+}
+
+enum FeedbackStatus {
+  BACKLOG
+  PLANNED
+  IN_PROGRESS
+  DONE
+  REJECTED
+}
+
+enum FeedbackPriority {
+  LOW
+  MEDIUM
+  HIGH
+}
+
 model Organization {
   id            String         @id @default(uuid()) @db.Uuid
   name          String
@@ -56,6 +77,9 @@ model Organization {
   clients       Client[]
   opportunities Opportunity[]
   activities    Activity[]
+  feedbackItems Feedback[]
+  feedbackComments FeedbackComment[]
+  feedbackVotes FeedbackVote[]
 }
 
 model User {
@@ -74,6 +98,10 @@ model User {
   ownedClients       Client[]       @relation("client-owner")
   ownedOpportunities Opportunity[]  @relation("opportunity-owner")
   activities         Activity[]     @relation("activity-user")
+  createdFeedbackItems Feedback[]   @relation("feedback-created-by")
+  assignedFeedbackItems Feedback[]  @relation("feedback-assigned-to")
+  feedbackComments   FeedbackComment[] @relation("feedback-comment-author")
+  feedbackVotes      FeedbackVote[] @relation("feedback-vote-user")
 
   @@index([organizationId])
 }
@@ -188,4 +216,63 @@ model Activity {
   @@index([clientId])
   @@index([opportunityId])
   @@index([type])
+}
+
+model Feedback {
+  id                String           @id @default(uuid()) @db.Uuid
+  organizationId    String           @db.Uuid
+  createdByUserId   String           @db.Uuid
+  assignedToUserId  String?          @db.Uuid
+  title             String
+  description       String
+  type              FeedbackType
+  status            FeedbackStatus   @default(BACKLOG)
+  priority          FeedbackPriority @default(MEDIUM)
+  createdAt         DateTime         @default(now())
+  updatedAt         DateTime         @updatedAt
+  organization      Organization     @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  createdBy         User             @relation("feedback-created-by", fields: [createdByUserId], references: [id], onDelete: Cascade)
+  assignedTo        User?            @relation("feedback-assigned-to", fields: [assignedToUserId], references: [id], onDelete: SetNull)
+  comments          FeedbackComment[]
+  votes             FeedbackVote[]
+
+  @@index([organizationId])
+  @@index([createdByUserId])
+  @@index([assignedToUserId])
+  @@index([type])
+  @@index([status])
+  @@index([priority])
+}
+
+model FeedbackComment {
+  id             String       @id @default(uuid()) @db.Uuid
+  organizationId String       @db.Uuid
+  feedbackId     String       @db.Uuid
+  userId         String       @db.Uuid
+  content        String
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  feedback       Feedback     @relation(fields: [feedbackId], references: [id], onDelete: Cascade)
+  user           User         @relation("feedback-comment-author", fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([organizationId])
+  @@index([feedbackId])
+  @@index([userId])
+}
+
+model FeedbackVote {
+  id             String       @id @default(uuid()) @db.Uuid
+  organizationId String       @db.Uuid
+  feedbackId     String       @db.Uuid
+  userId         String       @db.Uuid
+  createdAt      DateTime     @default(now())
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  feedback       Feedback     @relation(fields: [feedbackId], references: [id], onDelete: Cascade)
+  user           User         @relation("feedback-vote-user", fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([feedbackId, userId])
+  @@index([organizationId])
+  @@index([feedbackId])
+  @@index([userId])
 }

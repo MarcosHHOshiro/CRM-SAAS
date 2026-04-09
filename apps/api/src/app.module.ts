@@ -6,6 +6,7 @@ import { ActivitiesModule } from './modules/activities/activities.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { ClientsModule } from './modules/clients/clients.module';
 import { DashboardModule } from './modules/dashboard/dashboard.module';
+import { FeedbackModule } from './modules/feedback/feedback.module';
 import { HealthModule } from './modules/health/health.module';
 import { LeadsModule } from './modules/leads/leads.module';
 import { OpportunitiesModule } from './modules/opportunities/opportunities.module';
@@ -25,6 +26,7 @@ import { PrismaModule } from './prisma/prisma.module';
     AuthModule,
     ClientsModule,
     DashboardModule,
+    FeedbackModule,
     HealthModule,
     LeadsModule,
     OpportunitiesModule,
