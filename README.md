@@ -124,7 +124,7 @@ Main API variables live in `apps/api/.env`:
 
 ```env
 NODE_ENV=development
-PORT=3333
+PORT=3334
 CORS_ORIGIN=http://localhost:3000
 DATABASE_URL=postgresql://postgres:postgres@127.0.0.1:15432/crm_saas?schema=public
 JWT_ACCESS_SECRET=change-me-access-secret
@@ -139,7 +139,7 @@ BCRYPT_SALT_ROUNDS=10
 The frontend points to the backend API through `apps/web/.env.local`:
 
 ```env
-NEXT_PUBLIC_API_URL=http://localhost:3333/api
+NEXT_PUBLIC_API_URL=http://localhost:3334/api
 ```
 
 If you change the API port locally, update this URL to match.
@@ -191,7 +191,7 @@ npm run dev:api
 By default the API runs at:
 
 ```txt
-http://localhost:3333/api
+http://localhost:3334/api
 ```
 
 ## Running the Web App

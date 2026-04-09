@@ -23,7 +23,7 @@ async function bootstrap() {
   );
   app.useGlobalFilters(new ApiExceptionFilter());
 
-  const port = configService.get<number>('PORT') ?? 3333;
+  const port = configService.get<number>('PORT') ?? 3334;
 
   await app.listen(port);
 }

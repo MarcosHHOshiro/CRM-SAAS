@@ -12,7 +12,7 @@ type EnvironmentVariables = {
 
 export function validateEnv(config: Record<string, unknown>) {
   const env = config as EnvironmentVariables;
-  const port = Number(env.PORT ?? 3333);
+  const port = Number(env.PORT ?? 3334);
   const bcryptSaltRounds = Number(env.BCRYPT_SALT_ROUNDS ?? 10);
 
   if (Number.isNaN(port)) {

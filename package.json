@@ -19,6 +19,7 @@
     "build:api": "turbo -F @crm-saas/api build",
     "lint": "turbo lint",
     "check-types": "turbo check-types",
+    "test:api": "npm --workspace @crm-saas/api run test",
     "prisma:generate": "npm --workspace @crm-saas/api run prisma:generate",
     "prisma:migrate:dev": "npm --workspace @crm-saas/api run prisma:migrate:dev --",
     "prisma:studio": "npm --workspace @crm-saas/api run prisma:studio"
