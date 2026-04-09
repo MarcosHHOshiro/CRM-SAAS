@@ -5,10 +5,11 @@ import { useMemo, useState } from 'react';
 import { InlineBanner } from '@/components/InlineBanner';
 import { SelectField } from '@/components/SelectField';
 import { TextAreaField } from '@/components/TextAreaField';
+import { useTranslation } from '@/i18n/use-translation';
 
 import {
-  activityFormTypeOptions,
-  activityTypeLabels,
+  getActivityFormTypeOptions,
+  getActivityTypeLabels,
   getActivityClientOptions,
   getActivityInitialFormValues,
   getActivityLeadOptions,
@@ -41,6 +42,7 @@ export function ActivityForm({
   onSubmit,
   opportunityOptions = [],
 }: ActivityFormProps) {
+  const { messages } = useTranslation();
   const [values, setValues] = useState<ActivityFormValues>(() =>
     getActivityInitialFormValues(),
   );
@@ -89,7 +91,7 @@ export function ActivityForm({
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
-    const result = activitySchema.safeParse(values);
+    const result = activitySchema(messages).safeParse(values);
 
     if (!result.success) {
       const flattened = result.error.flatten().fieldErrors;
@@ -116,37 +118,37 @@ export function ActivityForm({
       <div className="grid gap-4 md:grid-cols-2">
         <SelectField
           error={fieldErrors.type}
-          label="Type"
+          label={messages.activities.form.type}
           name="type"
           onChange={handleChange}
-          options={activityFormTypeOptions.map((option) => ({
-            label: activityTypeLabels[option.value as keyof typeof activityTypeLabels],
+          options={getActivityFormTypeOptions(messages).map((option) => ({
+            label: getActivityTypeLabels(messages)[option.value as keyof ReturnType<typeof getActivityTypeLabels>],
             value: option.value,
           }))}
           value={values.type}
         />
         <SelectField
           error={fieldErrors.leadId}
-          label="Lead"
+          label={messages.activities.form.lead}
           name="leadId"
           onChange={handleChange}
-          options={getActivityLeadOptions(leadOptions)}
+          options={getActivityLeadOptions(leadOptions, messages)}
           value={values.leadId}
         />
         <SelectField
           error={fieldErrors.clientId}
-          label="Client"
+          label={messages.activities.form.client}
           name="clientId"
           onChange={handleChange}
-          options={getActivityClientOptions(clientOptions)}
+          options={getActivityClientOptions(clientOptions, messages)}
           value={values.clientId}
         />
         <SelectField
           error={fieldErrors.opportunityId}
-          label="Opportunity"
+          label={messages.activities.form.opportunity}
           name="opportunityId"
           onChange={handleChange}
-          options={getActivityOpportunityOptions(filteredOpportunityOptions)}
+          options={getActivityOpportunityOptions(filteredOpportunityOptions, messages)}
           value={values.opportunityId}
         />
       </div>
@@ -154,11 +156,11 @@ export function ActivityForm({
       <div className="mt-5">
         <TextAreaField
           error={fieldErrors.description}
-          hint="Describe the call, meeting, email, note, or task clearly."
-          label="Description"
+          hint={messages.activities.form.descriptionHint}
+          label={messages.activities.form.description}
           name="description"
           onChange={handleChange}
-          placeholder="Summarize what happened or what needs to happen next."
+          placeholder={messages.activities.form.descriptionPlaceholder}
           rows={6}
           value={values.description}
         />
@@ -176,7 +178,7 @@ export function ActivityForm({
           disabled={isSubmitting}
           type="submit"
         >
-          {isSubmitting ? 'Saving...' : 'Create activity'}
+          {isSubmitting ? messages.common.actions.saving : messages.activities.form.submit}
         </button>
       </div>
     </form>

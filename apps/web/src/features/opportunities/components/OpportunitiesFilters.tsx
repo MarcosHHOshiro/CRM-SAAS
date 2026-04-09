@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { useTranslation } from '@/i18n/use-translation';
 
 import { SelectField } from '@/components/SelectField';
 import { TextField } from '@/components/TextField';
@@ -36,18 +37,20 @@ export function OpportunitiesFilters({
   statusOptions,
   values,
 }: OpportunitiesFiltersProps) {
+  const { messages } = useTranslation();
+
   return (
     <section className="rounded-[2rem] border border-[var(--border)] bg-[var(--card)] p-6 shadow-[var(--shadow-soft)]">
       <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
         <div>
           <p className="text-sm font-semibold uppercase tracking-[0.2em] text-[var(--accent)]">
-            Opportunity filters
+            {messages.opportunities.filters.eyebrow}
           </p>
           <h2 className="mt-3 text-2xl font-semibold text-[var(--foreground)]">
-            Pipeline opportunity list
+            {messages.opportunities.filters.title}
           </h2>
           <p className="mt-2 text-sm leading-6 text-[var(--foreground-muted)]">
-            Filter opportunities by stage, status, and owner while keeping the pipeline organized.
+            {messages.opportunities.filters.description}
           </p>
         </div>
         <div className="flex flex-wrap gap-3">
@@ -55,13 +58,13 @@ export function OpportunitiesFilters({
             className="inline-flex min-h-11 items-center justify-center rounded-full border border-[var(--border)] bg-white/80 px-5 text-sm font-semibold text-[var(--foreground)] hover:border-[var(--accent)] hover:text-[var(--accent)]"
             href="/opportunities/pipeline"
           >
-            Open pipeline
+            {messages.opportunities.filters.openPipeline}
           </Link>
           <Link
             className="inline-flex min-h-11 items-center justify-center rounded-full bg-[var(--accent)] px-5 text-sm font-semibold text-white hover:bg-[var(--accent-strong)]"
             href="/opportunities/new"
           >
-            Create opportunity
+            {messages.opportunities.filters.createButton}
           </Link>
         </div>
       </div>
@@ -71,21 +74,21 @@ export function OpportunitiesFilters({
         onSubmit={onSubmit}
       >
         <TextField
-          label="Search"
+          label={messages.opportunities.filters.searchLabel}
           name="search"
           onChange={onChange}
-          placeholder="Title or client details"
+          placeholder={messages.opportunities.filters.searchPlaceholder}
           value={values.search}
         />
         <SelectField
-          label="Stage"
+          label={messages.opportunities.filters.stageLabel}
           name="stage"
           onChange={onChange}
           options={stageOptions}
           value={values.stage}
         />
         <SelectField
-          label="Status"
+          label={messages.opportunities.filters.statusLabel}
           name="status"
           onChange={onChange}
           options={statusOptions}
@@ -93,7 +96,7 @@ export function OpportunitiesFilters({
         />
         {showOwnerFilter ? (
           <SelectField
-            label="Owner"
+            label={messages.opportunities.filters.ownerLabel}
             name="ownerUserId"
             onChange={onChange}
             options={ownerOptions}
@@ -101,7 +104,7 @@ export function OpportunitiesFilters({
           />
         ) : (
           <SelectField
-            label="Sort"
+            label={messages.opportunities.filters.sortLabel}
             name="sortKey"
             onChange={onChange}
             options={sortOptions}
@@ -111,7 +114,7 @@ export function OpportunitiesFilters({
         <div className="flex items-end gap-3">
           {showOwnerFilter ? (
             <SelectField
-              label="Sort"
+              label={messages.opportunities.filters.sortLabel}
               name="sortKey"
               onChange={onChange}
               options={sortOptions}
@@ -122,14 +125,14 @@ export function OpportunitiesFilters({
             className="inline-flex min-h-12 items-center justify-center rounded-full bg-[var(--accent)] px-5 text-sm font-semibold text-white hover:bg-[var(--accent-strong)]"
             type="submit"
           >
-            Apply
+            {messages.common.actions.apply}
           </button>
           <button
             className="inline-flex min-h-12 items-center justify-center rounded-full border border-[var(--border)] bg-white/80 px-5 text-sm font-semibold text-[var(--foreground)] hover:border-[var(--accent)] hover:text-[var(--accent)]"
             onClick={onReset}
             type="button"
           >
-            Reset
+            {messages.common.actions.reset}
           </button>
         </div>
       </form>

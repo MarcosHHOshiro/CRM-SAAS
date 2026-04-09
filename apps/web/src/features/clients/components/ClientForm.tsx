@@ -6,9 +6,10 @@ import { useState } from 'react';
 import { InlineBanner } from '@/components/InlineBanner';
 import { SelectField } from '@/components/SelectField';
 import { TextField } from '@/components/TextField';
+import { useTranslation } from '@/i18n/use-translation';
 
 import { getClientInitialFormValues, getClientOwnerOptions } from '../lib/clients-format';
-import { clientSchema } from '../schemas/client-schema';
+import { createClientSchema } from '../schemas/client-schema';
 import type { Client, ClientFormValues, ClientOwnerOption } from '../types/clients';
 
 type ClientFormProps = Readonly<{
@@ -30,8 +31,10 @@ export function ClientForm({
   ownerOptions = [],
   submitLabel,
 }: ClientFormProps) {
+  const { messages } = useTranslation();
   const [values, setValues] = useState<ClientFormValues>(() => getClientInitialFormValues(client));
   const [fieldErrors, setFieldErrors] = useState<ClientFormErrors>({});
+  const clientSchema = createClientSchema(messages);
 
   function handleChange(
     event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
@@ -78,50 +81,50 @@ export function ClientForm({
       <div className="grid gap-5 md:grid-cols-2">
         <TextField
           error={fieldErrors.name}
-          label="Client name"
+          label={messages.clients.form.name}
           name="name"
           onChange={handleChange}
-          placeholder="Northwind Manufacturing"
+          placeholder={messages.clients.form.namePlaceholder}
           value={values.name}
         />
         <TextField
           error={fieldErrors.email}
-          label="Email"
+          label={messages.clients.form.email}
           name="email"
           onChange={handleChange}
-          placeholder="contact@company.com"
+          placeholder={messages.clients.form.emailPlaceholder}
           type="email"
           value={values.email}
         />
         <TextField
           error={fieldErrors.phone}
-          label="Phone"
+          label={messages.clients.form.phone}
           name="phone"
           onChange={handleChange}
-          placeholder="+1 (555) 000-1234"
+          placeholder={messages.clients.form.phonePlaceholder}
           value={values.phone}
         />
         <TextField
           error={fieldErrors.company}
-          label="Company"
+          label={messages.clients.form.company}
           name="company"
           onChange={handleChange}
-          placeholder="Northwind"
+          placeholder={messages.clients.form.companyPlaceholder}
           value={values.company}
         />
         {ownerOptions.length > 0 ? (
           <SelectField
             error={fieldErrors.ownerUserId}
-            hint="Assign an owner when this client already belongs to a team member."
-            label="Owner"
+            hint={messages.clients.form.ownerHint}
+            label={messages.clients.form.owner}
             name="ownerUserId"
             onChange={handleChange}
-            options={getClientOwnerOptions(ownerOptions)}
+            options={getClientOwnerOptions(ownerOptions, messages)}
             value={values.ownerUserId}
           />
         ) : (
           <div className="rounded-[1.5rem] border border-[var(--border)] bg-white/60 px-4 py-3 text-sm leading-6 text-[var(--foreground-muted)]">
-            Owner assignment is not available for your current access level.
+            {messages.clients.form.ownerUnavailable}
           </div>
         )}
       </div>
@@ -138,13 +141,13 @@ export function ClientForm({
           disabled={isSubmitting}
           type="submit"
         >
-          {isSubmitting ? 'Saving...' : submitLabel}
+          {isSubmitting ? messages.common.actions.saving : submitLabel}
         </button>
         <Link
           className="inline-flex min-h-11 items-center justify-center rounded-full border border-[var(--border)] bg-white/80 px-5 text-sm font-semibold text-[var(--foreground)] hover:border-[var(--accent)] hover:text-[var(--accent)]"
           href={client ? `/clients/${client.id}` : '/clients'}
         >
-          Cancel
+          {messages.common.actions.cancel}
         </Link>
       </div>
     </form>

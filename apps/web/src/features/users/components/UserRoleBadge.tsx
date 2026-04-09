@@ -1,6 +1,5 @@
 import type { UserRole } from '@crm-saas/types';
-
-import { userRoleLabels } from '../lib/users-format';
+import { useTranslation } from '@/i18n/use-translation';
 
 type UserRoleBadgeProps = Readonly<{
   role: UserRole;
@@ -13,9 +12,11 @@ const roleClasses: Record<UserRole, string> = {
 };
 
 export function UserRoleBadge({ role }: UserRoleBadgeProps) {
+  const { messages } = useTranslation();
+
   return (
     <span className={`inline-flex rounded-full px-3 py-1 text-xs font-semibold ${roleClasses[role]}`}>
-      {userRoleLabels[role]}
+      {messages.roles[role]}
     </span>
   );
 }

@@ -5,6 +5,7 @@ import { useParams, useSearchParams } from 'next/navigation';
 
 import { PageIntro } from '@/components/PageIntro';
 import { useQueryFeedbackToast } from '@/hooks/use-query-feedback-toast';
+import { useTranslation } from '@/i18n/use-translation';
 import { getApiErrorMessage } from '@/services/api/api-error';
 
 import { getClientSuccessMessage } from '../lib/clients-format';
@@ -14,11 +15,12 @@ import { ClientDetailsSkeleton } from './ClientDetailsSkeleton';
 import { ClientsErrorState } from './ClientsErrorState';
 
 export function ClientDetailsPage() {
+  const { messages } = useTranslation();
   const params = useParams<{ clientId: string }>();
   const searchParams = useSearchParams();
   const clientId = params.clientId;
   const clientQuery = useClientQuery(clientId);
-  const successMessage = getClientSuccessMessage(searchParams.get('success'));
+  const successMessage = getClientSuccessMessage(searchParams.get('success'), messages);
 
   useQueryFeedbackToast(successMessage);
 
@@ -30,11 +32,11 @@ export function ClientDetailsPage() {
     return (
       <div className="space-y-6">
         <PageIntro
-          description="Review the client profile, ownership, and origin details from the current organization."
-          eyebrow="Clients"
-          title="Client details"
+          description={messages.clients.details.description}
+          eyebrow={messages.clients.details.eyebrow}
+          title={messages.clients.details.title}
         />
-        <ClientsErrorState message={getApiErrorMessage(clientQuery.error, 'Unable to load this client.')} />
+        <ClientsErrorState message={getApiErrorMessage(clientQuery.error, messages.clients.details.loadError)} />
       </div>
     );
   }
@@ -43,8 +45,8 @@ export function ClientDetailsPage() {
   return (
     <div className="space-y-6">
       <PageIntro
-        description="Review the client profile, ownership, and origin details from the current organization."
-        eyebrow="Clients"
+        description={messages.clients.details.description}
+        eyebrow={messages.clients.details.eyebrow}
         title={client.name}
       />
       <section className="flex flex-wrap gap-3">
@@ -52,13 +54,13 @@ export function ClientDetailsPage() {
           className="inline-flex min-h-11 items-center justify-center rounded-full border border-[var(--border)] bg-white/80 px-5 text-sm font-semibold text-[var(--foreground)] hover:border-[var(--accent)] hover:text-[var(--accent)]"
           href="/clients"
         >
-          Back to list
+          {messages.common.actions.backToList}
         </Link>
         <Link
           className="inline-flex min-h-11 items-center justify-center rounded-full bg-[var(--accent)] px-5 text-sm font-semibold text-white hover:bg-[var(--accent-strong)]"
           href={`/clients/${client.id}/edit`}
         >
-          Edit client
+          {messages.clients.details.editButton}
         </Link>
       </section>
 

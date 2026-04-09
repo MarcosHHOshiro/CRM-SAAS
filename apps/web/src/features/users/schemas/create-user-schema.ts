@@ -1,16 +1,21 @@
 import { z } from 'zod';
 import { UserRole } from '@crm-saas/types';
+import type { AppMessages } from '@/i18n/messages/types';
 
-export const createUserSchema = z.object({
-  email: z.email('Enter a valid email address.').transform((value) => value.trim().toLowerCase()),
-  name: z
-    .string()
-    .trim()
-    .min(2, 'User name must have at least 2 characters.')
-    .max(120, 'User name must have at most 120 characters.'),
-  password: z
-    .string()
-    .min(8, 'Password must have at least 8 characters.')
-    .max(72, 'Password must have at most 72 characters.'),
-  role: z.nativeEnum(UserRole),
-});
+export function createUserSchema(messages: AppMessages) {
+  return z.object({
+    email: z
+      .email(messages.users.validation.emailInvalid)
+      .transform((value) => value.trim().toLowerCase()),
+    name: z
+      .string()
+      .trim()
+      .min(2, messages.users.validation.nameMin)
+      .max(120, messages.users.validation.nameMax),
+    password: z
+      .string()
+      .min(8, messages.users.validation.passwordMin)
+      .max(72, messages.users.validation.passwordMax),
+    role: z.nativeEnum(UserRole),
+  });
+}

@@ -1,13 +1,16 @@
 import Link from 'next/link';
+import { useTranslation } from '@/i18n/use-translation';
 
 type OpportunitiesViewSwitchProps = Readonly<{
   view: 'list' | 'pipeline';
 }>;
 
 export function OpportunitiesViewSwitch({ view }: OpportunitiesViewSwitchProps) {
+  const { messages } = useTranslation();
+
   const items = [
-    { href: '/opportunities', label: 'List', value: 'list' },
-    { href: '/opportunities/pipeline', label: 'Pipeline', value: 'pipeline' },
+    { href: '/opportunities', label: messages.opportunities.viewSwitch.list, value: 'list' },
+    { href: '/opportunities/pipeline', label: messages.opportunities.viewSwitch.pipeline, value: 'pipeline' },
   ] as const;
 
   return (

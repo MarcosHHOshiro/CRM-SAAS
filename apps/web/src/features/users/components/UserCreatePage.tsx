@@ -7,6 +7,7 @@ import { useState } from 'react';
 import { LoadingScreen } from '@/components/LoadingScreen';
 import { PageIntro } from '@/components/PageIntro';
 import { useCurrentSessionQuery } from '@/features/auth/hooks/use-auth';
+import { useTranslation } from '@/i18n/use-translation';
 import { getApiErrorMessage } from '@/services/api/api-error';
 
 import { useCreateUserMutation } from '../hooks/use-users';
@@ -20,6 +21,7 @@ export function UserCreatePage() {
   const currentSessionQuery = useCurrentSessionQuery();
   const createUserMutation = useCreateUserMutation();
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const { messages } = useTranslation();
 
   async function handleSubmit(values: UserFormValues) {
     setErrorMessage(null);
@@ -28,15 +30,15 @@ export function UserCreatePage() {
       await createUserMutation.mutateAsync(values);
       router.replace('/users?success=created');
     } catch (error) {
-      setErrorMessage(getApiErrorMessage(error, 'Unable to create this user right now.'));
+      setErrorMessage(getApiErrorMessage(error, messages.users.create.errorFallback));
     }
   }
 
   if (currentSessionQuery.isPending) {
     return (
       <LoadingScreen
-        description="Checking your access level before opening the team administration flow."
-        title="Loading user form"
+        description={messages.users.create.loadingDescription}
+        title={messages.users.create.loadingTitle}
       />
     );
   }
@@ -45,14 +47,14 @@ export function UserCreatePage() {
     return (
       <div className="space-y-6">
         <PageIntro
-          description="Invite or create an internal team member and assign the right role for your workspace."
-          eyebrow="Users"
-          title="Create user"
+          description={messages.users.create.description}
+          eyebrow={messages.users.create.eyebrow}
+          title={messages.users.create.title}
         />
         <UsersErrorState
           message={getApiErrorMessage(
             currentSessionQuery.error,
-            'Unable to load your current access context.',
+            messages.users.create.loadError,
           )}
         />
       </div>
@@ -63,9 +65,9 @@ export function UserCreatePage() {
     return (
       <div className="space-y-6">
         <PageIntro
-          description="Invite or create an internal team member and assign the right role for your workspace."
-          eyebrow="Users"
-          title="Create user"
+          description={messages.users.create.description}
+          eyebrow={messages.users.create.eyebrow}
+          title={messages.users.create.title}
         />
         <UsersAccessState />
       </div>
@@ -75,9 +77,9 @@ export function UserCreatePage() {
   return (
     <div className="space-y-6">
       <PageIntro
-        description="Invite or create an internal team member and assign the right role for your workspace."
-        eyebrow="Users"
-        title="Create user"
+        description={messages.users.create.description}
+        eyebrow={messages.users.create.eyebrow}
+        title={messages.users.create.title}
       />
       <UserForm
         actorRole={currentSessionQuery.data.user.role}
@@ -85,7 +87,7 @@ export function UserCreatePage() {
         isSubmitting={createUserMutation.isPending}
         mode="create"
         onSubmit={handleSubmit}
-        submitLabel="Create user"
+        submitLabel={messages.users.create.submit}
       />
     </div>
   );

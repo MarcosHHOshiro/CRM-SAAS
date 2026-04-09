@@ -8,14 +8,15 @@ import { PaginationControls } from '@/components/PaginationControls';
 import { PageIntro } from '@/components/PageIntro';
 import { useToast } from '@/components/ToastProvider';
 import { useQueryFeedbackToast } from '@/hooks/use-query-feedback-toast';
+import { useTranslation } from '@/i18n/use-translation';
 import { buildPageQueryString, getPageFromSearchParams, paginateItems } from '@/lib/pagination';
 import { getApiErrorMessage } from '@/services/api/api-error';
 
 import {
-  activityTypeOptions,
   buildActivityFilters,
   buildActivityFiltersQueryString,
   getActivityClientOptions,
+  getActivityTypeOptions,
   getActivityLeadOptions,
   getActivityOpportunityOptions,
   getActivitySuccessMessage,
@@ -68,6 +69,7 @@ export function ActivitiesPage() {
   const [formKey, setFormKey] = useState(0);
   const [formErrorMessage, setFormErrorMessage] = useState<string | null>(null);
   const { showToast } = useToast();
+  const { messages } = useTranslation();
   const [filtersState, setFiltersState] = useState<ActivityFiltersState>({
     authorUserId: searchParams.get('authorUserId') ?? '',
     clientId: searchParams.get('clientId') ?? '',
@@ -86,7 +88,7 @@ export function ActivitiesPage() {
     });
   }, [searchParams]);
 
-  const successMessage = getActivitySuccessMessage(searchParams.get('success'));
+  const successMessage = getActivitySuccessMessage(searchParams.get('success'), messages);
   const showUserFilter = (usersQuery.data?.length ?? 0) > 1;
   const currentPage = getPageFromSearchParams(searchParams);
 
@@ -131,12 +133,12 @@ export function ActivitiesPage() {
       setFormErrorMessage(null);
       await createActivityMutation.mutateAsync(mapCreateActivityPayload(values));
       showToast({
-        message: 'Activity created successfully.',
+        message: messages.activities.shared.successCreated,
         tone: 'success',
       });
       setFormKey((currentKey) => currentKey + 1);
     } catch (error) {
-      const message = getApiErrorMessage(error, 'Unable to create this activity right now.');
+      const message = getApiErrorMessage(error, messages.activities.page.errorFallback);
 
       setFormErrorMessage(message);
       showToast({
@@ -159,14 +161,14 @@ export function ActivitiesPage() {
     return (
       <div className="space-y-6">
         <PageIntro
-          description="Capture calls, meetings, notes, emails, and tasks in a clean activity feed for the organization."
-          eyebrow="Activities"
-          title="Activity feed"
+          description={messages.activities.page.description}
+          eyebrow={messages.activities.page.eyebrow}
+          title={messages.activities.page.title}
         />
         <ActivitiesErrorState
           message={getApiErrorMessage(
             activitiesQuery.error,
-            'Please try loading the activity feed again.',
+            messages.activities.page.errorFallback,
           )}
           onRetry={() => {
             void activitiesQuery.refetch();
@@ -181,30 +183,30 @@ export function ActivitiesPage() {
   return (
     <div className="space-y-6">
       <PageIntro
-        description="Capture calls, meetings, notes, emails, and tasks in a clean activity feed for the organization."
-        eyebrow="Activities"
-        title="Activity feed"
+        description={messages.activities.page.description}
+        eyebrow={messages.activities.page.eyebrow}
+        title={messages.activities.page.title}
       />
 
       {usersQuery.isError ? (
         <InlineBanner tone="info">
-          Author filtering is not available for your current access level.
+          {messages.activities.page.authorUnavailable}
         </InlineBanner>
       ) : null}
 
       <ActivitiesFilters
-        clientOptions={getActivityClientOptions(clientsQuery.data ?? [])}
-        leadOptions={getActivityLeadOptions(leadsQuery.data ?? [])}
+        clientOptions={getActivityClientOptions(clientsQuery.data ?? [], messages)}
+        leadOptions={getActivityLeadOptions(leadsQuery.data ?? [], messages)}
         onChange={handleFilterChange}
         onReset={handleFilterReset}
         onSubmit={handleFilterSubmit}
-        opportunityOptions={getActivityOpportunityOptions(opportunitiesQuery.data ?? [])}
+        opportunityOptions={getActivityOpportunityOptions(opportunitiesQuery.data ?? [], messages)}
         showUserFilter={showUserFilter}
-        typeOptions={activityTypeOptions.map((option) => ({
+        typeOptions={getActivityTypeOptions(messages).map((option) => ({
           label: option.label,
           value: option.value,
         }))}
-        userOptions={getActivityUserOptions(usersQuery.data ?? [])}
+        userOptions={getActivityUserOptions(usersQuery.data ?? [], messages)}
         values={filtersState}
       />
 
@@ -212,13 +214,13 @@ export function ActivitiesPage() {
         <section className="space-y-4">
           <div className="rounded-[2rem] border border-[var(--border)] bg-[var(--card)] p-6 shadow-[var(--shadow-soft)]">
             <p className="text-sm font-semibold uppercase tracking-[0.2em] text-[var(--accent)]">
-              Create activity
+              {messages.activities.page.createEyebrow}
             </p>
             <h2 className="mt-3 text-2xl font-semibold text-[var(--foreground)]">
-              Log the latest interaction
+              {messages.activities.page.createTitle}
             </h2>
             <p className="mt-2 text-sm leading-6 text-[var(--foreground-muted)]">
-              Add notes, calls, emails, meetings, or tasks tied to leads, clients, or opportunities.
+              {messages.activities.page.createDescription}
             </p>
           </div>
           <ActivityForm
@@ -235,13 +237,13 @@ export function ActivitiesPage() {
         <section className="space-y-4">
           <div className="rounded-[2rem] border border-[var(--border)] bg-[var(--card)] p-6 shadow-[var(--shadow-soft)]">
             <p className="text-sm font-semibold uppercase tracking-[0.2em] text-[var(--accent)]">
-              Recent activities
+              {messages.activities.page.recentEyebrow}
             </p>
             <h2 className="mt-3 text-2xl font-semibold text-[var(--foreground)]">
-              Latest follow-ups and touchpoints
+              {messages.activities.page.recentTitle}
             </h2>
             <p className="mt-2 text-sm leading-6 text-[var(--foreground-muted)]">
-              The feed updates as soon as new activities are created.
+              {messages.activities.page.recentDescription}
             </p>
           </div>
 
@@ -252,7 +254,7 @@ export function ActivitiesPage() {
               <ActivitiesFeed activities={paginatedActivities.items} />
               <PaginationControls
                 currentPage={paginatedActivities.currentPage}
-                itemLabel="activities"
+                itemLabel={messages.activities.page.itemLabel}
                 onPageChange={handlePageChange}
                 pageSize={8}
                 totalItems={paginatedActivities.totalItems}

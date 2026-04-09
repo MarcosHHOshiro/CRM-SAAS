@@ -27,7 +27,7 @@ function getRoleLabel(role: UserRole) {
   const labels: Record<UserRole, string> = {
     [UserRole.MANAGER]: 'Manager',
     [UserRole.OWNER]: 'Owner',
-    [UserRole.SALES_REP]: 'Sales rep',
+    [UserRole.SALES_REP]: 'Representante comercial',
   };
 
   return labels[role];
@@ -52,7 +52,7 @@ export function OrganizationSettingsPage() {
       await updateOrganizationMutation.mutateAsync(values);
       router.replace('/settings?success=updated');
     } catch (error) {
-      const message = getApiErrorMessage(error, 'Unable to update the organization right now.');
+      const message = getApiErrorMessage(error, 'Nao foi possivel atualizar a organizacao agora.');
 
       setErrorMessage(message);
       showToast({ message, tone: 'error' });
@@ -67,14 +67,14 @@ export function OrganizationSettingsPage() {
     return (
       <div className="space-y-6">
         <PageIntro
-          description="Review the current workspace identity and update the organization name when ownership changes require it."
-          eyebrow="Settings"
-          title="Organization settings"
+          description="Revise a identidade atual do workspace e atualize o nome da organizacao quando necessario."
+          eyebrow="Configuracoes"
+          title="Configuracoes da organizacao"
         />
         <OrganizationSettingsErrorState
           message={getApiErrorMessage(
             currentSessionQuery.error,
-            'Unable to load your current access context.',
+            'Nao foi possivel carregar seu contexto atual de acesso.',
           )}
         />
       </div>
@@ -85,14 +85,14 @@ export function OrganizationSettingsPage() {
     return (
       <div className="space-y-6">
         <PageIntro
-          description="Review the current workspace identity and update the organization name when ownership changes require it."
-          eyebrow="Settings"
-          title="Organization settings"
+          description="Revise a identidade atual do workspace e atualize o nome da organizacao quando necessario."
+          eyebrow="Configuracoes"
+          title="Configuracoes da organizacao"
         />
         <OrganizationSettingsErrorState
           message={getApiErrorMessage(
             organizationQuery.error,
-            'Please try loading the organization settings again.',
+            'Tente carregar as configuracoes da organizacao novamente.',
           )}
           onRetry={() => {
             void organizationQuery.refetch();
@@ -108,9 +108,9 @@ export function OrganizationSettingsPage() {
   return (
     <div className="space-y-6">
       <PageIntro
-        description="Review the current workspace identity and update the organization name when ownership changes require it."
-        eyebrow="Settings"
-        title="Organization settings"
+        description="Revise a identidade atual do workspace e atualize o nome da organizacao quando necessario."
+        eyebrow="Configuracoes"
+        title="Configuracoes da organizacao"
       />
       <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_320px]">
         <OrganizationSettingsForm
@@ -123,12 +123,12 @@ export function OrganizationSettingsPage() {
 
         <section className="rounded-[2rem] border border-[var(--border)] bg-[var(--card)] p-6 shadow-[var(--shadow-soft)]">
           <p className="text-sm font-semibold uppercase tracking-[0.2em] text-[var(--accent)]">
-            Workspace snapshot
+            Resumo do workspace
           </p>
           <div className="mt-6 space-y-5">
             <div>
               <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[var(--foreground-muted)]">
-                Current name
+                Nome atual
               </p>
               <p className="mt-2 text-base font-semibold text-[var(--foreground)]">
                 {organization.name}
@@ -142,13 +142,13 @@ export function OrganizationSettingsPage() {
             </div>
             <div>
               <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[var(--foreground-muted)]">
-                Your access
+                Seu acesso
               </p>
               <p className="mt-2 text-base text-[var(--foreground)]">{getRoleLabel(actor.role)}</p>
             </div>
             <div>
               <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[var(--foreground-muted)]">
-                Created
+                Criado em
               </p>
               <p className="mt-2 text-base text-[var(--foreground)]">
                 {formatOrganizationDate(organization.createdAt)}
@@ -156,7 +156,7 @@ export function OrganizationSettingsPage() {
             </div>
             <div>
               <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[var(--foreground-muted)]">
-                Last updated
+                Ultima atualizacao
               </p>
               <p className="mt-2 text-base text-[var(--foreground)]">
                 {formatOrganizationDate(organization.updatedAt)}

@@ -1,4 +1,4 @@
-import { headers } from 'next/headers';
+import { cookies } from 'next/headers';
 
 import { appMessagesByLocale, DEFAULT_LOCALE } from './messages';
 import type { AppLocale } from './messages/types';
@@ -15,34 +15,30 @@ function normalizeLocale(value: string) {
 }
 
 export async function getRequestLocale(): Promise<AppLocale> {
-  const headerList = await headers();
-  const acceptLanguage = headerList.get('accept-language') ?? '';
+  const cookieStore = await cookies();
+  const cookieLocale = cookieStore.get('locale')?.value;
 
-  for (const entry of acceptLanguage.split(',')) {
-    const [rawLocale] = entry.split(';');
-    const normalizedLocale = normalizeLocale(rawLocale ?? '');
+  if (!cookieLocale) {
+    return DEFAULT_LOCALE;
+  }
 
-    if (!normalizedLocale) {
-      continue;
-    }
+  const normalizedLocale = normalizeLocale(cookieLocale);
+  const matchedLocale = localeAliases[normalizedLocale];
 
-    const matchedLocale = localeAliases[normalizedLocale];
+  if (matchedLocale) {
+    return matchedLocale;
+  }
 
-    if (matchedLocale) {
-      return matchedLocale;
-    }
+  const baseLocale = normalizedLocale.split('-')[0];
 
-    const baseLocale = normalizedLocale.split('-')[0];
+  if (!baseLocale) {
+    return DEFAULT_LOCALE;
+  }
 
-    if (!baseLocale) {
-      continue;
-    }
+  const matchedBaseLocale = localeAliases[baseLocale];
 
-    const matchedBaseLocale = localeAliases[baseLocale];
-
-    if (matchedBaseLocale) {
-      return matchedBaseLocale;
-    }
+  if (matchedBaseLocale) {
+    return matchedBaseLocale;
   }
 
   return DEFAULT_LOCALE;

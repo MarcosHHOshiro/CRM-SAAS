@@ -1,4 +1,5 @@
-import { opportunityStageLabels } from '../lib/opportunities-format';
+import { useTranslation } from '@/i18n/use-translation';
+import { getOpportunityStageLabels } from '../lib/opportunities-format';
 import type { OpportunityStage } from '../types/opportunities';
 
 type OpportunityStageBadgeProps = Readonly<{
@@ -15,9 +16,11 @@ const stageClasses: Record<OpportunityStage, string> = {
 };
 
 export function OpportunityStageBadge({ stage }: OpportunityStageBadgeProps) {
+  const { messages } = useTranslation();
+
   return (
     <span className={`inline-flex rounded-full px-3 py-1 text-xs font-semibold ${stageClasses[stage]}`}>
-      {opportunityStageLabels[stage]}
+      {getOpportunityStageLabels(messages)[stage]}
     </span>
   );
 }

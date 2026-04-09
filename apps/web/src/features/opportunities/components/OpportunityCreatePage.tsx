@@ -5,6 +5,7 @@ import { useState } from 'react';
 
 import { InlineBanner } from '@/components/InlineBanner';
 import { PageIntro } from '@/components/PageIntro';
+import { useTranslation } from '@/i18n/use-translation';
 import { getApiErrorMessage } from '@/services/api/api-error';
 
 import {
@@ -33,6 +34,7 @@ export function OpportunityCreatePage() {
   const ownersQuery = useOpportunityOwnersQuery();
   const clientsQuery = useOpportunityClientsQuery();
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const { messages } = useTranslation();
 
   async function handleSubmit(values: OpportunityFormValues) {
     try {
@@ -42,7 +44,7 @@ export function OpportunityCreatePage() {
       router.replace(`/opportunities/${response.opportunity.id}?success=created`);
     } catch (error) {
       setErrorMessage(
-        getApiErrorMessage(error, 'Unable to create this opportunity right now.'),
+        getApiErrorMessage(error, messages.opportunities.create.errorFallback),
       );
     }
   }
@@ -50,13 +52,13 @@ export function OpportunityCreatePage() {
   return (
     <div className="space-y-6">
       <PageIntro
-        description="Create a new commercial opportunity linked to an existing client and track it across the pipeline."
-        eyebrow="Opportunities"
-        title="Create opportunity"
+        description={messages.opportunities.create.description}
+        eyebrow={messages.opportunities.create.eyebrow}
+        title={messages.opportunities.create.title}
       />
       {clientsQuery.data && clientsQuery.data.length === 0 ? (
         <InlineBanner tone="info">
-          Create at least one client before adding an opportunity.
+          {messages.opportunities.create.noClientsInfo}
         </InlineBanner>
       ) : null}
       <OpportunityForm
@@ -66,7 +68,7 @@ export function OpportunityCreatePage() {
         mode="create"
         onSubmit={handleSubmit}
         ownerOptions={ownersQuery.data}
-        submitLabel="Create opportunity"
+        submitLabel={messages.opportunities.create.submit}
       />
     </div>
   );

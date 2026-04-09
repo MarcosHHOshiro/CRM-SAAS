@@ -9,17 +9,17 @@ const pipelineSegments = [
   {
     colorClassName: 'bg-slate-900',
     key: 'openOpportunities',
-    label: 'Open',
+    label: 'Abertas',
   },
   {
     colorClassName: 'bg-emerald-500',
     key: 'wonOpportunities',
-    label: 'Won',
+    label: 'Ganhos',
   },
   {
     colorClassName: 'bg-rose-400',
     key: 'lostOpportunities',
-    label: 'Lost',
+    label: 'Perdidos',
   },
 ] as const;
 
@@ -32,19 +32,19 @@ export function DashboardPipelineSummary({ metrics }: DashboardPipelineSummaryPr
       <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <p className="text-sm font-semibold uppercase tracking-[0.2em] text-[var(--accent)]">
-            Pipeline summary
+            Resumo do pipeline
           </p>
           <h2 className="mt-3 text-2xl font-semibold text-[var(--foreground)]">
             {formatDashboardCurrency(metrics.totalPipelineValue)}
           </h2>
           <p className="mt-2 text-sm leading-6 text-[var(--foreground-muted)]">
-            Open pipeline value across all active opportunities.
+            Valor do pipeline aberto em todas as oportunidades ativas.
           </p>
         </div>
         <div className="rounded-[1.4rem] border border-[var(--border)] bg-white/80 px-4 py-3">
           <p className="text-sm font-semibold text-[var(--foreground)]">{totalTrackedOpportunities}</p>
           <p className="mt-1 text-xs uppercase tracking-[0.16em] text-[var(--foreground-muted)]">
-            Opportunities tracked
+            Oportunidades acompanhadas
           </p>
         </div>
       </div>

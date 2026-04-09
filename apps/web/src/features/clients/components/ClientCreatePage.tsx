@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
 import { PageIntro } from '@/components/PageIntro';
+import { useTranslation } from '@/i18n/use-translation';
 import { getApiErrorMessage } from '@/services/api/api-error';
 
 import { useClientOwnersQuery, useCreateClientMutation } from '../hooks/use-clients';
@@ -21,6 +22,7 @@ function mapCreateClientPayload(values: ClientFormValues) {
 }
 
 export function ClientCreatePage() {
+  const { messages } = useTranslation();
   const router = useRouter();
   const createClientMutation = useCreateClientMutation();
   const ownersQuery = useClientOwnersQuery();
@@ -31,23 +33,23 @@ export function ClientCreatePage() {
       const response = await createClientMutation.mutateAsync(mapCreateClientPayload(values));
       router.replace(`/clients/${response.client.id}?success=created`);
     } catch (error) {
-      setErrorMessage(getApiErrorMessage(error, 'Unable to create this client right now.'));
+      setErrorMessage(getApiErrorMessage(error, messages.clients.create.errorFallback));
     }
   }
 
   return (
     <div className="space-y-6">
       <PageIntro
-        description="Create a new client record with the core information needed for relationship management."
-        eyebrow="Clients"
-        title="Create client"
+        description={messages.clients.create.description}
+        eyebrow={messages.clients.create.eyebrow}
+        title={messages.clients.create.title}
       />
       <ClientForm
         errorMessage={errorMessage}
         isSubmitting={createClientMutation.isPending}
         onSubmit={handleSubmit}
         ownerOptions={ownersQuery.data}
-        submitLabel="Create client"
+        submitLabel={messages.clients.create.submit}
       />
     </div>
   );

@@ -5,15 +5,16 @@ import { useEffect, useMemo, useState } from 'react';
 
 import { InlineBanner } from '@/components/InlineBanner';
 import { PageIntro } from '@/components/PageIntro';
+import { useTranslation } from '@/i18n/use-translation';
 import { getApiErrorMessage } from '@/services/api/api-error';
 
 import {
   buildOpportunityFilters,
   buildOpportunityFiltersQueryString,
   getOpportunityOwnerOptions,
-  opportunitySortOptions,
-  opportunityStageOptions,
-  opportunityStatusOptions,
+  getOpportunitySortOptions,
+  getOpportunityStageOptions,
+  getOpportunityStatusOptions,
 } from '../lib/opportunities-format';
 import {
   useOpportunityOwnersQuery,
@@ -53,6 +54,7 @@ export function OpportunityPipelinePage() {
   const filters = useMemo(() => buildOpportunityFilters(searchParams), [searchParams]);
   const pipelineQuery = useOpportunityPipelineQuery(filters);
   const ownersQuery = useOpportunityOwnersQuery();
+  const { messages } = useTranslation();
   const [filtersState, setFiltersState] = useState<OpportunityFiltersState>({
     ownerUserId: searchParams.get('ownerUserId') ?? '',
     search: searchParams.get('search') ?? '',
@@ -74,7 +76,7 @@ export function OpportunityPipelinePage() {
     });
   }, [searchParams]);
 
-  const ownerOptions = ownersQuery.data ? getOpportunityOwnerOptions(ownersQuery.data) : [];
+  const ownerOptions = ownersQuery.data ? getOpportunityOwnerOptions(ownersQuery.data, messages) : [];
   const showOwnerFilter = ownerOptions.length > 1;
   const totalOpportunities =
     pipelineQuery.data?.groups.reduce(
@@ -129,14 +131,14 @@ export function OpportunityPipelinePage() {
     return (
       <div className="space-y-6">
         <PageIntro
-          description="Review the pipeline by stage and move opportunities forward with a simple stage update flow."
-          eyebrow="Opportunities"
-          title="Pipeline board"
+          description={messages.opportunities.pipeline.description}
+          eyebrow={messages.opportunities.pipeline.eyebrow}
+          title={messages.opportunities.pipeline.title}
         />
         <OpportunitiesErrorState
           message={getApiErrorMessage(
             pipelineQuery.error,
-            'Please try loading the pipeline again.',
+            messages.opportunities.pipeline.errorFallback,
           )}
           onRetry={() => {
             void pipelineQuery.refetch();
@@ -149,16 +151,16 @@ export function OpportunityPipelinePage() {
   return (
     <div className="space-y-6">
       <PageIntro
-        description="Review the pipeline by stage and move opportunities forward with a simple stage update flow."
-        eyebrow="Opportunities"
-        title="Pipeline board"
+        description={messages.opportunities.pipeline.description}
+        eyebrow={messages.opportunities.pipeline.eyebrow}
+        title={messages.opportunities.pipeline.title}
       />
 
       <OpportunitiesViewSwitch view="pipeline" />
 
       {ownersQuery.isError ? (
         <InlineBanner tone="info">
-          Owner filters are not available for your current access level.
+          {messages.opportunities.filters.ownerUnavailable}
         </InlineBanner>
       ) : null}
 
@@ -168,15 +170,15 @@ export function OpportunityPipelinePage() {
         onSubmit={handleSubmit}
         ownerOptions={ownerOptions}
         showOwnerFilter={showOwnerFilter}
-        sortOptions={opportunitySortOptions.map((option) => ({
+        sortOptions={getOpportunitySortOptions(messages).map((option) => ({
           label: option.label,
           value: `${option.sortBy}:${option.order}`,
         }))}
-        stageOptions={opportunityStageOptions.map((option) => ({
+        stageOptions={getOpportunityStageOptions(messages).map((option) => ({
           label: option.label,
           value: option.value,
         }))}
-        statusOptions={opportunityStatusOptions.map((option) => ({
+        statusOptions={getOpportunityStatusOptions(messages).map((option) => ({
           label: option.label,
           value: option.value,
         }))}

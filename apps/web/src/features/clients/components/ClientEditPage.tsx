@@ -4,6 +4,7 @@ import { useParams, useRouter } from 'next/navigation';
 import { useState } from 'react';
 
 import { PageIntro } from '@/components/PageIntro';
+import { useTranslation } from '@/i18n/use-translation';
 import { getApiErrorMessage } from '@/services/api/api-error';
 
 import { useClientOwnersQuery, useClientQuery, useUpdateClientMutation } from '../hooks/use-clients';
@@ -23,6 +24,7 @@ function mapUpdateClientPayload(values: ClientFormValues) {
 }
 
 export function ClientEditPage() {
+  const { messages } = useTranslation();
   const params = useParams<{ clientId: string }>();
   const router = useRouter();
   const clientId = params.clientId;
@@ -36,7 +38,7 @@ export function ClientEditPage() {
       await updateClientMutation.mutateAsync(mapUpdateClientPayload(values));
       router.replace(`/clients/${clientId}?success=updated`);
     } catch (error) {
-      setErrorMessage(getApiErrorMessage(error, 'Unable to update this client right now.'));
+      setErrorMessage(getApiErrorMessage(error, messages.clients.edit.errorFallback));
     }
   }
 
@@ -48,11 +50,11 @@ export function ClientEditPage() {
     return (
       <div className="space-y-6">
         <PageIntro
-          description="Update client information and ownership without leaving the private workspace."
-          eyebrow="Clients"
-          title="Edit client"
+          description={messages.clients.edit.description}
+          eyebrow={messages.clients.edit.eyebrow}
+          title={messages.clients.edit.title}
         />
-        <ClientsErrorState message={getApiErrorMessage(clientQuery.error, 'Unable to load this client.')} />
+        <ClientsErrorState message={getApiErrorMessage(clientQuery.error, messages.clients.edit.loadError)} />
       </div>
     );
   }
@@ -60,9 +62,9 @@ export function ClientEditPage() {
   return (
     <div className="space-y-6">
       <PageIntro
-        description="Update client information and ownership without leaving the private workspace."
-        eyebrow="Clients"
-        title={`Edit ${clientQuery.data.client.name}`}
+        description={messages.clients.edit.description}
+        eyebrow={messages.clients.edit.eyebrow}
+        title={messages.clients.edit.titleWithName.replace('{name}', clientQuery.data.client.name)}
       />
       <ClientForm
         client={clientQuery.data.client}
@@ -70,7 +72,7 @@ export function ClientEditPage() {
         isSubmitting={updateClientMutation.isPending}
         onSubmit={handleSubmit}
         ownerOptions={ownersQuery.data}
-        submitLabel="Save changes"
+        submitLabel={messages.clients.edit.submit}
       />
     </div>
   );

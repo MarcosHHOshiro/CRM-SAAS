@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react';
 import { InlineBanner } from '@/components/InlineBanner';
 import { SelectField } from '@/components/SelectField';
 import { TextField } from '@/components/TextField';
+import { useTranslation } from '@/i18n/use-translation';
 
 import {
   getAvailableRoleOptions,
@@ -56,6 +57,7 @@ export function UserForm(props: UserFormProps) {
     submitLabel,
     user,
   } = props;
+  const { messages } = useTranslation();
   const [createValues, setCreateValues] = useState<UserFormValues>(() =>
     getCreateUserInitialValues(),
   );
@@ -64,7 +66,7 @@ export function UserForm(props: UserFormProps) {
   );
   const [fieldErrors, setFieldErrors] = useState<UserFormErrors>({});
 
-  const roleOptions = getAvailableRoleOptions(actorRole).map((option) => ({
+  const roleOptions = getAvailableRoleOptions(actorRole, messages).map((option) => ({
     label: option.label,
     value: option.value,
   }));
@@ -105,7 +107,7 @@ export function UserForm(props: UserFormProps) {
     event.preventDefault();
 
     if (mode === 'create') {
-      const result = createUserSchema.safeParse(createValues);
+      const result = createUserSchema(messages).safeParse(createValues);
 
       if (!result.success) {
         const flattened = result.error.flatten().fieldErrors;
@@ -125,7 +127,7 @@ export function UserForm(props: UserFormProps) {
       return;
     }
 
-    const result = editUserSchema.safeParse(editValues);
+    const result = editUserSchema(messages).safeParse(editValues);
 
     if (!result.success) {
       const flattened = result.error.flatten().fieldErrors;
@@ -149,7 +151,7 @@ export function UserForm(props: UserFormProps) {
       <div className="grid gap-5 md:grid-cols-2">
         <TextField
           error={fieldErrors.name}
-          label="Name"
+          label={messages.users.form.name}
           name="name"
           onChange={handleChange}
           placeholder="Jamie Rivera"
@@ -158,7 +160,7 @@ export function UserForm(props: UserFormProps) {
         {mode === 'create' ? (
           <TextField
             error={fieldErrors.email}
-            label="Email"
+            label={messages.users.form.email}
             name="email"
             onChange={handleChange}
             placeholder="jamie@company.com"
@@ -167,30 +169,30 @@ export function UserForm(props: UserFormProps) {
           />
         ) : (
           <div className="rounded-[1.5rem] border border-[var(--border)] bg-white/60 px-4 py-3 text-sm leading-6 text-[var(--foreground-muted)]">
-            Email cannot be changed after the user is created.
+            {messages.users.form.emailReadonly}
           </div>
         )}
         {mode === 'create' ? (
           <TextField
             error={fieldErrors.password}
-            hint="At least 8 characters."
-            label="Password"
+            hint={messages.users.form.passwordHint}
+            label={messages.users.form.password}
             name="password"
             onChange={handleChange}
-            placeholder="Create a password"
+            placeholder={messages.users.form.passwordPlaceholder}
             type="password"
             value={createValues.password}
           />
         ) : (
           <div className="rounded-[1.5rem] border border-[var(--border)] bg-white/60 px-4 py-3 text-sm leading-6 text-[var(--foreground-muted)]">
-            Password changes are not part of this admin flow yet.
+            {messages.users.form.passwordReadonly}
           </div>
         )}
         <SelectField
           disabled={disableRoleField}
           error={fieldErrors.role}
           hint={disableRoleField ? roleHint : undefined}
-          label="Role"
+          label={messages.users.form.role}
           name="role"
           onChange={handleChange}
           options={roleOptions}
@@ -210,13 +212,13 @@ export function UserForm(props: UserFormProps) {
           disabled={isSubmitting}
           type="submit"
         >
-          {isSubmitting ? 'Saving...' : submitLabel}
+          {isSubmitting ? messages.common.actions.saving : submitLabel}
         </button>
         <Link
           className="inline-flex min-h-11 items-center justify-center rounded-full border border-[var(--border)] bg-white/80 px-5 text-sm font-semibold text-[var(--foreground)] hover:border-[var(--accent)] hover:text-[var(--accent)]"
           href="/users"
         >
-          Cancel
+          {messages.common.actions.cancel}
         </Link>
       </div>
     </form>

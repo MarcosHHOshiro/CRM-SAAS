@@ -1,33 +1,56 @@
 import { z } from 'zod';
+import type { AppMessages } from '@/i18n/messages/types';
 
 import { opportunityStages } from '../types/opportunities';
 
-const opportunitySharedShape = {
-  estimatedValue: z
-    .string()
-    .trim()
-    .regex(/^\d+(\.\d{1,2})?$/, 'Enter a valid amount with up to 2 decimal places.'),
-  expectedCloseDate: z.union([
-    z.literal(''),
-    z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'Enter a valid close date.'),
-  ]),
-  notes: z.string().trim().max(2000, 'Notes must have at most 2000 characters.'),
-  ownerUserId: z.union([z.literal(''), z.uuid('Choose a valid owner.')]),
-  title: z
-    .string()
-    .trim()
-    .min(2, 'Opportunity title must have at least 2 characters.')
-    .max(160, 'Opportunity title must have at most 160 characters.'),
-};
+export function createOpportunitySchema(messages: AppMessages) {
+  const opportunitySharedShape = {
+    estimatedValue: z
+      .string()
+      .trim()
+      .regex(/^\d+(\.\d{1,2})?$/, messages.opportunities.validation.estimatedValueInvalid),
+    expectedCloseDate: z.union([
+      z.literal(''),
+      z.string().regex(/^\d{4}-\d{2}-\d{2}$/, messages.opportunities.validation.expectedCloseInvalid),
+    ]),
+    notes: z.string().trim().max(2000, messages.opportunities.validation.notesMax),
+    ownerUserId: z.union([z.literal(''), z.uuid(messages.opportunities.validation.ownerInvalid)]),
+    title: z
+      .string()
+      .trim()
+      .min(2, messages.opportunities.validation.titleMin)
+      .max(160, messages.opportunities.validation.titleMax),
+  };
 
-export const createOpportunitySchema = z.object({
-  ...opportunitySharedShape,
-  clientId: z.uuid('Choose a valid client.'),
-  stage: z.enum(opportunityStages),
-});
+  return z.object({
+    ...opportunitySharedShape,
+    clientId: z.uuid(messages.opportunities.validation.clientInvalid),
+    stage: z.enum(opportunityStages),
+  });
+}
 
-export const updateOpportunitySchema = z.object({
-  ...opportunitySharedShape,
-  clientId: z.string(),
-  stage: z.enum(opportunityStages),
-});
+export function updateOpportunitySchema(messages: AppMessages) {
+  const opportunitySharedShape = {
+    estimatedValue: z
+      .string()
+      .trim()
+      .regex(/^\d+(\.\d{1,2})?$/, messages.opportunities.validation.estimatedValueInvalid),
+    expectedCloseDate: z.union([
+      z.literal(''),
+      z.string().regex(/^\d{4}-\d{2}-\d{2}$/, messages.opportunities.validation.expectedCloseInvalid),
+    ]),
+    notes: z.string().trim().max(2000, messages.opportunities.validation.notesMax),
+    ownerUserId: z.union([z.literal(''), z.uuid(messages.opportunities.validation.ownerInvalid)]),
+    title: z
+      .string()
+      .trim()
+      .min(2, messages.opportunities.validation.titleMin)
+      .max(160, messages.opportunities.validation.titleMax),
+  };
+
+  return z.object({
+    ...opportunitySharedShape,
+    clientId: z.string(),
+    stage: z.enum(opportunityStages),
+  });
+}

@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { useTranslation } from '@/i18n/use-translation';
 
 import { formatOpportunityCurrency, formatOpportunityDate } from '../lib/opportunities-format';
 import type { Opportunity } from '../types/opportunities';
@@ -13,19 +14,21 @@ type OpportunitiesTableProps = Readonly<{
 }>;
 
 export function OpportunitiesTable({ opportunities }: OpportunitiesTableProps) {
+  const { locale, messages } = useTranslation();
+
   return (
     <section className="overflow-hidden rounded-[2rem] border border-[var(--border)] bg-[var(--card)] shadow-[var(--shadow-soft)]">
       <div className="overflow-x-auto">
         <table className="min-w-[860px] text-left">
           <thead className="border-b border-[var(--border)] bg-white/65">
             <tr className="text-xs uppercase tracking-[0.16em] text-[var(--foreground-muted)]">
-              <th className="px-6 py-4 font-semibold">Opportunity</th>
-              <th className="px-6 py-4 font-semibold">Stage</th>
-              <th className="px-6 py-4 font-semibold">Status</th>
-              <th className="px-6 py-4 font-semibold">Owner</th>
-              <th className="px-6 py-4 font-semibold">Value</th>
-              <th className="px-6 py-4 font-semibold">Close date</th>
-              <th className="px-6 py-4 font-semibold">Actions</th>
+              <th className="px-6 py-4 font-semibold">{messages.opportunities.table.opportunity}</th>
+              <th className="px-6 py-4 font-semibold">{messages.opportunities.table.stage}</th>
+              <th className="px-6 py-4 font-semibold">{messages.opportunities.table.status}</th>
+              <th className="px-6 py-4 font-semibold">{messages.opportunities.table.owner}</th>
+              <th className="px-6 py-4 font-semibold">{messages.opportunities.table.value}</th>
+              <th className="px-6 py-4 font-semibold">{messages.opportunities.table.closeDate}</th>
+              <th className="px-6 py-4 font-semibold">{messages.opportunities.table.actions}</th>
             </tr>
           </thead>
           <tbody>
@@ -44,7 +47,7 @@ export function OpportunitiesTable({ opportunities }: OpportunitiesTableProps) {
                     </Link>
                     <div className="mt-2 space-y-1 text-sm text-[var(--foreground-muted)]">
                       <p>{opportunity.client.name}</p>
-                      <p>{opportunity.client.company || 'No company provided'}</p>
+                      <p>{opportunity.client.company || messages.opportunities.table.noCompany}</p>
                     </div>
                   </div>
                 </td>
@@ -63,14 +66,14 @@ export function OpportunitiesTable({ opportunities }: OpportunitiesTableProps) {
                       <p className="mt-1">{opportunity.owner.email}</p>
                     </div>
                   ) : (
-                    'Unassigned'
+                    messages.opportunities.table.unassigned
                   )}
                 </td>
                 <td className="px-6 py-5 align-top text-sm text-[var(--foreground)]">
-                  {formatOpportunityCurrency(opportunity.estimatedValue)}
+                  {formatOpportunityCurrency(opportunity.estimatedValue, locale)}
                 </td>
                 <td className="px-6 py-5 align-top text-sm text-[var(--foreground-muted)]">
-                  {formatOpportunityDate(opportunity.expectedCloseDate)}
+                  {formatOpportunityDate(opportunity.expectedCloseDate, locale, messages)}
                 </td>
                 <td className="px-6 py-5 align-top">
                   <div className="flex flex-wrap gap-2">
@@ -78,13 +81,13 @@ export function OpportunitiesTable({ opportunities }: OpportunitiesTableProps) {
                       className="inline-flex min-h-10 items-center justify-center rounded-full border border-[var(--border)] bg-white/80 px-4 text-sm font-semibold text-[var(--foreground)] hover:border-[var(--accent)] hover:text-[var(--accent)]"
                       href={`/opportunities/${opportunity.id}`}
                     >
-                      View
+                      {messages.common.actions.view}
                     </Link>
                     <Link
                       className="inline-flex min-h-10 items-center justify-center rounded-full border border-[var(--border)] bg-white/80 px-4 text-sm font-semibold text-[var(--foreground)] hover:border-[var(--accent)] hover:text-[var(--accent)]"
                       href={`/opportunities/${opportunity.id}/edit`}
                     >
-                      Edit
+                      {messages.common.actions.edit}
                     </Link>
                   </div>
                 </td>

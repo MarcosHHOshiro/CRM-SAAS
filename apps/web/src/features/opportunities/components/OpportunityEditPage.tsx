@@ -4,6 +4,7 @@ import { useParams, useRouter } from 'next/navigation';
 import { useState } from 'react';
 
 import { PageIntro } from '@/components/PageIntro';
+import { useTranslation } from '@/i18n/use-translation';
 import { getApiErrorMessage } from '@/services/api/api-error';
 
 import {
@@ -34,6 +35,7 @@ export function OpportunityEditPage() {
   const updateOpportunityMutation = useUpdateOpportunityMutation(opportunityId);
   const ownersQuery = useOpportunityOwnersQuery();
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const { messages } = useTranslation();
 
   async function handleSubmit(values: OpportunityFormValues) {
     try {
@@ -41,7 +43,7 @@ export function OpportunityEditPage() {
       router.replace(`/opportunities/${opportunityId}?success=updated`);
     } catch (error) {
       setErrorMessage(
-        getApiErrorMessage(error, 'Unable to update this opportunity right now.'),
+        getApiErrorMessage(error, messages.opportunities.edit.errorFallback),
       );
     }
   }
@@ -54,12 +56,12 @@ export function OpportunityEditPage() {
     return (
       <div className="space-y-6">
         <PageIntro
-          description="Update opportunity information, ownership, value, and close date from the private workspace."
-          eyebrow="Opportunities"
-          title="Edit opportunity"
+          description={messages.opportunities.edit.description}
+          eyebrow={messages.opportunities.edit.eyebrow}
+          title={messages.opportunities.edit.title}
         />
         <OpportunitiesErrorState
-          message={getApiErrorMessage(opportunityQuery.error, 'Unable to load this opportunity.')}
+          message={getApiErrorMessage(opportunityQuery.error, messages.opportunities.edit.loadError)}
         />
       </div>
     );
@@ -68,9 +70,9 @@ export function OpportunityEditPage() {
   return (
     <div className="space-y-6">
       <PageIntro
-        description="Update opportunity information, ownership, value, and close date from the private workspace."
-        eyebrow="Opportunities"
-        title={`Edit ${opportunityQuery.data.opportunity.title}`}
+        description={messages.opportunities.edit.description}
+        eyebrow={messages.opportunities.edit.eyebrow}
+        title={messages.opportunities.edit.titleWithName.replace('{name}', opportunityQuery.data.opportunity.title)}
       />
       <OpportunityForm
         errorMessage={errorMessage}
@@ -79,7 +81,7 @@ export function OpportunityEditPage() {
         onSubmit={handleSubmit}
         opportunity={opportunityQuery.data.opportunity}
         ownerOptions={ownersQuery.data}
-        submitLabel="Save changes"
+        submitLabel={messages.opportunities.edit.submit}
       />
     </div>
   );

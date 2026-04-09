@@ -1,6 +1,7 @@
 'use client';
 
 import { SelectField } from '@/components/SelectField';
+import { useTranslation } from '@/i18n/use-translation';
 
 type ActivitiesFiltersProps = Readonly<{
   clientOptions: Array<{ label: string; value: string }>;
@@ -33,6 +34,8 @@ export function ActivitiesFilters({
   userOptions,
   values,
 }: ActivitiesFiltersProps) {
+  const { messages } = useTranslation();
+
   return (
     <form
       className="rounded-[2rem] border border-[var(--border)] bg-[var(--card)] p-6 shadow-[var(--shadow-soft)]"
@@ -40,7 +43,7 @@ export function ActivitiesFilters({
     >
       <div className="grid gap-4 xl:grid-cols-[0.9fr_1fr_1fr_1fr_1fr_auto]">
         <SelectField
-          label="Type"
+          label={messages.activities.filters.type}
           name="type"
           onChange={onChange}
           options={typeOptions}
@@ -48,7 +51,7 @@ export function ActivitiesFilters({
         />
         {showUserFilter ? (
           <SelectField
-            label="Author"
+            label={messages.activities.filters.author}
             name="authorUserId"
             onChange={onChange}
             options={userOptions}
@@ -58,21 +61,21 @@ export function ActivitiesFilters({
           <div />
         )}
         <SelectField
-          label="Lead"
+          label={messages.activities.filters.lead}
           name="leadId"
           onChange={onChange}
           options={leadOptions}
           value={values.leadId}
         />
         <SelectField
-          label="Client"
+          label={messages.activities.filters.client}
           name="clientId"
           onChange={onChange}
           options={clientOptions}
           value={values.clientId}
         />
         <SelectField
-          label="Opportunity"
+          label={messages.activities.filters.opportunity}
           name="opportunityId"
           onChange={onChange}
           options={opportunityOptions}
@@ -83,14 +86,14 @@ export function ActivitiesFilters({
             className="inline-flex min-h-12 items-center justify-center rounded-full bg-[var(--accent)] px-5 text-sm font-semibold text-white hover:bg-[var(--accent-strong)]"
             type="submit"
           >
-            Apply
+            {messages.common.actions.apply}
           </button>
           <button
             className="inline-flex min-h-12 items-center justify-center rounded-full border border-[var(--border)] bg-white/80 px-5 text-sm font-semibold text-[var(--foreground)] hover:border-[var(--accent)] hover:text-[var(--accent)]"
             onClick={onReset}
             type="button"
           >
-            Reset
+            {messages.common.actions.reset}
           </button>
         </div>
       </div>

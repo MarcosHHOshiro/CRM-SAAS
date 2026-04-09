@@ -86,7 +86,7 @@ export function LeadForm({
       <div className="grid gap-5 md:grid-cols-2">
         <TextField
           error={fieldErrors.name}
-          label="Lead name"
+          label="Nome do lead"
           name="name"
           onChange={handleChange}
           placeholder="Jamie Rivera"
@@ -103,7 +103,7 @@ export function LeadForm({
         />
         <TextField
           error={fieldErrors.phone}
-          label="Phone"
+          label="Telefone"
           name="phone"
           onChange={handleChange}
           placeholder="+1 (555) 000-1234"
@@ -111,7 +111,7 @@ export function LeadForm({
         />
         <TextField
           error={fieldErrors.company}
-          label="Company"
+          label="Empresa"
           name="company"
           onChange={handleChange}
           placeholder="Northwind"
@@ -131,8 +131,8 @@ export function LeadForm({
         {ownerOptions.length > 0 ? (
           <SelectField
             error={fieldErrors.ownerUserId}
-            hint="Assign an owner when the lead already belongs to someone."
-            label="Owner"
+            hint="Defina um responsavel quando o lead ja pertencer a alguem."
+            label="Responsavel"
             name="ownerUserId"
             onChange={handleChange}
             options={getLeadFormOwnerOptions(ownerOptions)}
@@ -140,7 +140,7 @@ export function LeadForm({
           />
         ) : (
           <div className="rounded-[1.5rem] border border-[var(--border)] bg-white/60 px-4 py-3 text-sm leading-6 text-[var(--foreground-muted)]">
-            Owner assignment is not available for your current access level.
+            A atribuicao de responsavel nao esta disponivel para o seu nivel de acesso.
           </div>
         )}
       </div>
@@ -148,11 +148,11 @@ export function LeadForm({
       <div className="mt-5">
         <TextAreaField
           error={fieldErrors.notes}
-          hint="Optional internal notes about the lead."
-          label="Notes"
+          hint="Notas internas opcionais sobre o lead."
+          label="Notas"
           name="notes"
           onChange={handleChange}
-          placeholder="Important context, recent touchpoints, or qualification notes."
+          placeholder="Contexto importante, contatos recentes ou notas de qualificacao."
           rows={6}
           value={values.notes}
         />
@@ -170,13 +170,13 @@ export function LeadForm({
           disabled={isSubmitting}
           type="submit"
         >
-          {isSubmitting ? 'Saving...' : submitLabel}
+          {isSubmitting ? 'Salvando...' : submitLabel}
         </button>
         <Link
           className="inline-flex min-h-11 items-center justify-center rounded-full border border-[var(--border)] bg-white/80 px-5 text-sm font-semibold text-[var(--foreground)] hover:border-[var(--accent)] hover:text-[var(--accent)]"
           href={lead ? `/leads/${lead.id}` : '/leads'}
         >
-          Cancel
+          Cancelar
         </Link>
       </div>
     </form>

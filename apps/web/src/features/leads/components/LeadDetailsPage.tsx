@@ -35,11 +35,11 @@ export function LeadDetailsPage() {
     return (
       <div className="space-y-6">
         <PageIntro
-          description="Review the lead profile, current qualification status, ownership, and conversion readiness."
+          description="Revise o perfil do lead, o status atual de qualificacao, a responsabilidade e a prontidao para conversao."
           eyebrow="Leads"
-          title="Lead details"
+          title="Detalhes do lead"
         />
-        <LeadsErrorState message={getApiErrorMessage(leadQuery.error, 'Unable to load this lead.')} />
+        <LeadsErrorState message={getApiErrorMessage(leadQuery.error, 'Nao foi possivel carregar este lead.')} />
       </div>
     );
   }
@@ -47,7 +47,7 @@ export function LeadDetailsPage() {
   const canConvert = getLeadCanConvert(lead);
 
   async function handleDelete() {
-    const confirmed = window.confirm(`Delete the lead "${lead.name}"?`);
+    const confirmed = window.confirm(`Excluir o lead "${lead.name}"?`);
 
     if (!confirmed) {
       return;
@@ -58,14 +58,14 @@ export function LeadDetailsPage() {
       router.replace('/leads?success=deleted');
     } catch (error) {
       showToast({
-        message: getApiErrorMessage(error, 'Unable to delete this lead right now.'),
+        message: getApiErrorMessage(error, 'Nao foi possivel excluir este lead agora.'),
         tone: 'error',
       });
     }
   }
 
   async function handleConvert() {
-    const confirmed = window.confirm(`Convert the lead "${lead.name}" into a client?`);
+    const confirmed = window.confirm(`Converter o lead "${lead.name}" em cliente?`);
 
     if (!confirmed) {
       return;
@@ -76,7 +76,7 @@ export function LeadDetailsPage() {
       router.replace(`/leads/${lead.id}?success=converted`);
     } catch (error) {
       showToast({
-        message: getApiErrorMessage(error, 'Unable to convert this lead right now.'),
+        message: getApiErrorMessage(error, 'Nao foi possivel converter este lead agora.'),
         tone: 'error',
       });
     }
@@ -85,7 +85,7 @@ export function LeadDetailsPage() {
   return (
     <div className="space-y-6">
       <PageIntro
-        description="Review the lead profile, current qualification status, ownership, and conversion readiness."
+        description="Revise o perfil do lead, o status atual de qualificacao, a responsabilidade e a prontidao para conversao."
         eyebrow="Leads"
         title={lead.name}
       />
@@ -94,13 +94,13 @@ export function LeadDetailsPage() {
           className="inline-flex min-h-11 items-center justify-center rounded-full border border-[var(--border)] bg-white/80 px-5 text-sm font-semibold text-[var(--foreground)] hover:border-[var(--accent)] hover:text-[var(--accent)]"
           href="/leads"
         >
-          Back to list
+          Voltar para a lista
         </Link>
         <Link
           className="inline-flex min-h-11 items-center justify-center rounded-full bg-[var(--accent)] px-5 text-sm font-semibold text-white hover:bg-[var(--accent-strong)]"
           href={`/leads/${lead.id}/edit`}
         >
-          Edit lead
+          Editar lead
         </Link>
         {canConvert ? (
           <button
@@ -109,7 +109,7 @@ export function LeadDetailsPage() {
             onClick={handleConvert}
             type="button"
           >
-            {convertLeadMutation.isPending ? 'Converting...' : 'Convert to client'}
+            {convertLeadMutation.isPending ? 'Convertendo...' : 'Converter em cliente'}
           </button>
         ) : null}
         <button
@@ -118,7 +118,7 @@ export function LeadDetailsPage() {
           onClick={handleDelete}
           type="button"
         >
-          {deleteLeadMutation.isPending ? 'Deleting...' : 'Delete lead'}
+          {deleteLeadMutation.isPending ? 'Excluindo...' : 'Excluir lead'}
         </button>
       </section>
 

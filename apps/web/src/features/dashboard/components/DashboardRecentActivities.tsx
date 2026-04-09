@@ -16,25 +16,25 @@ export function DashboardRecentActivities({ activities }: DashboardRecentActivit
       <div className="flex items-start justify-between gap-4">
         <div>
           <p className="text-sm font-semibold uppercase tracking-[0.2em] text-[var(--accent)]">
-            Recent activities
+            Atividades recentes
           </p>
           <h2 className="mt-3 text-2xl font-semibold text-[var(--foreground)]">
-            Latest team interactions
+            Ultimas interacoes do time
           </h2>
           <p className="mt-2 text-sm leading-6 text-[var(--foreground-muted)]">
-            Notes, calls, emails, meetings, and tasks created most recently.
+            Notas, ligacoes, emails, reunioes e tarefas criadas mais recentemente.
           </p>
         </div>
         <span className="rounded-full border border-[var(--border)] bg-white/80 px-3 py-1 text-xs font-semibold uppercase tracking-[0.14em] text-[var(--foreground-muted)]">
-          {activities.length} items
+          {activities.length} itens
         </span>
       </div>
 
       {activities.length === 0 ? (
         <div className="mt-6 rounded-[1.6rem] border border-dashed border-[var(--border)] bg-white/55 px-5 py-8 text-center">
-          <h3 className="text-lg font-semibold text-[var(--foreground)]">No recent activities yet</h3>
+          <h3 className="text-lg font-semibold text-[var(--foreground)]">Nenhuma atividade recente ainda</h3>
           <p className="mt-3 text-sm leading-6 text-[var(--foreground-muted)]">
-            Once your team starts logging notes, calls, tasks, and meetings, they will appear here.
+            Assim que o time comecar a registrar notas, ligacoes, tarefas e reunioes, elas aparecerao aqui.
           </p>
         </div>
       ) : (
@@ -63,7 +63,7 @@ export function DashboardRecentActivities({ activities }: DashboardRecentActivit
                       {getDashboardActivityDescription(activity)}
                     </p>
                     <div className="mt-3 flex flex-wrap gap-x-4 gap-y-1 text-xs text-[var(--foreground-muted)]">
-                      <span>{activity.author ? `By ${activity.author.name}` : 'System activity'}</span>
+                      <span>{activity.author ? `Por ${activity.author.name}` : 'Atividade do sistema'}</span>
                       <span>{formatDashboardDateTime(activity.createdAt)}</span>
                     </div>
                   </div>

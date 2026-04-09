@@ -1,3 +1,5 @@
+import type { AppLocale, AppMessages } from '@/i18n/messages/types';
+
 import type {
   Opportunity,
   OpportunityClientOption,
@@ -8,63 +10,71 @@ import type {
   OpportunityStatus,
 } from '../types/opportunities';
 
-const currencyFormatter = new Intl.NumberFormat('en-US', {
-  currency: 'USD',
-  maximumFractionDigits: 0,
-  style: 'currency',
-});
+export function getOpportunityStageLabels(messages: AppMessages): Record<OpportunityStage, string> {
+  return {
+    LOST: messages.opportunities.shared.stageLost,
+    NEGOTIATION: messages.opportunities.shared.stageNegotiation,
+    NEW: messages.opportunities.shared.stageNew,
+    PROPOSAL: messages.opportunities.shared.stageProposal,
+    QUALIFICATION: messages.opportunities.shared.stageQualification,
+    WON: messages.opportunities.shared.stageWon,
+  };
+}
 
-const dateTimeFormatter = new Intl.DateTimeFormat('en-US', {
-  dateStyle: 'medium',
-  timeStyle: 'short',
-});
+export function getOpportunityStatusLabels(messages: AppMessages): Record<OpportunityStatus, string> {
+  return {
+    LOST: messages.opportunities.shared.statusLost,
+    OPEN: messages.opportunities.shared.statusOpen,
+    WON: messages.opportunities.shared.statusWon,
+  };
+}
 
-export const opportunityStageLabels: Record<OpportunityStage, string> = {
-  LOST: 'Lost',
-  NEGOTIATION: 'Negotiation',
-  NEW: 'New',
-  PROPOSAL: 'Proposal',
-  QUALIFICATION: 'Qualification',
-  WON: 'Won',
-};
+export function getOpportunityStageOptions(messages: AppMessages) {
+  const opportunityStageLabels = getOpportunityStageLabels(messages);
 
-export const opportunityStatusLabels: Record<OpportunityStatus, string> = {
-  LOST: 'Lost',
-  OPEN: 'Open',
-  WON: 'Won',
-};
+  return [
+    { label: messages.opportunities.shared.allStages, value: '' },
+    { label: opportunityStageLabels.NEW, value: 'NEW' },
+    { label: opportunityStageLabels.QUALIFICATION, value: 'QUALIFICATION' },
+    { label: opportunityStageLabels.PROPOSAL, value: 'PROPOSAL' },
+    { label: opportunityStageLabels.NEGOTIATION, value: 'NEGOTIATION' },
+    { label: opportunityStageLabels.WON, value: 'WON' },
+    { label: opportunityStageLabels.LOST, value: 'LOST' },
+  ] as const;
+}
 
-export const opportunityStageOptions = [
-  { label: 'All stages', value: '' },
-  { label: opportunityStageLabels.NEW, value: 'NEW' },
-  { label: opportunityStageLabels.QUALIFICATION, value: 'QUALIFICATION' },
-  { label: opportunityStageLabels.PROPOSAL, value: 'PROPOSAL' },
-  { label: opportunityStageLabels.NEGOTIATION, value: 'NEGOTIATION' },
-  { label: opportunityStageLabels.WON, value: 'WON' },
-  { label: opportunityStageLabels.LOST, value: 'LOST' },
-] as const;
+export function getOpportunityFormStageOptions(messages: AppMessages) {
+  return getOpportunityStageOptions(messages).filter((option) => option.value !== '');
+}
 
-export const opportunityFormStageOptions = opportunityStageOptions.filter(
-  (option) => option.value !== '',
-);
+export function getOpportunityStatusOptions(messages: AppMessages) {
+  const opportunityStatusLabels = getOpportunityStatusLabels(messages);
 
-export const opportunityStatusOptions = [
-  { label: 'All statuses', value: '' },
-  { label: opportunityStatusLabels.OPEN, value: 'OPEN' },
-  { label: opportunityStatusLabels.WON, value: 'WON' },
-  { label: opportunityStatusLabels.LOST, value: 'LOST' },
-] as const;
+  return [
+    { label: messages.opportunities.shared.allStatuses, value: '' },
+    { label: opportunityStatusLabels.OPEN, value: 'OPEN' },
+    { label: opportunityStatusLabels.WON, value: 'WON' },
+    { label: opportunityStatusLabels.LOST, value: 'LOST' },
+  ] as const;
+}
 
-export const opportunitySortOptions = [
-  { label: 'Newest first', order: 'desc', sortBy: 'createdAt' },
-  { label: 'Oldest first', order: 'asc', sortBy: 'createdAt' },
-  { label: 'Highest value', order: 'desc', sortBy: 'estimatedValue' },
-  { label: 'Lowest value', order: 'asc', sortBy: 'estimatedValue' },
-  { label: 'Expected close date', order: 'asc', sortBy: 'expectedCloseDate' },
-] as const;
+export function getOpportunitySortOptions(messages: AppMessages) {
+  return [
+    { label: messages.opportunities.shared.newestFirst, order: 'desc', sortBy: 'createdAt' },
+    { label: messages.opportunities.shared.oldestFirst, order: 'asc', sortBy: 'createdAt' },
+    { label: messages.opportunities.shared.highestValue, order: 'desc', sortBy: 'estimatedValue' },
+    { label: messages.opportunities.shared.lowestValue, order: 'asc', sortBy: 'estimatedValue' },
+    { label: messages.opportunities.shared.expectedCloseSort, order: 'asc', sortBy: 'expectedCloseDate' },
+  ] as const;
+}
 
-export function formatOpportunityCurrency(value: string) {
+export function formatOpportunityCurrency(value: string, locale: AppLocale) {
   const parsedValue = Number(value);
+  const currencyFormatter = new Intl.NumberFormat(locale, {
+    currency: 'USD',
+    maximumFractionDigits: 0,
+    style: 'currency',
+  });
 
   if (Number.isNaN(parsedValue)) {
     return currencyFormatter.format(0);
@@ -73,43 +83,48 @@ export function formatOpportunityCurrency(value: string) {
   return currencyFormatter.format(parsedValue);
 }
 
-export function formatOpportunityDate(value: string | null) {
+export function formatOpportunityDate(value: string | null, locale: AppLocale, messages: AppMessages) {
   if (!value) {
-    return 'Not scheduled';
+    return messages.opportunities.shared.unscheduled;
   }
 
   const parsedDate = new Date(value);
 
   if (Number.isNaN(parsedDate.getTime())) {
-    return 'Unknown date';
+    return messages.opportunities.shared.unknownDate;
   }
+
+  const dateTimeFormatter = new Intl.DateTimeFormat(locale, {
+    dateStyle: 'medium',
+    timeStyle: 'short',
+  });
 
   return dateTimeFormatter.format(parsedDate);
 }
 
-export function getOpportunityOwnerOptions(users: OpportunityOwnerOption[]) {
+export function getOpportunityOwnerOptions(users: OpportunityOwnerOption[], messages: AppMessages) {
   return [
-    { label: 'All owners', value: '' },
+    { label: messages.opportunities.shared.allOwners, value: '' },
     ...users.map((user) => ({
-      label: `${user.name}${user.isActive ? '' : ' (Inactive)'}`,
+      label: `${user.name}${user.isActive ? '' : ` (${messages.opportunities.form.ownerInactiveSuffix})`}`,
       value: user.id,
     })),
   ];
 }
 
-export function getOpportunityFormOwnerOptions(users: OpportunityOwnerOption[]) {
+export function getOpportunityFormOwnerOptions(users: OpportunityOwnerOption[], messages: AppMessages) {
   return [
-    { label: 'Unassigned', value: '' },
+    { label: messages.opportunities.form.ownerUnassigned, value: '' },
     ...users.map((user) => ({
-      label: `${user.name}${user.isActive ? '' : ' (Inactive)'}`,
+      label: `${user.name}${user.isActive ? '' : ` (${messages.opportunities.form.ownerInactiveSuffix})`}`,
       value: user.id,
     })),
   ];
 }
 
-export function getOpportunityClientOptions(clients: OpportunityClientOption[]) {
+export function getOpportunityClientOptions(clients: OpportunityClientOption[], messages: AppMessages) {
   return [
-    { label: 'Select a client', value: '' },
+    { label: messages.opportunities.form.clientPlaceholder, value: '' },
     ...clients.map((client) => ({
       label: client.company ? `${client.name} - ${client.company}` : client.name,
       value: client.id,
@@ -190,12 +205,12 @@ export function getOpportunityInitialFormValues(
   };
 }
 
-export function getOpportunitySuccessMessage(success: string | null) {
-  const messages: Record<string, string> = {
-    created: 'Opportunity created successfully.',
-    stageUpdated: 'Opportunity stage updated successfully.',
-    updated: 'Opportunity updated successfully.',
+export function getOpportunitySuccessMessage(success: string | null, appMessages: AppMessages) {
+  const successMessages: Record<string, string> = {
+    created: appMessages.opportunities.shared.successCreated,
+    stageUpdated: appMessages.opportunities.shared.successStageUpdated,
+    updated: appMessages.opportunities.shared.successUpdated,
   };
 
-  return success ? messages[success] ?? null : null;
+  return success ? successMessages[success] ?? null : null;
 }

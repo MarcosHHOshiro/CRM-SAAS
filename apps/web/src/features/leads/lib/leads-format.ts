@@ -6,15 +6,15 @@ const dateTimeFormatter = new Intl.DateTimeFormat('en-US', {
 });
 
 export const leadStatusLabels: Record<LeadStatus, string> = {
-  NEW: 'New',
-  QUALIFIED: 'Qualified',
-  CONTACTED: 'Contacted',
-  CONVERTED: 'Converted',
-  LOST: 'Lost',
+  NEW: 'Novo',
+  QUALIFIED: 'Qualificado',
+  CONTACTED: 'Contatado',
+  CONVERTED: 'Convertido',
+  LOST: 'Perdido',
 };
 
 export const leadStatusOptions = [
-  { label: 'All statuses', value: '' },
+  { label: 'Todos os status', value: '' },
   { label: leadStatusLabels.NEW, value: 'NEW' },
   { label: leadStatusLabels.QUALIFIED, value: 'QUALIFIED' },
   { label: leadStatusLabels.CONTACTED, value: 'CONTACTED' },
@@ -32,7 +32,7 @@ export function formatLeadDate(value: string) {
   const parsedDate = new Date(value);
 
   if (Number.isNaN(parsedDate.getTime())) {
-    return 'Unknown date';
+    return 'Data desconhecida';
   }
 
   return dateTimeFormatter.format(parsedDate);
@@ -40,9 +40,9 @@ export function formatLeadDate(value: string) {
 
 export function getLeadOwnerOptions(users: LeadOwnerOption[]) {
   return [
-    { label: 'All owners', value: '' },
+    { label: 'Todos os responsaveis', value: '' },
     ...users.map((user) => ({
-      label: `${user.name}${user.isActive ? '' : ' (Inactive)'}`,
+      label: `${user.name}${user.isActive ? '' : ' (Inativo)'}`,
       value: user.id,
     })),
   ];
@@ -50,9 +50,9 @@ export function getLeadOwnerOptions(users: LeadOwnerOption[]) {
 
 export function getLeadFormOwnerOptions(users: LeadOwnerOption[]) {
   return [
-    { label: 'Unassigned', value: '' },
+    { label: 'Sem responsavel', value: '' },
     ...users.map((user) => ({
-      label: `${user.name}${user.isActive ? '' : ' (Inactive)'}`,
+      label: `${user.name}${user.isActive ? '' : ' (Inativo)'}`,
       value: user.id,
     })),
   ];
@@ -110,10 +110,10 @@ export function getLeadInitialFormValues(lead?: Lead): LeadFormValues {
 
 export function getLeadSuccessMessage(success: string | null) {
   const messages: Record<string, string> = {
-    converted: 'Lead converted into a client successfully.',
-    created: 'Lead created successfully.',
-    deleted: 'Lead deleted successfully.',
-    updated: 'Lead updated successfully.',
+    converted: 'Lead convertido em cliente com sucesso.',
+    created: 'Lead criado com sucesso.',
+    deleted: 'Lead removido com sucesso.',
+    updated: 'Lead atualizado com sucesso.',
   };
 
   return success ? messages[success] ?? null : null;

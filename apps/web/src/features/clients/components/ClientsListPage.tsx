@@ -6,6 +6,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { PaginationControls } from '@/components/PaginationControls';
 import { PageIntro } from '@/components/PageIntro';
 import { useQueryFeedbackToast } from '@/hooks/use-query-feedback-toast';
+import { useTranslation } from '@/i18n/use-translation';
 import { buildPageQueryString, getPageFromSearchParams, paginateItems } from '@/lib/pagination';
 import { getApiErrorMessage } from '@/services/api/api-error';
 
@@ -22,6 +23,7 @@ import { ClientsSearch } from './ClientsSearch';
 import { ClientsTable } from './ClientsTable';
 
 export function ClientsListPage() {
+  const { messages } = useTranslation();
   const router = useRouter();
   const searchParams = useSearchParams();
   const filters = useMemo(() => buildClientFilters(searchParams), [searchParams]);
@@ -32,7 +34,7 @@ export function ClientsListPage() {
     setSearchValue(searchParams.get('search') ?? '');
   }, [searchParams]);
 
-  const successMessage = getClientSuccessMessage(searchParams.get('success'));
+  const successMessage = getClientSuccessMessage(searchParams.get('success'), messages);
   const hasFilters = Boolean(filters.search);
   const currentPage = getPageFromSearchParams(searchParams);
 
@@ -69,12 +71,12 @@ export function ClientsListPage() {
     return (
       <div className="space-y-6">
         <PageIntro
-          description="Keep a clean customer directory with the latest client records from the current organization."
-          eyebrow="Clients"
-          title="Client management"
+          description={messages.clients.list.description}
+          eyebrow={messages.clients.list.eyebrow}
+          title={messages.clients.list.title}
         />
         <ClientsErrorState
-          message={getApiErrorMessage(clientsQuery.error, 'Please try loading the clients again.')}
+          message={getApiErrorMessage(clientsQuery.error, messages.clients.list.errorFallback)}
           onRetry={() => {
             void clientsQuery.refetch();
           }}
@@ -88,9 +90,9 @@ export function ClientsListPage() {
   return (
     <div className="space-y-6">
       <PageIntro
-        description="Keep a clean customer directory with the latest client records from the current organization."
-        eyebrow="Clients"
-        title="Client management"
+        description={messages.clients.list.description}
+        eyebrow={messages.clients.list.eyebrow}
+        title={messages.clients.list.title}
       />
 
       <ClientsSearch
@@ -107,7 +109,7 @@ export function ClientsListPage() {
           <ClientsTable clients={paginatedClients.items} />
           <PaginationControls
             currentPage={paginatedClients.currentPage}
-            itemLabel="clients"
+            itemLabel={messages.clients.list.itemLabel}
             onPageChange={handlePageChange}
             pageSize={10}
             totalItems={paginatedClients.totalItems}

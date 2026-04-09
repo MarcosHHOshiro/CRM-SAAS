@@ -86,14 +86,14 @@ export function OrganizationSettingsForm({
         <TextField
           disabled={!canEdit}
           error={fieldErrors.name}
-          label="Organization name"
+          label="Nome da organizacao"
           name="name"
           onChange={handleChange}
           placeholder="Northwind Sales"
           value={values.name}
         />
         <div className="rounded-[1.5rem] border border-[var(--border)] bg-white/60 px-4 py-3 text-sm leading-6 text-[var(--foreground-muted)]">
-          <p className="font-semibold text-[var(--foreground)]">Organization slug</p>
+          <p className="font-semibold text-[var(--foreground)]">Slug da organizacao</p>
           <p className="mt-2">{organization.slug}</p>
         </div>
       </div>
@@ -101,7 +101,7 @@ export function OrganizationSettingsForm({
       {!canEdit ? (
         <div className="mt-5">
           <InlineBanner tone="info">
-            Only owners can update organization settings.
+            Somente owners podem atualizar as configuracoes da organizacao.
           </InlineBanner>
         </div>
       ) : null}
@@ -118,7 +118,7 @@ export function OrganizationSettingsForm({
           disabled={!canEdit || isSubmitting}
           type="submit"
         >
-          {isSubmitting ? 'Saving...' : 'Update organization'}
+          {isSubmitting ? 'Salvando...' : 'Atualizar organizacao'}
         </button>
       </div>
     </form>

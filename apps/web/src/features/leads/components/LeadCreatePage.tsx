@@ -33,23 +33,23 @@ export function LeadCreatePage() {
       const response = await createLeadMutation.mutateAsync(mapCreateLeadPayload(values));
       router.replace(`/leads/${response.lead.id}?success=created`);
     } catch (error) {
-      setErrorMessage(getApiErrorMessage(error, 'Unable to create this lead right now.'));
+      setErrorMessage(getApiErrorMessage(error, 'Nao foi possivel criar este lead agora.'));
     }
   }
 
   return (
     <div className="space-y-6">
       <PageIntro
-        description="Create a new lead record with the core commercial information needed for follow-up and qualification."
+        description="Crie um novo lead com as informacoes comerciais principais para follow-up e qualificacao."
         eyebrow="Leads"
-        title="Create lead"
+        title="Criar lead"
       />
       <LeadForm
         errorMessage={errorMessage}
         isSubmitting={createLeadMutation.isPending}
         onSubmit={handleSubmit}
         ownerOptions={ownersQuery.data}
-        submitLabel="Create lead"
+        submitLabel="Criar lead"
       />
     </div>
   );

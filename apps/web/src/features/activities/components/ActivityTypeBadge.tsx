@@ -1,4 +1,5 @@
-import { activityTypeLabels } from '../lib/activities-format';
+import { useTranslation } from '@/i18n/use-translation';
+import { getActivityTypeLabels } from '../lib/activities-format';
 import type { ActivityType } from '../types/activities';
 
 type ActivityTypeBadgeProps = Readonly<{
@@ -14,9 +15,11 @@ const typeClasses: Record<ActivityType, string> = {
 };
 
 export function ActivityTypeBadge({ type }: ActivityTypeBadgeProps) {
+  const { messages } = useTranslation();
+
   return (
     <span className={`inline-flex rounded-full px-3 py-1 text-xs font-semibold ${typeClasses[type]}`}>
-      {activityTypeLabels[type]}
+      {getActivityTypeLabels(messages)[type]}
     </span>
   );
 }

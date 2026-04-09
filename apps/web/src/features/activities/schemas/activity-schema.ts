@@ -1,15 +1,21 @@
 import { z } from 'zod';
+import type { AppMessages } from '@/i18n/messages/types';
 
 import { activityTypes } from '../types/activities';
 
-export const activitySchema = z.object({
-  clientId: z.union([z.literal(''), z.uuid('Choose a valid client.')]),
-  description: z
-    .string()
-    .trim()
-    .min(1, 'Description is required.')
-    .max(2000, 'Description must have at most 2000 characters.'),
-  leadId: z.union([z.literal(''), z.uuid('Choose a valid lead.')]),
-  opportunityId: z.union([z.literal(''), z.uuid('Choose a valid opportunity.')]),
-  type: z.enum(activityTypes),
-});
+export function activitySchema(messages: AppMessages) {
+  return z.object({
+    clientId: z.union([z.literal(''), z.uuid(messages.activities.validation.clientInvalid)]),
+    description: z
+      .string()
+      .trim()
+      .min(1, messages.activities.validation.descriptionRequired)
+      .max(2000, messages.activities.validation.descriptionMax),
+    leadId: z.union([z.literal(''), z.uuid(messages.activities.validation.leadInvalid)]),
+    opportunityId: z.union([
+      z.literal(''),
+      z.uuid(messages.activities.validation.opportunityInvalid),
+    ]),
+    type: z.enum(activityTypes),
+  });
+}

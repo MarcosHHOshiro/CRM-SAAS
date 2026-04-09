@@ -1,3 +1,5 @@
+import type { AppLocale, AppMessages } from '@/i18n/messages/types';
+
 import type {
   Activity,
   ActivityClientOption,
@@ -9,57 +11,65 @@ import type {
   ActivityUserOption,
 } from '../types/activities';
 
-const dateTimeFormatter = new Intl.DateTimeFormat('en-US', {
-  dateStyle: 'medium',
-  timeStyle: 'short',
-});
+export function getActivityTypeLabels(messages: AppMessages): Record<ActivityType, string> {
+  return {
+    CALL: messages.activities.shared.typeCall,
+    EMAIL: messages.activities.shared.typeEmail,
+    MEETING: messages.activities.shared.typeMeeting,
+    NOTE: messages.activities.shared.typeNote,
+    TASK: messages.activities.shared.typeTask,
+  };
+}
 
-export const activityTypeLabels: Record<ActivityType, string> = {
-  CALL: 'Call',
-  EMAIL: 'Email',
-  MEETING: 'Meeting',
-  NOTE: 'Note',
-  TASK: 'Task',
-};
+export function getActivityTypeOptions(messages: AppMessages) {
+  const activityTypeLabels = getActivityTypeLabels(messages);
 
-export const activityTypeOptions = [
-  { label: 'All types', value: '' },
-  { label: activityTypeLabels.CALL, value: 'CALL' },
-  { label: activityTypeLabels.MEETING, value: 'MEETING' },
-  { label: activityTypeLabels.EMAIL, value: 'EMAIL' },
-  { label: activityTypeLabels.NOTE, value: 'NOTE' },
-  { label: activityTypeLabels.TASK, value: 'TASK' },
-] as const;
+  return [
+    { label: messages.activities.shared.allTypes, value: '' },
+    { label: activityTypeLabels.CALL, value: 'CALL' },
+    { label: activityTypeLabels.MEETING, value: 'MEETING' },
+    { label: activityTypeLabels.EMAIL, value: 'EMAIL' },
+    { label: activityTypeLabels.NOTE, value: 'NOTE' },
+    { label: activityTypeLabels.TASK, value: 'TASK' },
+  ] as const;
+}
 
-export const activityFormTypeOptions = activityTypeOptions.filter((option) => option.value !== '');
+export function getActivityFormTypeOptions(messages: AppMessages) {
+  return getActivityTypeOptions(messages).filter((option) => option.value !== '');
+}
 
-export function formatActivityDate(value: string) {
+export function formatActivityDate(value: string, locale: AppLocale, messages: AppMessages) {
   const parsedDate = new Date(value);
 
   if (Number.isNaN(parsedDate.getTime())) {
-    return 'Unknown date';
+    return messages.activities.shared.unknownDate;
   }
+
+  const dateTimeFormatter = new Intl.DateTimeFormat(locale, {
+    dateStyle: 'medium',
+    timeStyle: 'short',
+  });
 
   return dateTimeFormatter.format(parsedDate);
 }
 
-export function getActivityTypeLabel(type: ActivityType) {
-  return activityTypeLabels[type];
+export function getActivityTypeLabel(type: ActivityType, messages: AppMessages) {
+  return getActivityTypeLabels(messages)[type];
 }
 
-export function getActivityUserOptions(users: ActivityUserOption[]) {
+export function getActivityUserOptions(users: ActivityUserOption[], messages: AppMessages) {
   return [
-    { label: 'All authors', value: '' },
+    { label: messages.activities.shared.allAuthors, value: '' },
     ...users.map((user) => ({
-      label: `${user.name}${user.isActive ? '' : ' (Inactive)'}`,
+      label: `${user.name}${user.isActive ? '' : ` (${messages.activities.shared.inactiveSuffix})`}`,
       value: user.id,
     })),
   ];
 }
 
-export function getActivityLeadOptions(leads: ActivityLeadOption[]) {
+export function getActivityLeadOptions(leads: ActivityLeadOption[], messages: AppMessages) {
   return [
-    { label: 'All leads', value: '' },
+    { label: messages.activities.shared.allLeads, value: '' },
     ...leads.map((lead) => ({
       label: lead.name,
       value: lead.id,
@@ -67,9 +77,9 @@ export function getActivityLeadOptions(leads: ActivityLeadOption[]) {
   ];
 }
 
-export function getActivityClientOptions(clients: ActivityClientOption[]) {
+export function getActivityClientOptions(clients: ActivityClientOption[], messages: AppMessages) {
   return [
-    { label: 'All clients', value: '' },
+    { label: messages.activities.shared.allClients, value: '' },
     ...clients.map((client) => ({
       label: client.company ? `${client.name} - ${client.company}` : client.name,
       value: client.id,
@@ -77,9 +87,9 @@ export function getActivityClientOptions(clients: ActivityClientOption[]) {
   ];
 }
 
-export function getActivityOpportunityOptions(opportunities: ActivityOpportunityOption[]) {
+export function getActivityOpportunityOptions(opportunities: ActivityOpportunityOption[], messages: AppMessages) {
   return [
-    { label: 'All opportunities', value: '' },
+    { label: messages.activities.shared.allOpportunities, value: '' },
     ...opportunities.map((opportunity) => ({
       label: opportunity.title,
       value: opportunity.id,
@@ -145,15 +155,15 @@ export function getActivityInitialFormValues(): ActivityFormValues {
   };
 }
 
-export function getActivitySuccessMessage(success: string | null) {
-  const messages: Record<string, string> = {
-    created: 'Activity created successfully.',
+export function getActivitySuccessMessage(success: string | null, appMessages: AppMessages) {
+  const successMessages: Record<string, string> = {
+    created: appMessages.activities.shared.successCreated,
   };
 
-  return success ? messages[success] ?? null : null;
+  return success ? successMessages[success] ?? null : null;
 }
 
-export function getActivityRelatedEntityLabel(activity: Activity) {
+export function getActivityRelatedEntityLabel(activity: Activity, messages: AppMessages) {
   if (activity.opportunity) {
     return activity.opportunity.title;
   }
@@ -168,5 +178,5 @@ export function getActivityRelatedEntityLabel(activity: Activity) {
     return activity.lead.name;
   }
 
-  return 'General activity';
+  return messages.activities.shared.generalActivity;
 }

@@ -17,7 +17,7 @@ export function LeadDetailsCard({ lead }: LeadDetailsCardProps) {
       <section className="rounded-[2rem] border border-[var(--border)] bg-[var(--card)] p-6 shadow-[var(--shadow-soft)]">
         <div className="flex flex-wrap items-start justify-between gap-4">
           <div>
-            <p className="text-sm font-semibold uppercase tracking-[0.2em] text-[var(--accent)]">Lead profile</p>
+            <p className="text-sm font-semibold uppercase tracking-[0.2em] text-[var(--accent)]">Perfil do lead</p>
             <h2 className="mt-3 text-3xl font-semibold text-[var(--foreground)]">{lead.name}</h2>
           </div>
           <LeadStatusBadge status={lead.status} />
@@ -26,32 +26,32 @@ export function LeadDetailsCard({ lead }: LeadDetailsCardProps) {
         <div className="mt-6 grid gap-4 sm:grid-cols-2">
           <article className="rounded-[1.4rem] border border-[var(--border)] bg-[var(--card-strong)] p-4">
             <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[var(--foreground-muted)]">Email</p>
-            <p className="mt-3 text-sm text-[var(--foreground)]">{lead.email || 'No email provided'}</p>
+            <p className="mt-3 text-sm text-[var(--foreground)]">{lead.email || 'Sem email informado'}</p>
           </article>
           <article className="rounded-[1.4rem] border border-[var(--border)] bg-[var(--card-strong)] p-4">
-            <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[var(--foreground-muted)]">Phone</p>
-            <p className="mt-3 text-sm text-[var(--foreground)]">{lead.phone || 'No phone provided'}</p>
+            <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[var(--foreground-muted)]">Telefone</p>
+            <p className="mt-3 text-sm text-[var(--foreground)]">{lead.phone || 'Sem telefone informado'}</p>
           </article>
           <article className="rounded-[1.4rem] border border-[var(--border)] bg-[var(--card-strong)] p-4">
-            <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[var(--foreground-muted)]">Company</p>
-            <p className="mt-3 text-sm text-[var(--foreground)]">{lead.company || 'No company provided'}</p>
+            <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[var(--foreground-muted)]">Empresa</p>
+            <p className="mt-3 text-sm text-[var(--foreground)]">{lead.company || 'Sem empresa informada'}</p>
           </article>
           <article className="rounded-[1.4rem] border border-[var(--border)] bg-[var(--card-strong)] p-4">
-            <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[var(--foreground-muted)]">Created</p>
+            <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[var(--foreground-muted)]">Criado em</p>
             <p className="mt-3 text-sm text-[var(--foreground)]">{formatLeadDate(lead.createdAt)}</p>
           </article>
         </div>
 
         <div className="mt-4 rounded-[1.4rem] border border-[var(--border)] bg-[var(--card-strong)] p-4">
-          <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[var(--foreground-muted)]">Notes</p>
+          <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[var(--foreground-muted)]">Notas</p>
           <p className="mt-3 text-sm leading-7 text-[var(--foreground)]">
-            {lead.notes || 'No notes added yet.'}
+            {lead.notes || 'Nenhuma nota adicionada ainda.'}
           </p>
         </div>
       </section>
 
       <section className="rounded-[2rem] border border-[var(--border)] bg-[var(--card)] p-6 shadow-[var(--shadow-soft)]">
-        <p className="text-sm font-semibold uppercase tracking-[0.2em] text-[var(--accent)]">Lead ownership</p>
+        <p className="text-sm font-semibold uppercase tracking-[0.2em] text-[var(--accent)]">Responsabilidade do lead</p>
         {lead.owner ? (
           <div className="mt-4 rounded-[1.5rem] border border-[var(--border)] bg-[var(--card-strong)] p-5">
             <p className="text-lg font-semibold text-[var(--foreground)]">{lead.owner.name}</p>
@@ -60,18 +60,18 @@ export function LeadDetailsCard({ lead }: LeadDetailsCardProps) {
           </div>
         ) : (
           <div className="mt-4 rounded-[1.5rem] border border-dashed border-[var(--border)] bg-white/55 p-5 text-sm text-[var(--foreground-muted)]">
-            This lead is currently unassigned.
+            Este lead esta sem responsavel no momento.
           </div>
         )}
 
         <div className="mt-4 rounded-[1.5rem] border border-[var(--border)] bg-[var(--card-strong)] p-5">
-          <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[var(--foreground-muted)]">Conversion</p>
+          <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[var(--foreground-muted)]">Conversao</p>
           <p className="mt-3 text-sm leading-7 text-[var(--foreground)]">
             {lead.clientId
-              ? 'This lead has already been converted into a client record.'
+              ? 'Este lead ja foi convertido em um registro de cliente.'
               : canConvert
-                ? 'This lead is eligible for conversion into a client.'
-                : 'This lead cannot be converted right now.'}
+                ? 'Este lead esta apto para conversao em cliente.'
+                : 'Este lead nao pode ser convertido agora.'}
           </p>
         </div>
       </section>

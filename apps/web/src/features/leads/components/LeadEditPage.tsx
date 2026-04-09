@@ -38,7 +38,7 @@ export function LeadEditPage() {
       await updateLeadMutation.mutateAsync(mapUpdateLeadPayload(values));
       router.replace(`/leads/${leadId}?success=updated`);
     } catch (error) {
-      setErrorMessage(getApiErrorMessage(error, 'Unable to update this lead right now.'));
+      setErrorMessage(getApiErrorMessage(error, 'Nao foi possivel atualizar este lead agora.'));
     }
   }
 
@@ -50,11 +50,11 @@ export function LeadEditPage() {
     return (
       <div className="space-y-6">
         <PageIntro
-          description="Update lead information, ownership, and qualification status without leaving the private workspace."
+          description="Atualize dados do lead, responsavel e status de qualificacao sem sair do workspace privado."
           eyebrow="Leads"
-          title="Edit lead"
+          title="Editar lead"
         />
-        <LeadsErrorState message={getApiErrorMessage(leadQuery.error, 'Unable to load this lead.')} />
+        <LeadsErrorState message={getApiErrorMessage(leadQuery.error, 'Nao foi possivel carregar este lead.')} />
       </div>
     );
   }
@@ -62,9 +62,9 @@ export function LeadEditPage() {
   return (
     <div className="space-y-6">
       <PageIntro
-        description="Update lead information, ownership, and qualification status without leaving the private workspace."
+        description="Atualize dados do lead, responsavel e status de qualificacao sem sair do workspace privado."
         eyebrow="Leads"
-        title={`Edit ${leadQuery.data.lead.name}`}
+        title={`Editar ${leadQuery.data.lead.name}`}
       />
       <LeadForm
         errorMessage={errorMessage}
@@ -72,7 +72,7 @@ export function LeadEditPage() {
         lead={leadQuery.data.lead}
         onSubmit={handleSubmit}
         ownerOptions={ownersQuery.data}
-        submitLabel="Save changes"
+        submitLabel="Salvar alteracoes"
       />
     </div>
   );

@@ -23,14 +23,14 @@ export function DashboardOverview() {
     return (
       <div className="space-y-6">
         <PageIntro
-          description="Track your sales funnel, client base, recent activity, and conversion performance in one place."
+          description="Acompanhe funil de vendas, base de clientes, atividade recente e conversao em um unico lugar."
           eyebrow="Dashboard"
-          title="Commercial performance overview"
+          title="Visao geral da performance comercial"
         />
         <DashboardErrorState
           message={getApiErrorMessage(
             dashboardSummaryQuery.error,
-            'Please confirm the backend is running and try again.',
+            'Confirme se o backend esta rodando e tente novamente.',
           )}
           onRetry={() => {
             void dashboardSummaryQuery.refetch();
@@ -46,9 +46,9 @@ export function DashboardOverview() {
   return (
     <div className="space-y-6">
       <PageIntro
-        description="Track your sales funnel, client base, recent activity, and conversion performance in one place."
+        description="Acompanhe funil de vendas, base de clientes, atividade recente e conversao em um unico lugar."
         eyebrow="Dashboard"
-        title="Commercial performance overview"
+        title="Visao geral da performance comercial"
       />
 
       {isEmpty ? <DashboardEmptyState /> : null}

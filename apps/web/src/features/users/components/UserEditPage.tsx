@@ -7,6 +7,7 @@ import { useState } from 'react';
 import { LoadingScreen } from '@/components/LoadingScreen';
 import { PageIntro } from '@/components/PageIntro';
 import { useCurrentSessionQuery } from '@/features/auth/hooks/use-auth';
+import { useTranslation } from '@/i18n/use-translation';
 import { ApiError, getApiErrorMessage } from '@/services/api/api-error';
 
 import { useUpdateUserMutation, useUsersQuery } from '../hooks/use-users';
@@ -22,6 +23,7 @@ export function UserEditPage() {
   const usersQuery = useUsersQuery();
   const updateUserMutation = useUpdateUserMutation(params.userId);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const { messages } = useTranslation();
 
   async function handleSubmit(values: EditUserFormValues) {
     if (
@@ -47,15 +49,15 @@ export function UserEditPage() {
       await updateUserMutation.mutateAsync(payload);
       router.replace('/users?success=updated');
     } catch (error) {
-      setErrorMessage(getApiErrorMessage(error, 'Unable to update this user right now.'));
+      setErrorMessage(getApiErrorMessage(error, messages.users.edit.errorFallback));
     }
   }
 
   if (currentSessionQuery.isPending || usersQuery.isPending) {
     return (
       <LoadingScreen
-        description="Loading the selected team member and your access level."
-        title="Loading user details"
+        description={messages.users.edit.loadingDescription}
+        title={messages.users.edit.loadingTitle}
       />
     );
   }
@@ -64,14 +66,14 @@ export function UserEditPage() {
     return (
       <div className="space-y-6">
         <PageIntro
-          description="Update role assignments and team member information without leaving the private workspace."
-          eyebrow="Users"
-          title="Edit user"
+          description={messages.users.edit.description}
+          eyebrow={messages.users.edit.eyebrow}
+          title={messages.users.edit.title}
         />
         <UsersErrorState
           message={getApiErrorMessage(
             currentSessionQuery.error,
-            'Unable to load your current access context.',
+            messages.users.list.currentAccessError,
           )}
         />
       </div>
@@ -84,9 +86,9 @@ export function UserEditPage() {
     return (
       <div className="space-y-6">
         <PageIntro
-          description="Update role assignments and team member information without leaving the private workspace."
-          eyebrow="Users"
-          title="Edit user"
+          description={messages.users.edit.description}
+          eyebrow={messages.users.edit.eyebrow}
+          title={messages.users.edit.title}
         />
         <UsersAccessState />
       </div>
@@ -98,9 +100,9 @@ export function UserEditPage() {
       return (
         <div className="space-y-6">
           <PageIntro
-            description="Update role assignments and team member information without leaving the private workspace."
-            eyebrow="Users"
-            title="Edit user"
+            description={messages.users.edit.description}
+            eyebrow={messages.users.edit.eyebrow}
+            title={messages.users.edit.title}
           />
           <UsersAccessState />
         </div>
@@ -110,12 +112,12 @@ export function UserEditPage() {
     return (
       <div className="space-y-6">
         <PageIntro
-          description="Update role assignments and team member information without leaving the private workspace."
-          eyebrow="Users"
-          title="Edit user"
+          description={messages.users.edit.description}
+          eyebrow={messages.users.edit.eyebrow}
+          title={messages.users.edit.title}
         />
         <UsersErrorState
-          message={getApiErrorMessage(usersQuery.error, 'Unable to load this user.')}
+          message={getApiErrorMessage(usersQuery.error, messages.users.edit.loadError)}
         />
       </div>
     );
@@ -127,11 +129,11 @@ export function UserEditPage() {
     return (
       <div className="space-y-6">
         <PageIntro
-          description="Update role assignments and team member information without leaving the private workspace."
-          eyebrow="Users"
-          title="Edit user"
+          description={messages.users.edit.description}
+          eyebrow={messages.users.edit.eyebrow}
+          title={messages.users.edit.title}
         />
-        <UsersErrorState message="This user could not be found in the current organization." />
+        <UsersErrorState message={messages.users.edit.notFound} />
       </div>
     );
   }
@@ -140,13 +142,13 @@ export function UserEditPage() {
     return (
       <div className="space-y-6">
         <PageIntro
-          description="Update role assignments and team member information without leaving the private workspace."
-          eyebrow="Users"
-          title={`Edit ${user.name}`}
+          description={messages.users.edit.description}
+          eyebrow={messages.users.edit.eyebrow}
+          title={messages.users.edit.titleWithName.replace('{name}', user.name)}
         />
         <UsersAccessState
-          description="Managers can update managers and sales reps, but owner accounts remain restricted to preserve workspace control."
-          title="This user can only be managed by an owner."
+          description={messages.users.access.ownerOnlyDescription}
+          title={messages.users.access.ownerOnlyTitle}
         />
       </div>
     );
@@ -157,9 +159,9 @@ export function UserEditPage() {
   return (
     <div className="space-y-6">
       <PageIntro
-        description="Update role assignments and team member information without leaving the private workspace."
-        eyebrow="Users"
-        title={`Edit ${user.name}`}
+        description={messages.users.edit.description}
+        eyebrow={messages.users.edit.eyebrow}
+        title={messages.users.edit.titleWithName.replace('{name}', user.name)}
       />
       <UserForm
         actorRole={actor.role}
@@ -170,10 +172,10 @@ export function UserEditPage() {
         onSubmit={handleSubmit}
         roleHint={
           isEditingCurrentUser
-            ? 'You can update your name here, but your own role stays locked.'
+            ? messages.users.edit.selfRoleHint
             : undefined
         }
-        submitLabel="Save changes"
+        submitLabel={messages.users.edit.submit}
         user={user}
       />
     </div>

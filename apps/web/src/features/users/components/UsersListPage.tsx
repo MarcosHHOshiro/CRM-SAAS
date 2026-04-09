@@ -9,6 +9,7 @@ import { PageIntro } from '@/components/PageIntro';
 import { useToast } from '@/components/ToastProvider';
 import { useCurrentSessionQuery } from '@/features/auth/hooks/use-auth';
 import { useQueryFeedbackToast } from '@/hooks/use-query-feedback-toast';
+import { useTranslation } from '@/i18n/use-translation';
 import { buildPageQueryString, getPageFromSearchParams, paginateItems } from '@/lib/pagination';
 import { ApiError, getApiErrorMessage } from '@/services/api/api-error';
 
@@ -28,7 +29,8 @@ export function UsersListPage() {
   const usersQuery = useUsersQuery();
   const updateUserStatusMutation = useUpdateUserStatusMutation();
   const { showToast } = useToast();
-  const successMessage = getUsersSuccessMessage(searchParams.get('success'));
+  const { messages } = useTranslation();
+  const successMessage = getUsersSuccessMessage(searchParams.get('success'), messages);
   const currentPage = getPageFromSearchParams(searchParams);
 
   useQueryFeedbackToast(successMessage);
@@ -40,12 +42,14 @@ export function UsersListPage() {
         userId: user.id,
       });
       showToast({
-        message: user.isActive ? 'User deactivated successfully.' : 'User activated successfully.',
+        message: user.isActive
+          ? messages.users.list.statusDeactivated
+          : messages.users.list.statusActivated,
         tone: 'success',
       });
     } catch (error) {
       showToast({
-        message: getApiErrorMessage(error, 'Unable to update this user status right now.'),
+        message: getApiErrorMessage(error, messages.users.list.statusUpdateError),
         tone: 'error',
       });
     }
@@ -65,14 +69,14 @@ export function UsersListPage() {
     return (
       <div className="space-y-6">
         <PageIntro
-          description="Manage your internal team with clear role visibility, status controls, and fast user administration."
-          eyebrow="Users"
-          title="Team administration"
+          description={messages.users.list.description}
+          eyebrow={messages.users.list.eyebrow}
+          title={messages.users.list.title}
         />
         <UsersErrorState
           message={getApiErrorMessage(
             currentSessionQuery.error,
-            'Unable to load your current access context.',
+            messages.users.list.currentAccessError,
           )}
         />
       </div>
@@ -85,9 +89,9 @@ export function UsersListPage() {
     return (
       <div className="space-y-6">
         <PageIntro
-          description="Manage your internal team with clear role visibility, status controls, and fast user administration."
-          eyebrow="Users"
-          title="Team administration"
+          description={messages.users.list.description}
+          eyebrow={messages.users.list.eyebrow}
+          title={messages.users.list.title}
         />
         <UsersAccessState />
       </div>
@@ -99,9 +103,9 @@ export function UsersListPage() {
       return (
         <div className="space-y-6">
           <PageIntro
-            description="Manage your internal team with clear role visibility, status controls, and fast user administration."
-            eyebrow="Users"
-            title="Team administration"
+            description={messages.users.list.description}
+            eyebrow={messages.users.list.eyebrow}
+            title={messages.users.list.title}
           />
           <UsersAccessState />
         </div>
@@ -111,14 +115,14 @@ export function UsersListPage() {
     return (
       <div className="space-y-6">
         <PageIntro
-          description="Manage your internal team with clear role visibility, status controls, and fast user administration."
-          eyebrow="Users"
-          title="Team administration"
+          description={messages.users.list.description}
+          eyebrow={messages.users.list.eyebrow}
+          title={messages.users.list.title}
         />
         <UsersErrorState
           message={getApiErrorMessage(
             usersQuery.error,
-            'Please try loading the team members again.',
+            messages.users.list.errorFallback,
           )}
           onRetry={() => {
             void usersQuery.refetch();
@@ -136,22 +140,22 @@ export function UsersListPage() {
   return (
     <div className="space-y-6">
       <PageIntro
-        description="Manage your internal team with clear role visibility, status controls, and fast user administration."
-        eyebrow="Users"
-        title="Team administration"
+        description={messages.users.list.description}
+        eyebrow={messages.users.list.eyebrow}
+        title={messages.users.list.title}
       />
 
       <section className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_auto]">
         <div className="grid gap-4 sm:grid-cols-3">
           <div className="rounded-[1.7rem] border border-[var(--border)] bg-[var(--card)] px-5 py-4 shadow-[var(--shadow-soft)]">
-            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--foreground-muted)]">
-              Total users
+              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--foreground-muted)]">
+              {messages.users.list.total}
             </p>
             <p className="mt-3 text-3xl font-semibold text-[var(--foreground)]">{users.length}</p>
           </div>
           <div className="rounded-[1.7rem] border border-[var(--border)] bg-[var(--card)] px-5 py-4 shadow-[var(--shadow-soft)]">
             <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--foreground-muted)]">
-              Active
+              {messages.users.list.active}
             </p>
             <p className="mt-3 text-3xl font-semibold text-[var(--foreground)]">
               {activeUsersCount}
@@ -159,7 +163,7 @@ export function UsersListPage() {
           </div>
           <div className="rounded-[1.7rem] border border-[var(--border)] bg-[var(--card)] px-5 py-4 shadow-[var(--shadow-soft)]">
             <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--foreground-muted)]">
-              Inactive
+              {messages.users.list.inactive}
             </p>
             <p className="mt-3 text-3xl font-semibold text-[var(--foreground)]">
               {inactiveUsersCount}
@@ -169,17 +173,17 @@ export function UsersListPage() {
         <section className="flex items-center justify-between gap-4 rounded-[1.7rem] border border-[var(--border)] bg-[var(--card)] px-5 py-4 shadow-[var(--shadow-soft)]">
           <div className="max-w-sm">
             <p className="text-sm font-semibold text-[var(--foreground)]">
-              Add managers and sales reps as your workspace grows.
+              {messages.users.list.ctaTitle}
             </p>
             <p className="mt-2 text-sm leading-6 text-[var(--foreground-muted)]">
-              Roles and activation state stay aligned with the backend authorization rules.
+              {messages.users.list.ctaDescription}
             </p>
           </div>
           <Link
             className="inline-flex min-h-11 items-center justify-center rounded-full bg-[var(--accent)] px-5 text-sm font-semibold text-white hover:bg-[var(--accent-strong)]"
             href="/users/new"
           >
-            Create user
+            {messages.users.list.createButton}
           </Link>
         </section>
       </section>
@@ -201,7 +205,7 @@ export function UsersListPage() {
           />
           <PaginationControls
             currentPage={paginatedUsers.currentPage}
-            itemLabel="users"
+            itemLabel={messages.users.list.itemLabel}
             onPageChange={handlePageChange}
             pageSize={10}
             totalItems={paginatedUsers.totalItems}

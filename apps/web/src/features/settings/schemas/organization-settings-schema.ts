@@ -4,6 +4,6 @@ export const organizationSettingsSchema = z.object({
   name: z
     .string()
     .trim()
-    .min(2, 'Organization name must have at least 2 characters.')
-    .max(120, 'Organization name must have at most 120 characters.'),
+    .min(2, 'O nome da organizacao precisa ter pelo menos 2 caracteres.')
+    .max(120, 'O nome da organizacao pode ter no maximo 120 caracteres.'),
 });

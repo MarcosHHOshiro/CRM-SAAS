@@ -7,6 +7,7 @@ import { InlineBanner } from '@/components/InlineBanner';
 import { PaginationControls } from '@/components/PaginationControls';
 import { PageIntro } from '@/components/PageIntro';
 import { useQueryFeedbackToast } from '@/hooks/use-query-feedback-toast';
+import { useTranslation } from '@/i18n/use-translation';
 import { buildPageQueryString, getPageFromSearchParams, paginateItems } from '@/lib/pagination';
 import { getApiErrorMessage } from '@/services/api/api-error';
 
@@ -14,10 +15,10 @@ import {
   buildOpportunityFilters,
   buildOpportunityFiltersQueryString,
   getOpportunityOwnerOptions,
+  getOpportunitySortOptions,
+  getOpportunityStageOptions,
+  getOpportunityStatusOptions,
   getOpportunitySuccessMessage,
-  opportunitySortOptions,
-  opportunityStageOptions,
-  opportunityStatusOptions,
 } from '../lib/opportunities-format';
 import { useOpportunityOwnersQuery, useOpportunitiesQuery } from '../hooks/use-opportunities';
 import { OpportunitiesEmptyState } from './OpportunitiesEmptyState';
@@ -54,6 +55,7 @@ export function OpportunitiesListPage() {
   const filters = useMemo(() => buildOpportunityFilters(searchParams), [searchParams]);
   const opportunitiesQuery = useOpportunitiesQuery(filters);
   const ownersQuery = useOpportunityOwnersQuery();
+  const { messages } = useTranslation();
   const [filtersState, setFiltersState] = useState<OpportunityFiltersState>({
     ownerUserId: searchParams.get('ownerUserId') ?? '',
     search: searchParams.get('search') ?? '',
@@ -75,12 +77,12 @@ export function OpportunitiesListPage() {
     });
   }, [searchParams]);
 
-  const ownerOptions = ownersQuery.data ? getOpportunityOwnerOptions(ownersQuery.data) : [];
+  const ownerOptions = ownersQuery.data ? getOpportunityOwnerOptions(ownersQuery.data, messages) : [];
   const showOwnerFilter = ownerOptions.length > 1;
   const hasFilters = Boolean(
     filters.search || filters.stage || filters.status || filters.ownerUserId,
   );
-  const successMessage = getOpportunitySuccessMessage(searchParams.get('success'));
+  const successMessage = getOpportunitySuccessMessage(searchParams.get('success'), messages);
   const currentPage = getPageFromSearchParams(searchParams);
 
   useQueryFeedbackToast(successMessage);
@@ -135,14 +137,14 @@ export function OpportunitiesListPage() {
     return (
       <div className="space-y-6">
         <PageIntro
-          description="Track commercial deals across the organization with clean filters, list views, and pipeline visibility."
-          eyebrow="Opportunities"
-          title="Opportunity management"
+          description={messages.opportunities.list.description}
+          eyebrow={messages.opportunities.list.eyebrow}
+          title={messages.opportunities.list.title}
         />
         <OpportunitiesErrorState
           message={getApiErrorMessage(
             opportunitiesQuery.error,
-            'Please try loading the opportunities again.',
+            messages.opportunities.list.errorFallback,
           )}
           onRetry={() => {
             void opportunitiesQuery.refetch();
@@ -161,16 +163,16 @@ export function OpportunitiesListPage() {
   return (
     <div className="space-y-6">
       <PageIntro
-        description="Track commercial deals across the organization with clean filters, list views, and pipeline visibility."
-        eyebrow="Opportunities"
-        title="Opportunity management"
+        description={messages.opportunities.list.description}
+        eyebrow={messages.opportunities.list.eyebrow}
+        title={messages.opportunities.list.title}
       />
 
       <OpportunitiesViewSwitch view="list" />
 
       {ownersQuery.isError ? (
         <InlineBanner tone="info">
-          Owner filters are not available for your current access level.
+          {messages.opportunities.filters.ownerUnavailable}
         </InlineBanner>
       ) : null}
 
@@ -180,15 +182,15 @@ export function OpportunitiesListPage() {
         onSubmit={handleSubmit}
         ownerOptions={ownerOptions}
         showOwnerFilter={showOwnerFilter}
-        sortOptions={opportunitySortOptions.map((option) => ({
+        sortOptions={getOpportunitySortOptions(messages).map((option) => ({
           label: option.label,
           value: `${option.sortBy}:${option.order}`,
         }))}
-        stageOptions={opportunityStageOptions.map((option) => ({
+        stageOptions={getOpportunityStageOptions(messages).map((option) => ({
           label: option.label,
           value: option.value,
         }))}
-        statusOptions={opportunityStatusOptions.map((option) => ({
+        statusOptions={getOpportunityStatusOptions(messages).map((option) => ({
           label: option.label,
           value: option.value,
         }))}
@@ -202,7 +204,7 @@ export function OpportunitiesListPage() {
           <OpportunitiesTable opportunities={paginatedOpportunities.items} />
           <PaginationControls
             currentPage={paginatedOpportunities.currentPage}
-            itemLabel="opportunities"
+            itemLabel={messages.opportunities.list.itemLabel}
             onPageChange={handlePageChange}
             pageSize={10}
             totalItems={paginatedOpportunities.totalItems}

@@ -7,13 +7,14 @@ import { InlineBanner } from '@/components/InlineBanner';
 import { SelectField } from '@/components/SelectField';
 import { TextAreaField } from '@/components/TextAreaField';
 import { TextField } from '@/components/TextField';
+import { useTranslation } from '@/i18n/use-translation';
 
 import {
   getOpportunityClientOptions,
+  getOpportunityFormStageOptions,
   getOpportunityFormOwnerOptions,
   getOpportunityInitialFormValues,
-  opportunityFormStageOptions,
-  opportunityStageLabels,
+  getOpportunityStageLabels,
 } from '../lib/opportunities-format';
 import {
   createOpportunitySchema,
@@ -49,6 +50,7 @@ export function OpportunityForm({
   ownerOptions = [],
   submitLabel,
 }: OpportunityFormProps) {
+  const { messages } = useTranslation();
   const [values, setValues] = useState<OpportunityFormValues>(() =>
     getOpportunityInitialFormValues(opportunity),
   );
@@ -72,7 +74,7 @@ export function OpportunityForm({
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
-    const schema = mode === 'create' ? createOpportunitySchema : updateOpportunitySchema;
+    const schema = mode === 'create' ? createOpportunitySchema(messages) : updateOpportunitySchema(messages);
     const result = schema.safeParse(values);
 
     if (!result.success) {
@@ -102,16 +104,16 @@ export function OpportunityForm({
       <div className="grid gap-5 md:grid-cols-2">
         <TextField
           error={fieldErrors.title}
-          label="Opportunity title"
+          label={messages.opportunities.form.title}
           name="title"
           onChange={handleChange}
-          placeholder="Annual renewal expansion"
+          placeholder={messages.opportunities.form.titlePlaceholder}
           value={values.title}
         />
         <TextField
           error={fieldErrors.estimatedValue}
-          hint="Use numbers with up to 2 decimal places."
-          label="Estimated value"
+          hint={messages.opportunities.form.estimatedValueHint}
+          label={messages.opportunities.form.estimatedValue}
           name="estimatedValue"
           onChange={handleChange}
           placeholder="15000"
@@ -120,20 +122,20 @@ export function OpportunityForm({
         {mode === 'create' ? (
           <SelectField
             error={fieldErrors.clientId}
-            label="Client"
+            label={messages.opportunities.form.client}
             name="clientId"
             onChange={handleChange}
-            options={getOpportunityClientOptions(clientOptions)}
+            options={getOpportunityClientOptions(clientOptions, messages)}
             value={values.clientId}
           />
         ) : (
           <div className="rounded-[1.5rem] border border-[var(--border)] bg-white/60 px-4 py-3 text-sm leading-6 text-[var(--foreground-muted)]">
-            Client cannot be changed after the opportunity is created.
+            {messages.opportunities.form.clientReadonly}
           </div>
         )}
         <TextField
           error={fieldErrors.expectedCloseDate}
-          label="Expected close date"
+          label={messages.opportunities.form.expectedCloseDate}
           name="expectedCloseDate"
           onChange={handleChange}
           type="date"
@@ -142,33 +144,33 @@ export function OpportunityForm({
         {mode === 'create' ? (
           <SelectField
             error={fieldErrors.stage}
-            label="Initial stage"
+            label={messages.opportunities.form.initialStage}
             name="stage"
             onChange={handleChange}
-            options={opportunityFormStageOptions.map((option) => ({
-              label: opportunityStageLabels[option.value as keyof typeof opportunityStageLabels],
+            options={getOpportunityFormStageOptions(messages).map((option) => ({
+              label: getOpportunityStageLabels(messages)[option.value as keyof ReturnType<typeof getOpportunityStageLabels>],
               value: option.value,
             }))}
             value={values.stage}
           />
         ) : (
           <div className="rounded-[1.5rem] border border-[var(--border)] bg-white/60 px-4 py-3 text-sm leading-6 text-[var(--foreground-muted)]">
-            Stage changes are handled from the pipeline or detail view.
+            {messages.opportunities.form.stageReadonly}
           </div>
         )}
         {ownerOptions.length > 0 ? (
           <SelectField
             error={fieldErrors.ownerUserId}
-            hint="Assign an owner when the opportunity already belongs to someone."
-            label="Owner"
+            hint={messages.opportunities.form.ownerHint}
+            label={messages.opportunities.form.owner}
             name="ownerUserId"
             onChange={handleChange}
-            options={getOpportunityFormOwnerOptions(ownerOptions)}
+            options={getOpportunityFormOwnerOptions(ownerOptions, messages)}
             value={values.ownerUserId}
           />
         ) : (
           <div className="rounded-[1.5rem] border border-[var(--border)] bg-white/60 px-4 py-3 text-sm leading-6 text-[var(--foreground-muted)]">
-            Owner assignment is not available for your current access level.
+            {messages.opportunities.form.ownerUnavailable}
           </div>
         )}
       </div>
@@ -176,11 +178,11 @@ export function OpportunityForm({
       <div className="mt-5">
         <TextAreaField
           error={fieldErrors.notes}
-          hint="Optional notes about the opportunity, stakeholders, or next steps."
-          label="Notes"
+          hint={messages.opportunities.form.notesHint}
+          label={messages.opportunities.form.notes}
           name="notes"
           onChange={handleChange}
-          placeholder="Important commercial context and next actions."
+          placeholder={messages.opportunities.form.notesPlaceholder}
           rows={6}
           value={values.notes}
         />
@@ -198,13 +200,13 @@ export function OpportunityForm({
           disabled={isSubmitting}
           type="submit"
         >
-          {isSubmitting ? 'Saving...' : submitLabel}
+          {isSubmitting ? messages.common.actions.saving : submitLabel}
         </button>
         <Link
           className="inline-flex min-h-11 items-center justify-center rounded-full border border-[var(--border)] bg-white/80 px-5 text-sm font-semibold text-[var(--foreground)] hover:border-[var(--accent)] hover:text-[var(--accent)]"
           href={opportunity ? `/opportunities/${opportunity.id}` : '/opportunities'}
         >
-          Cancel
+          {messages.common.actions.cancel}
         </Link>
       </div>
     </form>

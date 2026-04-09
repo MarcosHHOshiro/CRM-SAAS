@@ -30,9 +30,9 @@ export function LeadsTable({
             <tr className="text-xs uppercase tracking-[0.16em] text-[var(--foreground-muted)]">
               <th className="px-6 py-4 font-semibold">Lead</th>
               <th className="px-6 py-4 font-semibold">Status</th>
-              <th className="px-6 py-4 font-semibold">Owner</th>
-              <th className="px-6 py-4 font-semibold">Created</th>
-              <th className="px-6 py-4 font-semibold">Actions</th>
+              <th className="px-6 py-4 font-semibold">Responsavel</th>
+              <th className="px-6 py-4 font-semibold">Criado em</th>
+              <th className="px-6 py-4 font-semibold">Acoes</th>
             </tr>
           </thead>
           <tbody>
@@ -50,9 +50,9 @@ export function LeadsTable({
                         {lead.name}
                       </Link>
                       <div className="mt-2 space-y-1 text-sm text-[var(--foreground-muted)]">
-                        <p>{lead.email || 'No email provided'}</p>
-                        <p>{lead.phone || 'No phone provided'}</p>
-                        <p>{lead.company || 'No company provided'}</p>
+                        <p>{lead.email || 'Sem email informado'}</p>
+                        <p>{lead.phone || 'Sem telefone informado'}</p>
+                        <p>{lead.company || 'Sem empresa informada'}</p>
                       </div>
                     </div>
                   </td>
@@ -66,7 +66,7 @@ export function LeadsTable({
                         <p className="mt-1">{lead.owner.email}</p>
                       </div>
                     ) : (
-                      'Unassigned'
+                      'Sem responsavel'
                     )}
                   </td>
                   <td className="px-6 py-5 align-top text-sm text-[var(--foreground-muted)]">
@@ -77,15 +77,15 @@ export function LeadsTable({
                       <Link
                         className="inline-flex min-h-10 items-center justify-center rounded-full border border-[var(--border)] bg-white/80 px-4 text-sm font-semibold text-[var(--foreground)] hover:border-[var(--accent)] hover:text-[var(--accent)]"
                         href={`/leads/${lead.id}`}
-                      >
-                        View
-                      </Link>
+                    >
+                      Ver
+                    </Link>
                       <Link
                         className="inline-flex min-h-10 items-center justify-center rounded-full border border-[var(--border)] bg-white/80 px-4 text-sm font-semibold text-[var(--foreground)] hover:border-[var(--accent)] hover:text-[var(--accent)]"
                         href={`/leads/${lead.id}/edit`}
-                      >
-                        Edit
-                      </Link>
+                    >
+                      Editar
+                    </Link>
                       {canConvert ? (
                         <button
                           className="inline-flex min-h-10 items-center justify-center rounded-full border border-emerald-200 bg-emerald-50 px-4 text-sm font-semibold text-emerald-700 hover:bg-emerald-100 disabled:cursor-not-allowed disabled:opacity-70"
@@ -93,7 +93,7 @@ export function LeadsTable({
                           onClick={() => onConvert(lead)}
                           type="button"
                         >
-                          {isMutatingConvertLeadId === lead.id ? 'Converting...' : 'Convert'}
+                          {isMutatingConvertLeadId === lead.id ? 'Convertendo...' : 'Converter'}
                         </button>
                       ) : null}
                       <button
@@ -102,7 +102,7 @@ export function LeadsTable({
                         onClick={() => onDelete(lead)}
                         type="button"
                       >
-                        {isDeletingLeadId === lead.id ? 'Deleting...' : 'Delete'}
+                        {isDeletingLeadId === lead.id ? 'Removendo...' : 'Excluir'}
                       </button>
                     </div>
                   </td>

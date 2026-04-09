@@ -1,3 +1,7 @@
+'use client';
+
+import { useTranslation } from '@/i18n/use-translation';
+
 type PaginationControlsProps = Readonly<{
   currentPage: number;
   itemLabel: string;
@@ -15,6 +19,8 @@ export function PaginationControls({
   totalItems,
   totalPages,
 }: PaginationControlsProps) {
+  const { locale, messages } = useTranslation();
+
   if (totalPages <= 1) {
     return null;
   }
@@ -26,10 +32,14 @@ export function PaginationControls({
     <section className="flex flex-col gap-4 rounded-[1.7rem] border border-[var(--border)] bg-[var(--card)] px-5 py-4 shadow-[var(--shadow-soft)] sm:flex-row sm:items-center sm:justify-between">
       <div>
         <p className="text-sm font-semibold text-[var(--foreground)]">
-          Showing {startItem}-{endItem} of {totalItems} {itemLabel}
+          {locale === 'pt-BR'
+            ? `Mostrando ${startItem}-${endItem} de ${totalItems} ${itemLabel}`
+            : `Showing ${startItem}-${endItem} of ${totalItems} ${itemLabel}`}
         </p>
         <p className="mt-1 text-sm text-[var(--foreground-muted)]">
-          Page {currentPage} of {totalPages}
+          {locale === 'pt-BR'
+            ? `Pagina ${currentPage} de ${totalPages}`
+            : `Page ${currentPage} of ${totalPages}`}
         </p>
       </div>
       <div className="flex flex-wrap gap-3">
@@ -41,7 +51,7 @@ export function PaginationControls({
           }}
           type="button"
         >
-          Previous
+          {messages.common.actions.previous}
         </button>
         <button
           className="inline-flex min-h-10 items-center justify-center rounded-full bg-[var(--accent)] px-4 text-sm font-semibold text-white hover:bg-[var(--accent-strong)] disabled:cursor-not-allowed disabled:opacity-60"
@@ -51,7 +61,7 @@ export function PaginationControls({
           }}
           type="button"
         >
-          Next
+          {messages.common.actions.next}
         </button>
       </div>
     </section>

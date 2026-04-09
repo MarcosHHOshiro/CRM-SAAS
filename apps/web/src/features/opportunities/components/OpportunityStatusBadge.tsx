@@ -1,4 +1,5 @@
-import { opportunityStatusLabels } from '../lib/opportunities-format';
+import { useTranslation } from '@/i18n/use-translation';
+import { getOpportunityStatusLabels } from '../lib/opportunities-format';
 import type { OpportunityStatus } from '../types/opportunities';
 
 type OpportunityStatusBadgeProps = Readonly<{
@@ -12,9 +13,11 @@ const statusClasses: Record<OpportunityStatus, string> = {
 };
 
 export function OpportunityStatusBadge({ status }: OpportunityStatusBadgeProps) {
+  const { messages } = useTranslation();
+
   return (
     <span className={`inline-flex rounded-full px-3 py-1 text-xs font-semibold ${statusClasses[status]}`}>
-      {opportunityStatusLabels[status]}
+      {getOpportunityStatusLabels(messages)[status]}
     </span>
   );
 }
