@@ -7,11 +7,12 @@ import { useState } from 'react';
 import { InlineBanner } from '@/components/InlineBanner';
 import { TextField } from '@/components/TextField';
 import { useToast } from '@/components/ToastProvider';
+import { useTranslation } from '@/i18n/use-translation';
 import { DEFAULT_PRIVATE_ROUTE } from '@/lib/routes';
 import { getApiErrorMessage } from '@/services/api/api-error';
 
 import { useLoginMutation } from '../hooks/use-auth';
-import { loginSchema } from '../schemas/login-schema';
+import { createLoginSchema } from '../schemas/login-schema';
 import type { LoginValues } from '../types/auth';
 
 type LoginFieldErrors = Partial<Record<keyof LoginValues, string>>;
@@ -29,6 +30,8 @@ export function LoginForm() {
   const [fieldErrors, setFieldErrors] = useState<LoginFieldErrors>({});
   const [formError, setFormError] = useState<string | null>(null);
   const { showToast } = useToast();
+  const { messages } = useTranslation();
+  const loginSchema = createLoginSchema(messages);
 
   function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
     const { name, value } = event.target;
@@ -65,7 +68,7 @@ export function LoginForm() {
       await loginMutation.mutateAsync(result.data);
       router.replace(searchParams.get('next') || DEFAULT_PRIVATE_ROUTE);
     } catch (error) {
-      const message = getApiErrorMessage(error, 'Unable to sign in right now.');
+      const message = getApiErrorMessage(error, messages.auth.loginForm.fallbackError);
 
       setFormError(message);
       showToast({ message, tone: 'error' });
@@ -77,20 +80,20 @@ export function LoginForm() {
       <TextField
         autoComplete="email"
         error={fieldErrors.email}
-        label="Work email"
+        label={messages.auth.loginForm.emailLabel}
         name="email"
         onChange={handleChange}
-        placeholder="you@company.com"
+        placeholder={messages.auth.loginForm.emailPlaceholder}
         type="email"
         value={values.email}
       />
       <TextField
         autoComplete="current-password"
         error={fieldErrors.password}
-        label="Password"
+        label={messages.auth.loginForm.passwordLabel}
         name="password"
         onChange={handleChange}
-        placeholder="Enter your password"
+        placeholder={messages.auth.loginForm.passwordPlaceholder}
         type="password"
         value={values.password}
       />
@@ -102,12 +105,12 @@ export function LoginForm() {
         disabled={loginMutation.isPending}
         type="submit"
       >
-        {loginMutation.isPending ? 'Signing in...' : 'Sign in'}
+        {loginMutation.isPending ? messages.auth.loginForm.submitting : messages.auth.loginForm.submit}
       </button>
       <p className="text-sm text-[var(--foreground-muted)]">
-        New to Pulse CRM?{' '}
+        {messages.auth.loginForm.switchPrompt}{' '}
         <Link className="font-semibold text-[var(--accent)] hover:text-[var(--accent-strong)]" href="/register">
-          Create your workspace
+          {messages.auth.loginForm.switchLink}
         </Link>
       </p>
     </form>

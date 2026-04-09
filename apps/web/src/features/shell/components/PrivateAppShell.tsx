@@ -4,12 +4,12 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
-import { formatUserRole } from '@/lib/format';
+import { useTranslation } from '@/i18n/use-translation';
 
 import { LogoutButton } from '@/features/auth/components/LogoutButton';
 import type { CurrentSession } from '@/features/auth/types/auth';
 
-import { navigationItems } from '../config/navigation';
+import { getNavigationItems } from '../config/navigation';
 
 type PrivateAppShellProps = Readonly<{
   children: React.ReactNode;
@@ -19,6 +19,9 @@ type PrivateAppShellProps = Readonly<{
 export function PrivateAppShell({ children, session }: PrivateAppShellProps) {
   const pathname = usePathname();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const { messages } = useTranslation();
+  const navigationItems = getNavigationItems(messages);
+  const roleLabel = messages.roles[session.user.role];
 
   useEffect(() => {
     setIsSidebarOpen(false);
@@ -43,13 +46,13 @@ export function PrivateAppShell({ children, session }: PrivateAppShellProps) {
           }}
           type="button"
         >
-          {isSidebarOpen ? 'Close menu' : 'Open menu'}
+          {isSidebarOpen ? messages.shell.mobileMenuClose : messages.shell.mobileMenuOpen}
         </button>
       </div>
 
       {isSidebarOpen ? (
         <button
-          aria-label="Close navigation menu"
+          aria-label={messages.shell.closeNavigationAriaLabel}
           className="fixed inset-0 z-30 bg-slate-950/35 lg:hidden"
           onClick={() => {
             setIsSidebarOpen(false);
@@ -68,7 +71,7 @@ export function PrivateAppShell({ children, session }: PrivateAppShellProps) {
             <div className="flex items-start justify-between gap-3 lg:block">
               <div className="min-w-0">
                 <p className="text-xs font-semibold uppercase tracking-[0.28em] text-emerald-200/80">
-                  Pulse CRM
+                  {messages.common.brand}
                 </p>
                 <h1 className="mt-4 text-2xl font-semibold leading-tight">
                   {session.organization.name}
@@ -114,7 +117,9 @@ export function PrivateAppShell({ children, session }: PrivateAppShellProps) {
           </nav>
 
           <div className="mt-6 rounded-[1.5rem] border border-white/10 bg-white/5 p-4">
-            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">Signed in as</p>
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">
+              {messages.shell.signedInAs}
+            </p>
             <p className="mt-3 text-sm font-semibold text-white">{session.user.name}</p>
             <p className="mt-1 text-sm text-slate-300">{session.user.email}</p>
           </div>
@@ -124,7 +129,7 @@ export function PrivateAppShell({ children, session }: PrivateAppShellProps) {
           <header className="flex flex-col gap-4 rounded-[2rem] border border-[var(--border)] bg-[var(--card)] px-5 py-5 shadow-[var(--shadow-soft)] sm:px-6 sm:flex-row sm:items-center sm:justify-between">
             <div>
               <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[var(--accent)]">
-                Organization workspace
+                {messages.shell.workspaceEyebrow}
               </p>
               <h2 className="mt-3 text-2xl font-semibold text-[var(--foreground)]">
                 {session.organization.name}
@@ -134,7 +139,7 @@ export function PrivateAppShell({ children, session }: PrivateAppShellProps) {
               <div className="rounded-[1.4rem] border border-[var(--border)] bg-white/80 px-4 py-3">
                 <p className="text-sm font-semibold text-[var(--foreground)]">{session.user.name}</p>
                 <p className="mt-1 text-sm text-[var(--foreground-muted)]">
-                  {formatUserRole(session.user.role)}
+                  {roleLabel}
                 </p>
               </div>
               <LogoutButton />

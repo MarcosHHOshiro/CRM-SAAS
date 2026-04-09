@@ -1,6 +1,8 @@
 import type { Metadata } from 'next';
 
 import { ToastProvider } from '@/components/ToastProvider';
+import { I18nProvider } from '@/i18n/I18nProvider';
+import { getRequestI18n } from '@/i18n/request';
 import { QueryProvider } from '@/services/query/query-provider';
 import './globals.css';
 
@@ -13,13 +15,17 @@ type RootLayoutProps = Readonly<{
   children: React.ReactNode;
 }>;
 
-export default function RootLayout({ children }: RootLayoutProps) {
+export default async function RootLayout({ children }: RootLayoutProps) {
+  const { locale, messages } = await getRequestI18n();
+
   return (
-    <html lang="en">
+    <html lang={locale}>
       <body className="bg-[var(--background)] text-[var(--foreground)] antialiased">
-        <QueryProvider>
-          <ToastProvider>{children}</ToastProvider>
-        </QueryProvider>
+        <I18nProvider locale={locale} messages={messages}>
+          <QueryProvider>
+            <ToastProvider>{children}</ToastProvider>
+          </QueryProvider>
+        </I18nProvider>
       </body>
     </html>
   );

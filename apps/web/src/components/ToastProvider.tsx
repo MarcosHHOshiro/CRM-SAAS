@@ -2,6 +2,8 @@
 
 import { createContext, useCallback, useContext, useMemo, useRef, useState } from 'react';
 
+import { useTranslation } from '@/i18n/use-translation';
+
 type ToastTone = 'error' | 'info' | 'success';
 
 type ToastInput = Readonly<{
@@ -35,6 +37,7 @@ type ToastProviderProps = Readonly<{
 }>;
 
 export function ToastProvider({ children }: ToastProviderProps) {
+  const { messages } = useTranslation();
   const [toasts, setToasts] = useState<ToastItem[]>([]);
   const nextIdRef = useRef(1);
   const timeoutMapRef = useRef<Map<number, ReturnType<typeof setTimeout>>>(new Map());
@@ -109,7 +112,7 @@ export function ToastProvider({ children }: ToastProviderProps) {
                 }}
                 type="button"
               >
-                Close
+                {messages.common.actions.close}
               </button>
             </div>
           </div>

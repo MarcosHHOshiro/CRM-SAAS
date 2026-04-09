@@ -1,10 +1,13 @@
 import { LoadingScreen } from '@/components/LoadingScreen';
+import { getRequestI18n } from '@/i18n/request';
 
-export default function PrivateLoadingPage() {
+export default async function PrivateLoadingPage() {
+  const { messages } = await getRequestI18n();
+
   return (
     <LoadingScreen
-      description="Loading the next CRM workspace view and preparing the latest data."
-      title="Opening workspace"
+      description={messages.common.loading.privateDescription}
+      title={messages.common.loading.privateTitle}
     />
   );
 }

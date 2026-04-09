@@ -7,11 +7,12 @@ import { useState } from 'react';
 import { InlineBanner } from '@/components/InlineBanner';
 import { TextField } from '@/components/TextField';
 import { useToast } from '@/components/ToastProvider';
+import { useTranslation } from '@/i18n/use-translation';
 import { DEFAULT_PRIVATE_ROUTE } from '@/lib/routes';
 import { getApiErrorMessage } from '@/services/api/api-error';
 
 import { useRegisterMutation } from '../hooks/use-auth';
-import { registerSchema } from '../schemas/register-schema';
+import { createRegisterSchema } from '../schemas/register-schema';
 import type { RegisterValues } from '../types/auth';
 
 type RegisterFieldErrors = Partial<Record<keyof RegisterValues, string>>;
@@ -31,6 +32,8 @@ export function RegisterForm() {
   const [fieldErrors, setFieldErrors] = useState<RegisterFieldErrors>({});
   const [formError, setFormError] = useState<string | null>(null);
   const { showToast } = useToast();
+  const { messages } = useTranslation();
+  const registerSchema = createRegisterSchema(messages);
 
   function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
     const { name, value } = event.target;
@@ -75,7 +78,7 @@ export function RegisterForm() {
       await registerMutation.mutateAsync(parsedValues);
       router.replace(DEFAULT_PRIVATE_ROUTE);
     } catch (error) {
-      const message = getApiErrorMessage(error, 'Unable to create your workspace right now.');
+      const message = getApiErrorMessage(error, messages.auth.registerForm.fallbackError);
 
       setFormError(message);
       showToast({ message, tone: 'error' });
@@ -87,48 +90,48 @@ export function RegisterForm() {
       <TextField
         autoComplete="organization"
         error={fieldErrors.organizationName}
-        label="Organization name"
+        label={messages.auth.registerForm.organizationNameLabel}
         name="organizationName"
         onChange={handleChange}
-        placeholder="Northwind Sales"
+        placeholder={messages.auth.registerForm.organizationNamePlaceholder}
         value={values.organizationName}
       />
       <TextField
         error={fieldErrors.organizationSlug}
-        hint="Optional. Used in workspace URLs and must be unique."
-        label="Organization slug"
+        hint={messages.auth.registerForm.organizationSlugHint}
+        label={messages.auth.registerForm.organizationSlugLabel}
         name="organizationSlug"
         onChange={handleChange}
-        placeholder="northwind-sales"
+        placeholder={messages.auth.registerForm.organizationSlugPlaceholder}
         value={values.organizationSlug ?? ''}
       />
       <TextField
         autoComplete="name"
         error={fieldErrors.name}
-        label="Your name"
+        label={messages.auth.registerForm.nameLabel}
         name="name"
         onChange={handleChange}
-        placeholder="Alex Morgan"
+        placeholder={messages.auth.registerForm.namePlaceholder}
         value={values.name}
       />
       <TextField
         autoComplete="email"
         error={fieldErrors.email}
-        label="Work email"
+        label={messages.auth.registerForm.emailLabel}
         name="email"
         onChange={handleChange}
-        placeholder="alex@northwind.com"
+        placeholder={messages.auth.registerForm.emailPlaceholder}
         type="email"
         value={values.email}
       />
       <TextField
         autoComplete="new-password"
         error={fieldErrors.password}
-        hint="At least 8 characters."
-        label="Password"
+        hint={messages.auth.registerForm.passwordHint}
+        label={messages.auth.registerForm.passwordLabel}
         name="password"
         onChange={handleChange}
-        placeholder="Create a password"
+        placeholder={messages.auth.registerForm.passwordPlaceholder}
         type="password"
         value={values.password}
       />
@@ -140,12 +143,12 @@ export function RegisterForm() {
         disabled={registerMutation.isPending}
         type="submit"
       >
-        {registerMutation.isPending ? 'Creating workspace...' : 'Create workspace'}
+        {registerMutation.isPending ? messages.auth.registerForm.submitting : messages.auth.registerForm.submit}
       </button>
       <p className="text-sm text-[var(--foreground-muted)]">
-        Already have an account?{' '}
+        {messages.auth.registerForm.switchPrompt}{' '}
         <Link className="font-semibold text-[var(--accent)] hover:text-[var(--accent-strong)]" href="/login">
-          Sign in
+          {messages.auth.registerForm.switchLink}
         </Link>
       </p>
     </form>

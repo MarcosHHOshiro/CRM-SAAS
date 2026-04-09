@@ -3,12 +3,15 @@
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
+import { useTranslation } from '@/i18n/use-translation';
+
 import { useLogoutMutation } from '../hooks/use-auth';
 
 export function LogoutButton() {
   const router = useRouter();
   const logoutMutation = useLogoutMutation();
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const { messages } = useTranslation();
 
   async function handleLogout() {
     setErrorMessage(null);
@@ -16,7 +19,7 @@ export function LogoutButton() {
     try {
       await logoutMutation.mutateAsync();
     } catch {
-      setErrorMessage('We could not confirm logout with the API, but the local session was cleared.');
+      setErrorMessage(messages.auth.logout.fallbackError);
     } finally {
       router.replace('/login');
     }
@@ -30,7 +33,7 @@ export function LogoutButton() {
         onClick={handleLogout}
         type="button"
       >
-        {logoutMutation.isPending ? 'Signing out...' : 'Logout'}
+        {logoutMutation.isPending ? messages.auth.logout.submitting : messages.auth.logout.submit}
       </button>
       {errorMessage ? (
         <p className="max-w-xs text-right text-xs leading-5 text-[var(--danger)]">{errorMessage}</p>

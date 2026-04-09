@@ -4,6 +4,7 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useEffect } from 'react';
 
 import { LoadingScreen } from '@/components/LoadingScreen';
+import { useTranslation } from '@/i18n/use-translation';
 import { buildLoginHref } from '@/lib/routes';
 
 import { useCurrentSessionQuery } from '../hooks/use-auth';
@@ -18,6 +19,7 @@ export function AuthGuard({ children }: AuthGuardProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const currentSessionQuery = useCurrentSessionQuery();
+  const { messages } = useTranslation();
   const nextPath = `${pathname}${searchParams.toString() ? `?${searchParams.toString()}` : ''}`;
 
   useEffect(() => {
@@ -29,8 +31,8 @@ export function AuthGuard({ children }: AuthGuardProps) {
   if (currentSessionQuery.isPending || !currentSessionQuery.data) {
     return (
       <LoadingScreen
-        description="We are validating your session and loading the latest organization context."
-        title="Preparing your workspace"
+        description={messages.common.loading.authGuardDescription}
+        title={messages.common.loading.authGuardTitle}
       />
     );
   }

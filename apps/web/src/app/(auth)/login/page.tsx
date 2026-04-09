@@ -1,11 +1,14 @@
 import { AuthCard } from '@/features/auth/components/AuthCard';
 import { LoginForm } from '@/features/auth/components/LoginForm';
+import { getRequestI18n } from '@/i18n/request';
 
-export default function LoginPage() {
+export default async function LoginPage() {
+  const { messages } = await getRequestI18n();
+
   return (
     <AuthCard
-      description="Sign in with the owner or team member account already registered in your organization."
-      title="Welcome back"
+      description={messages.auth.loginPage.description}
+      title={messages.auth.loginPage.title}
     >
       <LoginForm />
     </AuthCard>

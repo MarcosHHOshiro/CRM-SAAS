@@ -1,8 +1,12 @@
+import { getRequestI18n } from '@/i18n/request';
+
 type AuthLayoutProps = Readonly<{
   children: React.ReactNode;
 }>;
 
-export default function AuthLayout({ children }: AuthLayoutProps) {
+export default async function AuthLayout({ children }: AuthLayoutProps) {
+  const { messages } = await getRequestI18n();
+
   return (
     <main className="min-h-screen px-4 py-4 sm:px-6 sm:py-6">
       <div className="mx-auto grid min-h-[calc(100vh-2rem)] max-w-7xl gap-6 lg:grid-cols-[1.1fr_0.9fr]">
@@ -10,26 +14,28 @@ export default function AuthLayout({ children }: AuthLayoutProps) {
           <div className="absolute inset-x-0 top-0 h-64 bg-[radial-gradient(circle_at_top_left,rgba(120,255,205,0.18),transparent_52%)]" />
           <div className="relative flex h-full flex-col justify-between gap-10">
             <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.3em] text-emerald-200/80">Pulse CRM</p>
+              <p className="text-xs font-semibold uppercase tracking-[0.3em] text-emerald-200/80">
+                {messages.common.brand}
+              </p>
               <h1 className="mt-6 max-w-xl text-4xl font-semibold leading-tight tracking-tight sm:text-5xl">
-                Sales teams, tenant-safe by default.
+                {messages.auth.layout.title}
               </h1>
               <p className="mt-6 max-w-xl text-base leading-8 text-emerald-50/82">
-                This workspace is prepared to connect Next.js directly to the existing NestJS backend with a clean auth flow, protected routes, and a private application shell that can grow feature by feature.
+                {messages.auth.layout.description}
               </p>
             </div>
             <div className="grid gap-4 sm:grid-cols-3">
               <div className="rounded-[1.6rem] border border-white/10 bg-white/8 p-4">
                 <p className="text-2xl font-semibold">01</p>
-                <p className="mt-3 text-sm leading-6 text-emerald-50/76">Register an organization and create the first owner account.</p>
+                <p className="mt-3 text-sm leading-6 text-emerald-50/76">{messages.auth.layout.steps[0]}</p>
               </div>
               <div className="rounded-[1.6rem] border border-white/10 bg-white/8 p-4">
                 <p className="text-2xl font-semibold">02</p>
-                <p className="mt-3 text-sm leading-6 text-emerald-50/76">Sign in and hydrate the session from `/auth/me`.</p>
+                <p className="mt-3 text-sm leading-6 text-emerald-50/76">{messages.auth.layout.steps[1]}</p>
               </div>
               <div className="rounded-[1.6rem] border border-white/10 bg-white/8 p-4">
                 <p className="text-2xl font-semibold">03</p>
-                <p className="mt-3 text-sm leading-6 text-emerald-50/76">Move into the private shell and start building product modules.</p>
+                <p className="mt-3 text-sm leading-6 text-emerald-50/76">{messages.auth.layout.steps[2]}</p>
               </div>
             </div>
           </div>
