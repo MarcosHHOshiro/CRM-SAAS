@@ -3,7 +3,10 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { UserRole } from '@crm-saas/types';
 
+import { activityClientsQueryKey } from '@/features/activities/hooks/use-activities';
 import { currentSessionQueryKey } from '@/features/auth/hooks/use-auth';
+import { clientsQueryKey } from '@/features/clients/hooks/use-clients';
+import { opportunityClientsQueryKey } from '@/features/opportunities/hooks/use-opportunities';
 
 import { leadOwnersApi, mapLeadOwnerOptions } from '../api/lead-owners-api';
 import { leadsApi } from '../api/leads-api';
@@ -97,7 +100,12 @@ export function useConvertLeadMutation() {
     mutationFn: (leadId: string) => leadsApi.convertLead(leadId),
     onSuccess: async (response) => {
       queryClient.setQueryData(getLeadDetailsQueryKey(response.lead.id), { lead: response.lead });
-      await queryClient.invalidateQueries({ queryKey: leadsQueryKey });
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: leadsQueryKey }),
+        queryClient.invalidateQueries({ queryKey: clientsQueryKey }),
+        queryClient.invalidateQueries({ queryKey: opportunityClientsQueryKey }),
+        queryClient.invalidateQueries({ queryKey: activityClientsQueryKey }),
+      ]);
     },
   });
 }

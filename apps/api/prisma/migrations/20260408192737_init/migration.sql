@@ -91,8 +91,10 @@ CREATE TABLE "Opportunity" (
     "ownerId" UUID,
     "title" TEXT NOT NULL,
     "stage" "OpportunityStage" NOT NULL DEFAULT 'NEW',
+    "status" "OpportunityStatus" NOT NULL DEFAULT 'OPEN',
     "value" DECIMAL(12,2) NOT NULL,
     "expectedCloseDate" TIMESTAMP(3),
+    "notes" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -124,16 +126,19 @@ CREATE UNIQUE INDEX "Organization_slug_key" ON "Organization"("slug");
 CREATE INDEX "User_organizationId_idx" ON "User"("organizationId");
 
 -- CreateIndex
-CREATE INDEX "User_email_idx" ON "User"("email");
-
--- CreateIndex
-CREATE UNIQUE INDEX "User_organizationId_email_key" ON "User"("organizationId", "email");
+CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
 
 -- CreateIndex
 CREATE INDEX "RefreshToken_organizationId_idx" ON "RefreshToken"("organizationId");
 
 -- CreateIndex
 CREATE INDEX "RefreshToken_userId_idx" ON "RefreshToken"("userId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "RefreshToken_tokenHash_key" ON "RefreshToken"("tokenHash");
+
+-- CreateIndex
+CREATE INDEX "RefreshToken_expiresAt_idx" ON "RefreshToken"("expiresAt");
 
 -- CreateIndex
 CREATE INDEX "Lead_organizationId_idx" ON "Lead"("organizationId");
@@ -164,6 +169,9 @@ CREATE INDEX "Opportunity_ownerId_idx" ON "Opportunity"("ownerId");
 
 -- CreateIndex
 CREATE INDEX "Opportunity_stage_idx" ON "Opportunity"("stage");
+
+-- CreateIndex
+CREATE INDEX "Opportunity_status_idx" ON "Opportunity"("status");
 
 -- CreateIndex
 CREATE INDEX "Activity_organizationId_idx" ON "Activity"("organizationId");

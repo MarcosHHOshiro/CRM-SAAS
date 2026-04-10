@@ -2,6 +2,9 @@
   "extends": "@crm-saas/tsconfig/nextjs.json",
   "compilerOptions": {
     "paths": {
+      "@crm-saas/types": [
+        "../../packages/types/src/index.ts"
+      ],
       "@/*": [
         "./src/*"
       ]

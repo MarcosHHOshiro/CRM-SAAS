@@ -1,24 +1,8 @@
--- CreateEnum
-CREATE TYPE "OpportunityStatus" AS ENUM ('OPEN', 'WON', 'LOST');
-
--- AlterTable
-ALTER TABLE "Opportunity"
-ADD COLUMN "status" "OpportunityStatus" NOT NULL DEFAULT 'OPEN';
-
--- DropIndex
-DROP INDEX "User_email_idx";
-
--- DropIndex
-DROP INDEX "User_organizationId_email_key";
-
--- CreateIndex
-CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
-
--- CreateIndex
-CREATE UNIQUE INDEX "RefreshToken_tokenHash_key" ON "RefreshToken"("tokenHash");
-
--- CreateIndex
-CREATE INDEX "RefreshToken_expiresAt_idx" ON "RefreshToken"("expiresAt");
-
--- CreateIndex
-CREATE INDEX "Opportunity_status_idx" ON "Opportunity"("status");
+-- Keep this migration safe to run before `init` in the current history order.
+-- Structural changes for existing tables were consolidated into `20260408192737_init`.
+DO $$
+BEGIN
+    CREATE TYPE "OpportunityStatus" AS ENUM ('OPEN', 'WON', 'LOST');
+EXCEPTION
+    WHEN duplicate_object THEN NULL;
+END $$;
