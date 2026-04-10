@@ -14,14 +14,14 @@ export function OpportunitiesViewSwitch({ view }: OpportunitiesViewSwitchProps) 
   ] as const;
 
   return (
-    <div className="inline-flex rounded-full border border-[var(--border)] bg-white/75 p-1 shadow-[var(--shadow-soft)]">
+    <div className="inline-flex rounded-xl border border-[var(--border)] bg-white p-1 shadow-[var(--shadow-soft)]">
       {items.map((item) => {
         const active = item.value === view;
 
         return (
           <Link
             key={item.href}
-            className={`inline-flex min-h-10 items-center justify-center rounded-full px-4 text-sm font-semibold ${
+            className={`inline-flex min-h-10 items-center justify-center rounded-lg px-4 text-sm font-semibold ${
               active
                 ? 'bg-[var(--accent)] text-white'
                 : 'text-[var(--foreground)] hover:text-[var(--accent)]'

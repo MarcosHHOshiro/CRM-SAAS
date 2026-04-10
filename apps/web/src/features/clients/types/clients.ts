@@ -41,6 +41,18 @@ export type ClientFilters = {
   search?: string;
 };
 
+export type ClientOwnershipFilter = 'all' | 'assigned' | 'unassigned';
+
+export type ClientOriginFilter = 'all' | 'lead' | 'direct';
+
+export type ClientPeriodFilter = 'all' | '30d' | '90d' | '365d';
+
+export type ClientDirectoryFilters = {
+  origin: ClientOriginFilter;
+  ownership: ClientOwnershipFilter;
+  period: ClientPeriodFilter;
+};
+
 export type ClientFormValues = {
   company: string;
   email: string;

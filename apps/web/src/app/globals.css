@@ -1,19 +1,20 @@
 @import "tailwindcss";
 
 :root {
-  --background: #f4f1ea;
-  --background-strong: #ebe5db;
-  --foreground: #14231b;
-  --foreground-muted: #556458;
-  --card: rgba(255, 252, 247, 0.92);
+  --background: #f2f5f9;
+  --background-strong: #e7edf4;
+  --sidebar: #eef2f6;
+  --foreground: #1f2a37;
+  --foreground-muted: #667586;
+  --card: #ffffff;
   --card-strong: #ffffff;
-  --card-dark: #112118;
-  --border: rgba(20, 35, 27, 0.12);
-  --accent: #117a56;
-  --accent-strong: #0b5a40;
-  --accent-soft: rgba(17, 122, 86, 0.12);
-  --danger: #b54545;
-  --shadow-soft: 0 24px 80px rgba(23, 31, 26, 0.12);
+  --card-dark: #f6f8fb;
+  --border: #d4dde8;
+  --accent: #ff5c35;
+  --accent-strong: #e14f2b;
+  --accent-soft: #fff1ea;
+  --danger: #d64545;
+  --shadow-soft: 0 1px 2px rgba(15, 23, 42, 0.06);
 }
 
 html {
@@ -21,10 +22,7 @@ html {
 }
 
 body {
-  background:
-    radial-gradient(circle at top left, rgba(17, 122, 86, 0.16), transparent 28%),
-    radial-gradient(circle at top right, rgba(255, 255, 255, 0.5), transparent 30%),
-    linear-gradient(180deg, var(--background-strong) 0%, var(--background) 22%, #f7f4ee 100%);
+  background: linear-gradient(180deg, var(--background-strong) 0%, var(--background) 12%, #f5f8fb 100%);
   color: var(--foreground);
   font-family: "Aptos", "Segoe UI Variable", "Segoe UI", sans-serif;
   min-height: 100vh;
@@ -35,7 +33,7 @@ body {
 }
 
 ::selection {
-  background: rgba(17, 122, 86, 0.18);
+  background: rgba(255, 92, 53, 0.2);
 }
 
 a,
@@ -44,11 +42,10 @@ input,
 textarea,
 select {
   transition:
-    color 0.2s ease,
-    background-color 0.2s ease,
-    border-color 0.2s ease,
-    box-shadow 0.2s ease,
-    transform 0.2s ease;
+    color 0.18s ease,
+    background-color 0.18s ease,
+    border-color 0.18s ease,
+    box-shadow 0.18s ease;
 }
 
 button:not(:disabled) {

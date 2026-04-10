@@ -37,31 +37,23 @@ export function OpportunitiesFilters({
   statusOptions,
   values,
 }: OpportunitiesFiltersProps) {
-  const { messages } = useTranslation();
+  const { locale, messages } = useTranslation();
 
   return (
-    <section className="rounded-[2rem] border border-[var(--border)] bg-[var(--card)] p-6 shadow-[var(--shadow-soft)]">
-      <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
-        <div>
-          <p className="text-sm font-semibold uppercase tracking-[0.2em] text-[var(--accent)]">
-            {messages.opportunities.filters.eyebrow}
-          </p>
-          <h2 className="mt-3 text-2xl font-semibold text-[var(--foreground)]">
-            {messages.opportunities.filters.title}
-          </h2>
-          <p className="mt-2 text-sm leading-6 text-[var(--foreground-muted)]">
-            {messages.opportunities.filters.description}
-          </p>
-        </div>
+    <section className="rounded-[1.4rem] border border-[var(--border)] bg-white p-5 shadow-[var(--shadow-soft)]">
+      <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
+        <p className="text-sm font-semibold text-[var(--foreground)]">
+          {locale === 'pt-BR' ? 'Diretorio de oportunidades' : 'Opportunity directory'}
+        </p>
         <div className="flex flex-wrap gap-3">
           <Link
-            className="inline-flex min-h-11 items-center justify-center rounded-full border border-[var(--border)] bg-white/80 px-5 text-sm font-semibold text-[var(--foreground)] hover:border-[var(--accent)] hover:text-[var(--accent)]"
+            className="inline-flex min-h-11 items-center justify-center rounded-xl border border-[var(--border)] bg-white px-5 text-sm font-semibold text-[var(--foreground)] hover:border-[var(--accent)] hover:text-[var(--accent)]"
             href="/opportunities/pipeline"
           >
             {messages.opportunities.filters.openPipeline}
           </Link>
           <Link
-            className="inline-flex min-h-11 items-center justify-center rounded-full bg-[var(--accent)] px-5 text-sm font-semibold text-white hover:bg-[var(--accent-strong)]"
+            className="inline-flex min-h-11 items-center justify-center rounded-xl bg-[var(--accent)] px-5 text-sm font-semibold text-white hover:bg-[var(--accent-strong)]"
             href="/opportunities/new"
           >
             {messages.opportunities.filters.createButton}
@@ -70,7 +62,7 @@ export function OpportunitiesFilters({
       </div>
 
       <form
-        className="mt-6 grid gap-4 xl:grid-cols-[1.5fr_0.8fr_0.8fr_0.9fr_auto]"
+        className="grid gap-4 xl:grid-cols-[1.5fr_0.8fr_0.8fr_0.9fr_auto]"
         onSubmit={onSubmit}
       >
         <TextField
@@ -122,13 +114,13 @@ export function OpportunitiesFilters({
             />
           ) : null}
           <button
-            className="inline-flex min-h-12 items-center justify-center rounded-full bg-[var(--accent)] px-5 text-sm font-semibold text-white hover:bg-[var(--accent-strong)]"
+            className="inline-flex min-h-11 items-center justify-center rounded-xl bg-[var(--accent)] px-5 text-sm font-semibold text-white hover:bg-[var(--accent-strong)]"
             type="submit"
           >
             {messages.common.actions.apply}
           </button>
           <button
-            className="inline-flex min-h-12 items-center justify-center rounded-full border border-[var(--border)] bg-white/80 px-5 text-sm font-semibold text-[var(--foreground)] hover:border-[var(--accent)] hover:text-[var(--accent)]"
+            className="inline-flex min-h-11 items-center justify-center rounded-xl border border-[var(--border)] bg-[var(--card-dark)] px-5 text-sm font-semibold text-[var(--foreground)] hover:border-[var(--accent)] hover:text-[var(--accent)]"
             onClick={onReset}
             type="button"
           >

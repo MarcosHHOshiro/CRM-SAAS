@@ -29,7 +29,7 @@ export function PaginationControls({
   const endItem = Math.min(currentPage * pageSize, totalItems);
 
   return (
-    <section className="flex flex-col gap-4 rounded-[1.7rem] border border-[var(--border)] bg-[var(--card)] px-5 py-4 shadow-[var(--shadow-soft)] sm:flex-row sm:items-center sm:justify-between">
+    <section className="flex flex-col gap-4 rounded-[1.2rem] border border-[var(--border)] bg-white px-5 py-4 shadow-[var(--shadow-soft)] sm:flex-row sm:items-center sm:justify-between">
       <div>
         <p className="text-sm font-semibold text-[var(--foreground)]">
           {locale === 'pt-BR'
@@ -42,9 +42,9 @@ export function PaginationControls({
             : `Page ${currentPage} of ${totalPages}`}
         </p>
       </div>
-      <div className="flex flex-wrap gap-3">
+      <div className="flex flex-wrap items-center gap-3">
         <button
-          className="inline-flex min-h-10 items-center justify-center rounded-full border border-[var(--border)] bg-white/80 px-4 text-sm font-semibold text-[var(--foreground)] hover:border-[var(--accent)] hover:text-[var(--accent)] disabled:cursor-not-allowed disabled:opacity-60"
+          className="inline-flex min-h-10 items-center justify-center rounded-lg border border-[var(--border)] bg-white px-4 text-sm font-semibold text-[var(--foreground)] hover:border-[var(--accent)] hover:text-[var(--accent)] disabled:cursor-not-allowed disabled:opacity-60"
           disabled={currentPage <= 1}
           onClick={() => {
             onPageChange(currentPage - 1);
@@ -53,8 +53,11 @@ export function PaginationControls({
         >
           {messages.common.actions.previous}
         </button>
+        <span className="inline-flex min-h-10 min-w-10 items-center justify-center rounded-lg bg-[var(--accent)] px-3 text-sm font-semibold text-white">
+          {currentPage}
+        </span>
         <button
-          className="inline-flex min-h-10 items-center justify-center rounded-full bg-[var(--accent)] px-4 text-sm font-semibold text-white hover:bg-[var(--accent-strong)] disabled:cursor-not-allowed disabled:opacity-60"
+          className="inline-flex min-h-10 items-center justify-center rounded-lg border border-transparent bg-white px-4 text-sm font-semibold text-[var(--foreground)] hover:border-[var(--accent)] hover:text-[var(--accent)] disabled:cursor-not-allowed disabled:opacity-60"
           disabled={currentPage >= totalPages}
           onClick={() => {
             onPageChange(currentPage + 1);

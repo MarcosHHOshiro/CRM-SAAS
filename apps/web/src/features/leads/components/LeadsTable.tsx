@@ -26,11 +26,21 @@ export function LeadsTable({
   const { locale, messages } = useTranslation();
 
   return (
-    <section className="overflow-hidden rounded-[2rem] border border-[var(--border)] bg-[var(--card)] shadow-[var(--shadow-soft)]">
+    <section className="overflow-hidden rounded-[1.4rem] border border-[var(--border)] bg-white shadow-[var(--shadow-soft)]">
+      <div className="flex items-center justify-between gap-3 border-b border-[var(--border)] px-5 py-4">
+        <div>
+          <p className="text-sm font-semibold text-[var(--foreground)]">
+            {locale === 'pt-BR' ? 'Diretorio de leads' : 'Lead directory'}
+          </p>
+          <p className="mt-1 text-sm text-[var(--foreground-muted)]">
+            {locale === 'pt-BR' ? `${leads.length} registros na pagina atual` : `${leads.length} records on this page`}
+          </p>
+        </div>
+      </div>
       <div className="overflow-x-auto">
-        <table className="min-w-[920px] text-left">
-          <thead className="border-b border-[var(--border)] bg-white/65">
-            <tr className="text-xs uppercase tracking-[0.16em] text-[var(--foreground-muted)]">
+        <table className="w-full min-w-[920px] text-left">
+          <thead className="border-b border-[var(--border)] bg-[var(--card-dark)]">
+            <tr className="text-xs uppercase tracking-[0.14em] text-[var(--foreground-muted)]">
               <th className="px-6 py-4 font-semibold">{messages.leads.table.lead}</th>
               <th className="px-6 py-4 font-semibold">{messages.leads.table.status}</th>
               <th className="px-6 py-4 font-semibold">{messages.leads.table.owner}</th>
@@ -43,11 +53,14 @@ export function LeadsTable({
               const canConvert = getLeadCanConvert(lead);
 
               return (
-                <tr key={lead.id} className="border-b border-[var(--border)] last:border-b-0">
+                <tr
+                  key={lead.id}
+                  className="border-b border-[var(--border)] last:border-b-0 hover:bg-[color:rgba(148,163,184,0.05)]"
+                >
                   <td className="px-6 py-5 align-top">
                     <div>
                       <Link
-                        className="text-base font-semibold text-[var(--foreground)] hover:text-[var(--accent)]"
+                        className="text-sm font-semibold text-[var(--foreground)] hover:text-[var(--accent)]"
                         href={`/leads/${lead.id}`}
                       >
                         {lead.name}
@@ -77,21 +90,21 @@ export function LeadsTable({
                   </td>
                   <td className="px-6 py-5 align-top">
                     <div className="flex flex-wrap gap-2">
-                      <Link
-                        className="inline-flex min-h-10 items-center justify-center rounded-full border border-[var(--border)] bg-white/80 px-4 text-sm font-semibold text-[var(--foreground)] hover:border-[var(--accent)] hover:text-[var(--accent)]"
-                        href={`/leads/${lead.id}`}
+                    <Link
+                      className="inline-flex min-h-9 items-center justify-center rounded-lg border border-[var(--border)] bg-white px-3 text-sm font-semibold text-[var(--foreground)] hover:border-[var(--accent)] hover:text-[var(--accent)]"
+                      href={`/leads/${lead.id}`}
                     >
                       {messages.common.actions.view}
                     </Link>
                       <Link
-                        className="inline-flex min-h-10 items-center justify-center rounded-full border border-[var(--border)] bg-white/80 px-4 text-sm font-semibold text-[var(--foreground)] hover:border-[var(--accent)] hover:text-[var(--accent)]"
+                        className="inline-flex min-h-9 items-center justify-center rounded-lg border border-[var(--border)] bg-[var(--card-dark)] px-3 text-sm font-semibold text-[var(--foreground)] hover:border-[var(--accent)] hover:text-[var(--accent)]"
                         href={`/leads/${lead.id}/edit`}
                     >
                       {messages.common.actions.edit}
                     </Link>
                       {canConvert ? (
                         <button
-                          className="inline-flex min-h-10 items-center justify-center rounded-full border border-emerald-200 bg-emerald-50 px-4 text-sm font-semibold text-emerald-700 hover:bg-emerald-100 disabled:cursor-not-allowed disabled:opacity-70"
+                          className="inline-flex min-h-9 items-center justify-center rounded-lg border border-[color:rgba(255,92,53,0.2)] bg-[var(--accent-soft)] px-3 text-sm font-semibold text-[var(--accent)] hover:bg-[color:rgba(255,92,53,0.18)] disabled:cursor-not-allowed disabled:opacity-70"
                           disabled={isMutatingConvertLeadId === lead.id}
                           onClick={() => onConvert(lead)}
                           type="button"
@@ -102,7 +115,7 @@ export function LeadsTable({
                         </button>
                       ) : null}
                       <button
-                        className="inline-flex min-h-10 items-center justify-center rounded-full border border-rose-200 bg-rose-50 px-4 text-sm font-semibold text-rose-700 hover:bg-rose-100 disabled:cursor-not-allowed disabled:opacity-70"
+                        className="inline-flex min-h-9 items-center justify-center rounded-lg border border-[color:rgba(214,69,69,0.18)] bg-[color:rgba(214,69,69,0.06)] px-3 text-sm font-semibold text-[var(--danger)] hover:bg-[color:rgba(214,69,69,0.12)] disabled:cursor-not-allowed disabled:opacity-70"
                         disabled={isDeletingLeadId === lead.id}
                         onClick={() => onDelete(lead)}
                         type="button"

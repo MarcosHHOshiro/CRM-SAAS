@@ -1,6 +1,12 @@
 import type { AppMessages } from '@/i18n/messages/types';
 
-import type { Client, ClientFilters, ClientFormValues, ClientOwnerOption } from '../types/clients';
+import type {
+  Client,
+  ClientDirectoryFilters,
+  ClientFilters,
+  ClientFormValues,
+  ClientOwnerOption,
+} from '../types/clients';
 
 export function formatClientDate(value: string, locale = 'en-US') {
   const parsedDate = new Date(value);
@@ -11,10 +17,74 @@ export function formatClientDate(value: string, locale = 'en-US') {
 
   const dateTimeFormatter = new Intl.DateTimeFormat(locale, {
     dateStyle: 'medium',
-    timeStyle: 'short',
   });
 
   return dateTimeFormatter.format(parsedDate);
+}
+
+export function filterClients(clients: Client[], filters: ClientDirectoryFilters) {
+  const now = Date.now();
+
+  return clients.filter((client) => {
+    if (filters.ownership === 'assigned' && !client.owner) {
+      return false;
+    }
+
+    if (filters.ownership === 'unassigned' && client.owner) {
+      return false;
+    }
+
+    if (filters.origin === 'lead' && !client.sourceLead) {
+      return false;
+    }
+
+    if (filters.origin === 'direct' && client.sourceLead) {
+      return false;
+    }
+
+    if (filters.period !== 'all') {
+      const createdAt = new Date(client.createdAt).getTime();
+
+      if (Number.isNaN(createdAt)) {
+        return false;
+      }
+
+      const thresholdByPeriod = {
+        '30d': 30,
+        '90d': 90,
+        '365d': 365,
+      } as const;
+
+      const maxAgeInDays = thresholdByPeriod[filters.period];
+      const elapsedDays = (now - createdAt) / (1000 * 60 * 60 * 24);
+
+      if (elapsedDays > maxAgeInDays) {
+        return false;
+      }
+    }
+
+    return true;
+  });
+}
+
+export function getClientsMetrics(clients: Client[]) {
+  const now = Date.now();
+
+  return {
+    newThisMonthCount: clients.filter((client) => {
+      const createdAt = new Date(client.createdAt).getTime();
+
+      if (Number.isNaN(createdAt)) {
+        return false;
+      }
+
+      const elapsedDays = (now - createdAt) / (1000 * 60 * 60 * 24);
+
+      return elapsedDays <= 30;
+    }).length,
+    totalCount: clients.length,
+    unassignedCount: clients.filter((client) => !client.owner).length,
+  };
 }
 
 export function getClientOwnerOptions(users: ClientOwnerOption[], messages: AppMessages) {

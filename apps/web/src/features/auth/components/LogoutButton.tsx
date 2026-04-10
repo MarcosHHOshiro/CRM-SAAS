@@ -7,7 +7,12 @@ import { useTranslation } from '@/i18n/use-translation';
 
 import { useLogoutMutation } from '../hooks/use-auth';
 
-export function LogoutButton() {
+type LogoutButtonProps = Readonly<{
+  align?: 'end' | 'start';
+  fullWidth?: boolean;
+}>;
+
+export function LogoutButton({ align = 'end', fullWidth = false }: LogoutButtonProps) {
   const router = useRouter();
   const logoutMutation = useLogoutMutation();
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -26,9 +31,9 @@ export function LogoutButton() {
   }
 
   return (
-    <div className="flex flex-col items-end gap-2">
+    <div className={`flex flex-col gap-2 ${align === 'start' ? 'items-start' : 'items-end'}`}>
       <button
-        className="inline-flex min-h-11 items-center justify-center rounded-full border border-[var(--border)] bg-white/80 px-4 text-sm font-semibold text-[var(--foreground)] hover:border-[var(--accent)] hover:text-[var(--accent)] disabled:cursor-not-allowed disabled:opacity-70"
+        className={`inline-flex min-h-10 items-center justify-center rounded-xl border border-[var(--border)] bg-white px-4 text-sm font-semibold text-[var(--foreground)] hover:border-[var(--accent)] hover:text-[var(--accent)] disabled:cursor-not-allowed disabled:opacity-70 ${fullWidth ? 'w-full' : ''}`}
         disabled={logoutMutation.isPending}
         onClick={handleLogout}
         type="button"
@@ -36,7 +41,11 @@ export function LogoutButton() {
         {logoutMutation.isPending ? messages.auth.logout.submitting : messages.auth.logout.submit}
       </button>
       {errorMessage ? (
-        <p className="max-w-xs text-right text-xs leading-5 text-[var(--danger)]">{errorMessage}</p>
+        <p
+          className={`max-w-xs text-xs leading-5 text-[var(--danger)] ${align === 'start' ? 'text-left' : 'text-right'}`}
+        >
+          {errorMessage}
+        </p>
       ) : null}
     </div>
   );
