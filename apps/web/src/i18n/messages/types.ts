@@ -1,9 +1,19 @@
 export type AppMessages = {
   auth: {
     layout: {
+      eyebrow: string;
       title: string;
       description: string;
-      steps: [string, string, string];
+      stats: [
+        {
+          value: string;
+          label: string;
+        },
+        {
+          value: string;
+          label: string;
+        },
+      ];
     };
     loginPage: {
       title: string;
@@ -124,6 +134,8 @@ export type AppMessages = {
     brand: string;
     theme: {
       toggle: string;
+      light: string;
+      dark: string;
       switchToDark: string;
       switchToLight: string;
     };

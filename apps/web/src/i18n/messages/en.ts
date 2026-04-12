@@ -3,28 +3,34 @@ import type { AppMessages } from './types';
 export const enMessages: AppMessages = {
   auth: {
     layout: {
-      title: 'Sales teams, tenant-safe by default.',
+      eyebrow: 'Workspace access',
+      title: 'Leads, clients, opportunities, and sales activity in one multi-tenant CRM.',
       description:
-        'This workspace is prepared to connect Next.js directly to the existing NestJS backend with a clean auth flow, protected routes, and a private application shell that can grow feature by feature.',
-      steps: [
-        'Register an organization and create the first owner account.',
-        'Sign in and hydrate the session from `/auth/me`.',
-        'Move into the private shell and start building product modules.',
+        'Sign in to track your organization pipeline, review customer relationships, and operate each workspace with secure tenant isolation.',
+      stats: [
+        {
+          value: '7 modules',
+          label: 'auth, dashboard, leads, clients, opportunities, activities, and users',
+        },
+        {
+          value: 'Tenant-safe',
+          label: 'all core flows protected by organizationId scoping',
+        },
       ],
     },
     loginPage: {
       title: 'Welcome back',
       description:
-        'Sign in with the owner or team member account already registered in your organization.',
+        'Sign in with your work account to access your organization workspace in Pulse CRM.',
     },
     loginForm: {
       emailLabel: 'Work email',
       emailPlaceholder: 'you@company.com',
       passwordLabel: 'Password',
       passwordPlaceholder: 'Enter your password',
-      submit: 'Sign in',
+      submit: 'Sign in to workspace',
       submitting: 'Signing in...',
-      switchPrompt: 'New to Pulse CRM?',
+      switchPrompt: 'Need access first?',
       switchLink: 'Create your workspace',
       fallbackError: 'Unable to sign in right now.',
     },
@@ -137,6 +143,8 @@ export const enMessages: AppMessages = {
     brand: 'Pulse CRM',
     theme: {
       toggle: 'Toggle theme',
+      light: 'Light',
+      dark: 'Dark',
       switchToDark: 'Switch to dark theme',
       switchToLight: 'Switch to light theme',
     },

@@ -3,28 +3,34 @@ import type { AppMessages } from './types';
 export const ptBRMessages: AppMessages = {
   auth: {
     layout: {
-      title: 'Times de vendas, com isolamento por tenant desde o inicio.',
+      eyebrow: 'Acesso ao workspace',
+      title: 'Leads, clientes, oportunidades e atividade comercial em um CRM multi-tenant.',
       description:
-        'Este workspace ja esta preparado para conectar o Next.js ao backend NestJS existente com autenticacao limpa, rotas protegidas e um shell privado que pode crescer modulo por modulo.',
-      steps: [
-        'Cadastre uma organizacao e crie a primeira conta owner.',
-        'Entre no sistema e hidrate a sessao usando `/auth/me`.',
-        'Acesse o shell privado e comece a evoluir os modulos do produto.',
+        'Entre para acompanhar o pipeline da sua organizacao, revisar relacionamentos com clientes e operar cada workspace com isolamento seguro por tenant.',
+      stats: [
+        {
+          value: '7 modulos',
+          label: 'auth, dashboard, leads, clientes, oportunidades, atividades e usuarios',
+        },
+        {
+          value: 'Tenant-safe',
+          label: 'todos os fluxos principais protegidos por organizationId',
+        },
       ],
     },
     loginPage: {
       title: 'Bem-vindo de volta',
       description:
-        'Entre com a conta do owner ou de um membro do time ja cadastrado na sua organizacao.',
+        'Entre com sua conta de trabalho para acessar o workspace da sua organizacao no Pulse CRM.',
     },
     loginForm: {
       emailLabel: 'Email de trabalho',
       emailPlaceholder: 'voce@empresa.com',
       passwordLabel: 'Senha',
       passwordPlaceholder: 'Digite sua senha',
-      submit: 'Entrar',
+      submit: 'Entrar no workspace',
       submitting: 'Entrando...',
-      switchPrompt: 'Novo no Pulse CRM?',
+      switchPrompt: 'Ainda nao tem acesso?',
       switchLink: 'Crie seu workspace',
       fallbackError: 'Nao foi possivel entrar agora.',
     },
@@ -137,6 +143,8 @@ export const ptBRMessages: AppMessages = {
     brand: 'Pulse CRM',
     theme: {
       toggle: 'Alternar tema',
+      light: 'Claro',
+      dark: 'Escuro',
       switchToDark: 'Ativar tema escuro',
       switchToLight: 'Ativar tema claro',
     },

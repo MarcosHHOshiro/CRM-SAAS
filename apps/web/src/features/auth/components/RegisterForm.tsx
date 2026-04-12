@@ -139,7 +139,7 @@ export function RegisterForm() {
         <InlineBanner tone="error">{formError}</InlineBanner>
       ) : null}
       <button
-        className="inline-flex min-h-12 w-full items-center justify-center rounded-full bg-[var(--accent)] px-5 text-sm font-semibold text-white hover:bg-[var(--accent-strong)] disabled:cursor-not-allowed disabled:opacity-70"
+        className="inline-flex min-h-12 w-full items-center justify-center rounded-lg bg-[var(--accent)] px-5 text-sm font-semibold text-white transition-colors hover:bg-[var(--accent-strong)] disabled:cursor-not-allowed disabled:opacity-70"
         disabled={registerMutation.isPending}
         type="submit"
       >

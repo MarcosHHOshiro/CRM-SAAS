@@ -4,7 +4,6 @@ import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useState } from 'react';
 
-import { InlineBanner } from '@/components/InlineBanner';
 import { TextField } from '@/components/TextField';
 import { useToast } from '@/components/ToastProvider';
 import { useTranslation } from '@/i18n/use-translation';
@@ -80,34 +79,32 @@ export function LoginForm() {
       <TextField
         autoComplete="email"
         error={fieldErrors.email}
+        hideErrorIcon
         label={messages.auth.loginForm.emailLabel}
         name="email"
         onChange={handleChange}
-        placeholder={messages.auth.loginForm.emailPlaceholder}
         type="email"
         value={values.email}
       />
       <TextField
         autoComplete="current-password"
         error={fieldErrors.password}
+        hideErrorIcon
         label={messages.auth.loginForm.passwordLabel}
         name="password"
         onChange={handleChange}
-        placeholder={messages.auth.loginForm.passwordPlaceholder}
         type="password"
         value={values.password}
       />
-      {formError ? (
-        <InlineBanner tone="error">{formError}</InlineBanner>
-      ) : null}
+      {formError ? <p className="sr-only">{formError}</p> : null}
       <button
-        className="inline-flex min-h-12 w-full items-center justify-center rounded-full bg-[var(--accent)] px-5 text-sm font-semibold text-white hover:bg-[var(--accent-strong)] disabled:cursor-not-allowed disabled:opacity-70"
+        className="inline-flex min-h-12 w-full items-center justify-center rounded-lg bg-[var(--accent)] px-5 text-sm font-semibold text-white transition-colors hover:bg-[var(--accent-strong)] disabled:cursor-not-allowed disabled:opacity-70"
         disabled={loginMutation.isPending}
         type="submit"
       >
         {loginMutation.isPending ? messages.auth.loginForm.submitting : messages.auth.loginForm.submit}
       </button>
-      <p className="text-sm text-[var(--foreground-muted)]">
+      <p className="text-sm leading-6 text-[var(--foreground-muted)]">
         {messages.auth.loginForm.switchPrompt}{' '}
         <Link className="font-semibold text-[var(--accent)] hover:text-[var(--accent-strong)]" href="/register">
           {messages.auth.loginForm.switchLink}

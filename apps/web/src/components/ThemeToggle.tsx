@@ -9,6 +9,7 @@ type ThemeToggleProps = Readonly<{
   className?: string;
   compact?: boolean;
   fullWidth?: boolean;
+  showLabels?: boolean;
 }>;
 
 function MoonIcon() {
@@ -43,6 +44,7 @@ export function ThemeToggle({
   className = '',
   compact = false,
   fullWidth = false,
+  showLabels = true,
 }: ThemeToggleProps) {
   const { messages } = useTranslation();
   const [theme, setTheme] = useState<ThemeMode>('light');
@@ -57,12 +59,26 @@ export function ThemeToggle({
   const nextTheme = theme === 'dark' ? 'light' : 'dark';
   const actionLabel =
     theme === 'dark' ? messages.common.theme.switchToLight : messages.common.theme.switchToDark;
+  const isDark = theme === 'dark';
+  const knobStyle = compact
+    ? {
+        transform: `translate(${isDark ? '2rem' : '0rem'}, -50%)`,
+      }
+    : {
+        transform: `translate(${isDark ? 'calc(100% + 0.1rem)' : '0rem'}, -50%)`,
+      };
 
   return (
     <button
       aria-label={actionLabel}
-      className={`inline-flex min-h-10 items-center rounded-xl border border-[var(--border)] bg-[var(--card)] px-4 text-sm font-semibold text-[var(--foreground)] shadow-[var(--shadow-soft)] hover:border-[var(--accent)] hover:text-[var(--accent)] ${
-        compact ? 'h-10 w-10 justify-center px-0' : fullWidth ? 'w-full justify-between' : 'gap-2'
+      className={`group relative inline-flex items-center overflow-hidden border border-[var(--border)] bg-[var(--card)] text-[var(--foreground)] shadow-[var(--shadow-soft)] hover:border-[var(--accent)] ${
+        compact
+          ? 'h-10 w-[4.4rem] rounded-full px-1.5'
+          : !showLabels
+            ? 'h-10 w-[4.8rem] rounded-full px-1.5'
+          : fullWidth
+            ? 'min-h-[3.1rem] w-full rounded-full px-2 py-1.5'
+            : 'min-h-[3.1rem] w-[10.25rem] rounded-full px-2 py-1.5'
       } ${className}`.trim()}
       onClick={() => {
         applyTheme(nextTheme);
@@ -71,10 +87,38 @@ export function ThemeToggle({
       title={actionLabel}
       type="button"
     >
-      <span className="flex h-8 w-8 items-center justify-center rounded-full bg-[var(--accent-soft)] text-[var(--accent)]">
-        {theme === 'dark' ? <SunIcon /> : <MoonIcon />}
+      <span
+        className={`pointer-events-none absolute rounded-full border border-[var(--border)] bg-[var(--card-dark)] ${
+          compact || !showLabels
+            ? 'inset-y-[6px] left-2 right-2'
+            : 'inset-y-[6px] left-2 right-2'
+        }`}
+      />
+      <span
+        aria-hidden="true"
+        className={`pointer-events-none absolute top-1/2 left-2 rounded-full border border-[var(--border)] bg-[var(--card-strong)] text-[var(--accent)] shadow-[var(--shadow-soft)] transition-transform duration-200 ${
+          compact || !showLabels
+            ? 'h-[1.875rem] w-[1.875rem]'
+            : 'h-[2rem] w-[calc(50%-0.28rem)]'
+        }`}
+        style={knobStyle}
+      >
+        <span className="flex h-full w-full items-center justify-center">
+          {isDark ? <SunIcon /> : <MoonIcon />}
+        </span>
       </span>
-      {compact ? <span className="sr-only">{messages.common.theme.toggle}</span> : <span>{actionLabel}</span>}
+      {compact || !showLabels ? (
+        <span className="sr-only">{messages.common.theme.toggle}</span>
+      ) : (
+        <span className="relative z-10 grid flex-1 grid-cols-2 items-center text-[0.66rem] font-semibold uppercase tracking-[0.16em]">
+          <span className={`text-center transition-colors ${isDark ? 'text-[var(--foreground-muted)]' : 'text-[var(--foreground)]'}`}>
+            {messages.common.theme.light}
+          </span>
+          <span className={`text-center transition-colors ${isDark ? 'text-[var(--foreground)]' : 'text-[var(--foreground-muted)]'}`}>
+            {messages.common.theme.dark}
+          </span>
+        </span>
+      )}
     </button>
   );
 }
