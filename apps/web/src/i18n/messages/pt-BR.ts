@@ -135,6 +135,11 @@ export const ptBRMessages: AppMessages = {
   },
   common: {
     brand: 'Pulse CRM',
+    theme: {
+      toggle: 'Alternar tema',
+      switchToDark: 'Ativar tema escuro',
+      switchToLight: 'Ativar tema claro',
+    },
     loading: {
       title: 'Carregando seu CRM',
       description: 'Preparando seu workspace e os detalhes da sessao.',

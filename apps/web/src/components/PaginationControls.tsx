@@ -29,7 +29,7 @@ export function PaginationControls({
   const endItem = Math.min(currentPage * pageSize, totalItems);
 
   return (
-    <section className="flex flex-col gap-4 rounded-[1.2rem] border border-[var(--border)] bg-white px-5 py-4 shadow-[var(--shadow-soft)] sm:flex-row sm:items-center sm:justify-between">
+    <section className="flex flex-col gap-4 rounded-[1.2rem] border border-[var(--border)] bg-[var(--card)] px-5 py-4 shadow-[var(--shadow-soft)] sm:flex-row sm:items-center sm:justify-between">
       <div>
         <p className="text-sm font-semibold text-[var(--foreground)]">
           {locale === 'pt-BR'
@@ -44,7 +44,7 @@ export function PaginationControls({
       </div>
       <div className="flex flex-wrap items-center gap-3">
         <button
-          className="inline-flex min-h-10 items-center justify-center rounded-lg border border-[var(--border)] bg-white px-4 text-sm font-semibold text-[var(--foreground)] hover:border-[var(--accent)] hover:text-[var(--accent)] disabled:cursor-not-allowed disabled:opacity-60"
+          className="inline-flex min-h-10 items-center justify-center rounded-lg border border-[var(--border)] bg-[var(--card-strong)] px-4 text-sm font-semibold text-[var(--foreground)] hover:border-[var(--accent)] hover:text-[var(--accent)] disabled:cursor-not-allowed disabled:opacity-60"
           disabled={currentPage <= 1}
           onClick={() => {
             onPageChange(currentPage - 1);
@@ -57,7 +57,7 @@ export function PaginationControls({
           {currentPage}
         </span>
         <button
-          className="inline-flex min-h-10 items-center justify-center rounded-lg border border-transparent bg-white px-4 text-sm font-semibold text-[var(--foreground)] hover:border-[var(--accent)] hover:text-[var(--accent)] disabled:cursor-not-allowed disabled:opacity-60"
+          className="inline-flex min-h-10 items-center justify-center rounded-lg border border-transparent bg-[var(--card-strong)] px-4 text-sm font-semibold text-[var(--foreground)] hover:border-[var(--accent)] hover:text-[var(--accent)] disabled:cursor-not-allowed disabled:opacity-60"
           disabled={currentPage >= totalPages}
           onClick={() => {
             onPageChange(currentPage + 1);

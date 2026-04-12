@@ -1,3 +1,4 @@
+import { ThemeToggle } from '@/components/ThemeToggle';
 import { getRequestI18n } from '@/i18n/request';
 
 type AuthLayoutProps = Readonly<{
@@ -9,7 +10,12 @@ export default async function AuthLayout({ children }: AuthLayoutProps) {
 
   return (
     <main className="min-h-screen px-4 py-4 sm:px-6 sm:py-6">
-      <div className="mx-auto grid min-h-[calc(100vh-2rem)] max-w-7xl gap-6 lg:grid-cols-[1.1fr_0.9fr]">
+      <div className="mx-auto max-w-7xl">
+        <div className="mb-4 flex justify-end">
+          <ThemeToggle />
+        </div>
+      </div>
+      <div className="mx-auto grid min-h-[calc(100vh-6rem)] max-w-7xl gap-6 lg:grid-cols-[1.1fr_0.9fr]">
         <section className="relative overflow-hidden rounded-[2.5rem] border border-[var(--border)] bg-[linear-gradient(180deg,#10251b_0%,#153325_54%,#1c4632_100%)] px-6 py-8 text-white shadow-[var(--shadow-soft)] sm:px-10 sm:py-10">
           <div className="absolute inset-x-0 top-0 h-64 bg-[radial-gradient(circle_at_top_left,rgba(120,255,205,0.18),transparent_52%)]" />
           <div className="relative flex h-full flex-col justify-between gap-10">

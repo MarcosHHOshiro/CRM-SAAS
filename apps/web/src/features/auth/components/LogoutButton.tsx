@@ -33,7 +33,7 @@ export function LogoutButton({ align = 'end', fullWidth = false }: LogoutButtonP
   return (
     <div className={`flex flex-col gap-2 ${align === 'start' ? 'items-start' : 'items-end'}`}>
       <button
-        className={`inline-flex min-h-10 items-center justify-center rounded-xl border border-[var(--border)] bg-white px-4 text-sm font-semibold text-[var(--foreground)] hover:border-[var(--accent)] hover:text-[var(--accent)] disabled:cursor-not-allowed disabled:opacity-70 ${fullWidth ? 'w-full' : ''}`}
+        className={`inline-flex min-h-10 items-center justify-center rounded-xl border border-[var(--border)] bg-[var(--card-strong)] px-4 text-sm font-semibold text-[var(--foreground)] hover:border-[var(--accent)] hover:text-[var(--accent)] disabled:cursor-not-allowed disabled:opacity-70 ${fullWidth ? 'w-full' : ''}`}
         disabled={logoutMutation.isPending}
         onClick={handleLogout}
         type="button"

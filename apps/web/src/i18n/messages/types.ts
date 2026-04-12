@@ -122,6 +122,11 @@ export type AppMessages = {
   };
   common: {
     brand: string;
+    theme: {
+      toggle: string;
+      switchToDark: string;
+      switchToLight: string;
+    };
     loading: {
       title: string;
       description: string;

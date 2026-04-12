@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
+import { ThemeToggle } from '@/components/ThemeToggle';
 import { useTranslation } from '@/i18n/use-translation';
 
 import { LogoutButton } from '@/features/auth/components/LogoutButton';
@@ -121,7 +122,7 @@ export function PrivateAppShell({ children, session }: PrivateAppShellProps) {
       <header className="sticky top-0 z-30 border-b border-[var(--border)] bg-[var(--background)]/95 px-4 py-4 backdrop-blur lg:hidden">
         <div className="mx-auto flex max-w-[1640px] items-center justify-between gap-3">
           <div className="flex items-center gap-3">
-            <div className="flex h-9 w-9 items-center justify-center rounded-lg border border-[color:rgba(255,92,53,0.26)] bg-white text-xs font-semibold text-[var(--accent)]">
+            <div className="flex h-9 w-9 items-center justify-center rounded-lg border border-[color:rgba(255,92,53,0.26)] bg-[var(--card)] text-xs font-semibold text-[var(--accent)]">
               {organizationInitial}
             </div>
             <div className="min-w-0">
@@ -133,23 +134,26 @@ export function PrivateAppShell({ children, session }: PrivateAppShellProps) {
               </p>
             </div>
           </div>
-          <button
-            aria-expanded={isSidebarOpen}
-            className="inline-flex min-h-10 items-center justify-center rounded-xl border border-[var(--border)] bg-white px-3.5 text-sm font-medium text-[var(--foreground)] hover:border-[var(--accent)] hover:text-[var(--accent)]"
-            onClick={() => {
-              setIsSidebarOpen((currentValue) => !currentValue);
-            }}
-            type="button"
-          >
-            {isSidebarOpen ? messages.shell.mobileMenuClose : messages.shell.mobileMenuOpen}
-          </button>
+          <div className="flex items-center gap-2">
+            <ThemeToggle compact />
+            <button
+              aria-expanded={isSidebarOpen}
+              className="inline-flex min-h-10 items-center justify-center rounded-xl border border-[var(--border)] bg-[var(--card)] px-3.5 text-sm font-medium text-[var(--foreground)] hover:border-[var(--accent)] hover:text-[var(--accent)]"
+              onClick={() => {
+                setIsSidebarOpen((currentValue) => !currentValue);
+              }}
+              type="button"
+            >
+              {isSidebarOpen ? messages.shell.mobileMenuClose : messages.shell.mobileMenuOpen}
+            </button>
+          </div>
         </div>
       </header>
 
       {isSidebarOpen ? (
         <button
           aria-label={messages.shell.closeNavigationAriaLabel}
-          className="fixed inset-0 z-30 bg-slate-900/30 lg:hidden"
+          className="fixed inset-0 z-30 bg-[color:var(--overlay)] lg:hidden"
           onClick={() => {
             setIsSidebarOpen(false);
           }}
@@ -166,7 +170,7 @@ export function PrivateAppShell({ children, session }: PrivateAppShellProps) {
           }`}
         >
           <div className="flex h-full flex-col">
-            <div className="rounded-xl border border-[var(--border)] bg-white px-3 py-3">
+            <div className="rounded-xl border border-[var(--border)] bg-[var(--card)] px-3 py-3">
               <div className="flex items-center justify-between gap-2">
                 <div className="flex min-w-0 items-center gap-3">
                   <div className="flex h-9 w-9 items-center justify-center rounded-lg border border-[color:rgba(255,92,53,0.26)] bg-[var(--accent-soft)] text-xs font-semibold text-[var(--accent)]">
@@ -189,7 +193,7 @@ export function PrivateAppShell({ children, session }: PrivateAppShellProps) {
                       ? messages.shell.mobileMenuOpen
                       : messages.shell.mobileMenuClose
                   }
-                  className="hidden h-8 w-8 items-center justify-center rounded-lg border border-[var(--border)] bg-white text-[var(--foreground-muted)] hover:border-[var(--accent)] hover:text-[var(--accent)] lg:inline-flex"
+                  className="hidden h-8 w-8 items-center justify-center rounded-lg border border-[var(--border)] bg-[var(--card-strong)] text-[var(--foreground-muted)] hover:border-[var(--accent)] hover:text-[var(--accent)] lg:inline-flex"
                   onClick={() => {
                     setIsDesktopSidebarCollapsed((currentValue) => !currentValue);
                   }}
@@ -211,7 +215,7 @@ export function PrivateAppShell({ children, session }: PrivateAppShellProps) {
                   </svg>
                 </button>
                 <button
-                  className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-[var(--border)] bg-white text-sm font-semibold text-[var(--foreground-muted)] hover:border-[var(--accent)] hover:text-[var(--accent)] lg:hidden"
+                  className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-[var(--border)] bg-[var(--card-strong)] text-sm font-semibold text-[var(--foreground-muted)] hover:border-[var(--accent)] hover:text-[var(--accent)] lg:hidden"
                   onClick={() => {
                     setIsSidebarOpen(false);
                   }}
@@ -239,7 +243,7 @@ export function PrivateAppShell({ children, session }: PrivateAppShellProps) {
                     className={`flex items-center rounded-lg border py-2.5 text-sm ${
                       isActive
                         ? 'border-[color:rgba(255,92,53,0.28)] bg-[var(--accent-soft)] text-[var(--foreground)]'
-                        : 'border-transparent text-[var(--foreground)] hover:border-[var(--border)] hover:bg-white'
+                        : 'border-transparent text-[var(--foreground)] hover:border-[var(--border)] hover:bg-[var(--card)]'
                     } ${isDesktopSidebarCollapsed ? 'justify-center px-2' : 'gap-3 px-3'}`}
                     href={item.href}
                     title={item.label}
@@ -247,8 +251,8 @@ export function PrivateAppShell({ children, session }: PrivateAppShellProps) {
                     <span
                       className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-md border ${
                         isActive
-                          ? 'border-[color:rgba(255,92,53,0.28)] bg-white text-[var(--accent)]'
-                          : 'border-[var(--border)] bg-white text-[var(--foreground-muted)]'
+                          ? 'border-[color:rgba(255,92,53,0.28)] bg-[var(--card-strong)] text-[var(--accent)]'
+                          : 'border-[var(--border)] bg-[var(--card-strong)] text-[var(--foreground-muted)]'
                       }`}
                     >
                       <NavigationIcon href={item.href} />
@@ -262,7 +266,7 @@ export function PrivateAppShell({ children, session }: PrivateAppShellProps) {
             </nav>
 
             <div
-              className={`mt-auto rounded-xl border border-[var(--border)] bg-white py-3 ${
+              className={`mt-auto rounded-xl border border-[var(--border)] bg-[var(--card)] py-3 ${
                 isDesktopSidebarCollapsed ? 'px-2' : 'px-3'
               }`}
             >
@@ -282,6 +286,9 @@ export function PrivateAppShell({ children, session }: PrivateAppShellProps) {
                     <p className="truncate text-xs text-[var(--foreground-muted)]">{roleLabel}</p>
                   </div>
                 )}
+              </div>
+              <div className={`mt-3 ${isDesktopSidebarCollapsed ? 'flex justify-center' : ''}`}>
+                <ThemeToggle compact={isDesktopSidebarCollapsed} fullWidth={!isDesktopSidebarCollapsed} />
               </div>
               <div className={`mt-3 ${isDesktopSidebarCollapsed ? 'flex justify-center' : ''}`}>
                 <LogoutButton align="start" fullWidth={!isDesktopSidebarCollapsed} />

@@ -135,6 +135,11 @@ export const enMessages: AppMessages = {
   },
   common: {
     brand: 'Pulse CRM',
+    theme: {
+      toggle: 'Toggle theme',
+      switchToDark: 'Switch to dark theme',
+      switchToLight: 'Switch to light theme',
+    },
     loading: {
       title: 'Loading your CRM',
       description: 'Preparing your workspace and session details.',
