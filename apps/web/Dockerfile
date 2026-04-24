@@ -12,7 +12,7 @@ COPY packages/eslint-config/package.json packages/eslint-config/package.json
 COPY packages/tsconfig/package.json packages/tsconfig/package.json
 COPY packages/types/package.json packages/types/package.json
 
-RUN npm ci
+RUN npm install
 
 COPY . .
 

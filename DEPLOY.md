@@ -73,12 +73,18 @@ nano .env.production
 Troque pelo menos:
 
 ```env
-POSTGRES_PASSWORD=uma-senha-forte
+POSTGRES_PASSWORD=uma-senha-forte-sem-caracteres-especiais
 JWT_ACCESS_SECRET=um-segredo-longo
 JWT_REFRESH_SECRET=outro-segredo-longo
 ```
 
-Para gerar segredos:
+Para gerar a senha do Postgres, prefira caracteres sem simbolos para evitar quebrar a `DATABASE_URL`:
+
+```bash
+openssl rand -hex 24
+```
+
+Para gerar os segredos JWT:
 
 ```bash
 openssl rand -base64 48
