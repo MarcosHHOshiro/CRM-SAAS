@@ -252,6 +252,10 @@ npm --workspace @crm-saas/api run lint
 npm --workspace @crm-saas/api run build
 ```
 
+## Production Deploy
+
+Deployment instructions for the VPS/domain setup live in [`DEPLOY.md`](./DEPLOY.md).
+
 ## Demo Flow
 
 A good local demo sequence is:

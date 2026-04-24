@@ -1,0 +1,8 @@
+crm.marcos-hh-oshiro.com {
+	encode zstd gzip
+
+	@api path /api/*
+	reverse_proxy @api api:3334
+
+	reverse_proxy web:3000
+}
