@@ -73,22 +73,18 @@ nano .env.production
 Troque pelo menos:
 
 ```env
-POSTGRES_PASSWORD=uma-senha-forte-sem-caracteres-especiais
+POSTGRES_PASSWORD=uma-senha-forte
 JWT_ACCESS_SECRET=um-segredo-longo
 JWT_REFRESH_SECRET=outro-segredo-longo
 ```
 
-Para gerar a senha do Postgres, prefira caracteres sem simbolos para evitar quebrar a `DATABASE_URL`:
-
-```bash
-openssl rand -hex 24
-```
-
-Para gerar os segredos JWT:
+Para gerar a senha do Postgres e os segredos JWT:
 
 ```bash
 openssl rand -base64 48
 ```
+
+A API monta a `DATABASE_URL` dentro do container com os caracteres da senha escapados corretamente.
 
 ## 5. Subir a aplicacao
 

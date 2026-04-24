@@ -30,13 +30,15 @@ services:
       NODE_ENV: production
       PORT: 3334
       CORS_ORIGIN: ${APP_URL}
-      DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}?schema=public
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       JWT_ACCESS_SECRET: ${JWT_ACCESS_SECRET}
       JWT_ACCESS_EXPIRES_IN: ${JWT_ACCESS_EXPIRES_IN}
       JWT_REFRESH_SECRET: ${JWT_REFRESH_SECRET}
       JWT_REFRESH_EXPIRES_IN: ${JWT_REFRESH_EXPIRES_IN}
       BCRYPT_SALT_ROUNDS: ${BCRYPT_SALT_ROUNDS}
-    command: sh -c "npm --workspace @crm-saas/api run prisma:migrate:deploy && npm --workspace @crm-saas/api run start:prod"
+    command: node apps/api/scripts/start-production.mjs
 
   web:
     build:
