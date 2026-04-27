@@ -5,7 +5,7 @@ type DashboardErrorStateProps = Readonly<{
 
 export function DashboardErrorState({ message, onRetry }: DashboardErrorStateProps) {
   return (
-    <section className="rounded-[2rem] border border-[color:rgba(181,69,69,0.16)] bg-[color:rgba(181,69,69,0.06)] p-8 shadow-[var(--shadow-soft)]">
+    <section className="rounded-lg border border-[color:rgba(181,69,69,0.16)] bg-[color:rgba(181,69,69,0.06)] p-8 shadow-[var(--shadow-soft)]">
       <p className="text-sm font-semibold uppercase tracking-[0.2em] text-[var(--danger)]">Dashboard indisponivel</p>
       <h2 className="mt-4 text-2xl font-semibold text-[var(--foreground)]">
         Nao foi possivel carregar o resumo mais recente do dashboard.

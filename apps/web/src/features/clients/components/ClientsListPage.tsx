@@ -142,7 +142,7 @@ export function ClientsListPage() {
   if (clientsQuery.isError) {
     return (
       <div className="space-y-4">
-        <section className="rounded-xl border border-[var(--border)] bg-white px-5 py-5">
+        <section className="rounded-lg border border-[var(--border)] bg-[var(--card)] px-5 py-5">
           <p className="text-xs text-[var(--foreground-muted)]">
             Workspace / {messages.clients.list.eyebrow}
           </p>
@@ -178,7 +178,7 @@ export function ClientsListPage() {
 
   return (
     <div className="space-y-4">
-      <section className="rounded-xl border border-[var(--border)] bg-white px-5 py-5">
+      <section className="rounded-lg border border-[var(--border)] bg-[var(--card)] px-5 py-5">
         <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
           <div>
             <p className="text-xs text-[var(--foreground-muted)]">
@@ -193,7 +193,7 @@ export function ClientsListPage() {
           </div>
           <div className="flex flex-wrap items-center gap-2">
             <button
-              className="inline-flex min-h-10 items-center justify-center rounded-lg border border-[var(--border)] bg-white px-4 text-sm font-medium text-[var(--foreground)] hover:border-[var(--accent)] hover:text-[var(--accent)]"
+              className="inline-flex min-h-10 items-center justify-center rounded-lg border border-[var(--border)] bg-[var(--card)] px-4 text-sm font-medium text-[var(--foreground)] hover:border-[var(--accent)] hover:text-[var(--accent)]"
               onClick={handleExport}
               type="button"
             >

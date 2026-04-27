@@ -10,7 +10,7 @@ export function PageIntro({
   title,
 }: PageIntroProps) {
   return (
-    <section className="rounded-[1.6rem] border border-[var(--border)] bg-white px-6 py-6 shadow-[var(--shadow-soft)] sm:px-8">
+    <section className="rounded-lg border border-[var(--border)] bg-[var(--card)] px-6 py-6 shadow-[var(--shadow-soft)] sm:px-8">
       <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[var(--foreground-muted)]">
         Workspace / {eyebrow}
       </p>

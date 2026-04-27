@@ -82,7 +82,7 @@ export function LeadForm({
 
   return (
     <form
-      className="rounded-[2rem] border border-[var(--border)] bg-[var(--card)] p-6 shadow-[var(--shadow-soft)]"
+      className="rounded-lg border border-[var(--border)] bg-[var(--card)] p-6 shadow-[var(--shadow-soft)]"
       onSubmit={handleSubmit}
     >
       <div className="grid gap-5 md:grid-cols-2">
@@ -141,7 +141,7 @@ export function LeadForm({
             value={values.ownerUserId}
           />
         ) : (
-          <div className="rounded-[1.5rem] border border-[var(--border)] bg-white/60 px-4 py-3 text-sm leading-6 text-[var(--foreground-muted)]">
+          <div className="rounded-lg border border-[var(--border)] bg-[var(--card-dark)] px-4 py-3 text-sm leading-6 text-[var(--foreground-muted)]">
             {messages.leads.form.ownerUnavailable}
           </div>
         )}
@@ -175,7 +175,7 @@ export function LeadForm({
           {isSubmitting ? messages.common.actions.saving : submitLabel}
         </button>
         <Link
-          className="inline-flex min-h-11 items-center justify-center rounded-full border border-[var(--border)] bg-white/80 px-5 text-sm font-semibold text-[var(--foreground)] hover:border-[var(--accent)] hover:text-[var(--accent)]"
+          className="inline-flex min-h-11 items-center justify-center rounded-full border border-[var(--border)] bg-[var(--card-strong)] px-5 text-sm font-semibold text-[var(--foreground)] hover:border-[var(--accent)] hover:text-[var(--accent)]"
           href={lead ? `/leads/${lead.id}` : '/leads'}
         >
           {messages.common.actions.cancel}

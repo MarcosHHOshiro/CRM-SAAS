@@ -7,7 +7,7 @@ export default async function NotFoundPage() {
   return (
     <main className="px-6 py-10">
       <div className="mx-auto flex min-h-[70vh] max-w-2xl items-center">
-        <div className="w-full rounded-[2rem] border border-[var(--border)] bg-[var(--card)] p-8 shadow-[var(--shadow-soft)]">
+        <div className="w-full rounded-lg border border-[var(--border)] bg-[var(--card)] p-8 shadow-[var(--shadow-soft)]">
           <p className="text-sm font-semibold uppercase tracking-[0.24em] text-[var(--accent)]">
             {messages.errors.notFound.eyebrow}
           </p>

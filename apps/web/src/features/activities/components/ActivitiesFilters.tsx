@@ -38,7 +38,7 @@ export function ActivitiesFilters({
 
   return (
     <form
-      className="rounded-[2rem] border border-[var(--border)] bg-[var(--card)] p-6 shadow-[var(--shadow-soft)]"
+      className="rounded-lg border border-[var(--border)] bg-[var(--card)] p-6 shadow-[var(--shadow-soft)]"
       onSubmit={onSubmit}
     >
       <div className="grid gap-4 xl:grid-cols-[0.9fr_1fr_1fr_1fr_1fr_auto]">
@@ -89,7 +89,7 @@ export function ActivitiesFilters({
             {messages.common.actions.apply}
           </button>
           <button
-            className="inline-flex min-h-12 items-center justify-center rounded-full border border-[var(--border)] bg-white/80 px-5 text-sm font-semibold text-[var(--foreground)] hover:border-[var(--accent)] hover:text-[var(--accent)]"
+            className="inline-flex min-h-12 items-center justify-center rounded-full border border-[var(--border)] bg-[var(--card-strong)] px-5 text-sm font-semibold text-[var(--foreground)] hover:border-[var(--accent)] hover:text-[var(--accent)]"
             onClick={onReset}
             type="button"
           >

@@ -30,7 +30,7 @@ export function SelectField({
         {label}
       </span>
       <select
-        className="min-h-11 rounded-xl border border-[var(--border)] bg-[var(--card)] px-3.5 py-2.5 text-sm text-[var(--foreground)] outline-none ring-0 focus:border-[var(--accent)] focus:bg-[var(--card-strong)] focus:shadow-[var(--focus-ring)] disabled:cursor-not-allowed disabled:bg-[var(--field-disabled)] disabled:text-[var(--foreground-muted)] disabled:opacity-80"
+        className="min-h-11 rounded-lg border border-[var(--border)] bg-[var(--card)] px-3.5 py-2.5 text-sm text-[var(--foreground)] outline-none ring-0 focus:border-[var(--accent)] focus:bg-[var(--card-strong)] focus:shadow-[var(--focus-ring)] disabled:cursor-not-allowed disabled:bg-[var(--field-disabled)] disabled:text-[var(--foreground-muted)] disabled:opacity-80"
         disabled={disabled}
         name={name}
         onChange={onChange}

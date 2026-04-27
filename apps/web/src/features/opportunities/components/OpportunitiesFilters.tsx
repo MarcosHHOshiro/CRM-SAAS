@@ -40,20 +40,20 @@ export function OpportunitiesFilters({
   const { locale, messages } = useTranslation();
 
   return (
-    <section className="rounded-[1.4rem] border border-[var(--border)] bg-white p-5 shadow-[var(--shadow-soft)]">
+    <section className="rounded-lg border border-[var(--border)] bg-[var(--card)] p-5 shadow-[var(--shadow-soft)]">
       <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
         <p className="text-sm font-semibold text-[var(--foreground)]">
           {locale === 'pt-BR' ? 'Diretorio de oportunidades' : 'Opportunity directory'}
         </p>
         <div className="flex flex-wrap gap-3">
           <Link
-            className="inline-flex min-h-11 items-center justify-center rounded-xl border border-[var(--border)] bg-white px-5 text-sm font-semibold text-[var(--foreground)] hover:border-[var(--accent)] hover:text-[var(--accent)]"
+            className="inline-flex min-h-11 items-center justify-center rounded-lg border border-[var(--border)] bg-[var(--card)] px-5 text-sm font-semibold text-[var(--foreground)] hover:border-[var(--accent)] hover:text-[var(--accent)]"
             href="/opportunities/pipeline"
           >
             {messages.opportunities.filters.openPipeline}
           </Link>
           <Link
-            className="inline-flex min-h-11 items-center justify-center rounded-xl bg-[var(--accent)] px-5 text-sm font-semibold text-white hover:bg-[var(--accent-strong)]"
+            className="inline-flex min-h-11 items-center justify-center rounded-lg bg-[var(--accent)] px-5 text-sm font-semibold text-white hover:bg-[var(--accent-strong)]"
             href="/opportunities/new"
           >
             {messages.opportunities.filters.createButton}
@@ -114,13 +114,13 @@ export function OpportunitiesFilters({
             />
           ) : null}
           <button
-            className="inline-flex min-h-11 items-center justify-center rounded-xl bg-[var(--accent)] px-5 text-sm font-semibold text-white hover:bg-[var(--accent-strong)]"
+            className="inline-flex min-h-11 items-center justify-center rounded-lg bg-[var(--accent)] px-5 text-sm font-semibold text-white hover:bg-[var(--accent-strong)]"
             type="submit"
           >
             {messages.common.actions.apply}
           </button>
           <button
-            className="inline-flex min-h-11 items-center justify-center rounded-xl border border-[var(--border)] bg-[var(--card-dark)] px-5 text-sm font-semibold text-[var(--foreground)] hover:border-[var(--accent)] hover:text-[var(--accent)]"
+            className="inline-flex min-h-11 items-center justify-center rounded-lg border border-[var(--border)] bg-[var(--card-dark)] px-5 text-sm font-semibold text-[var(--foreground)] hover:border-[var(--accent)] hover:text-[var(--accent)]"
             onClick={onReset}
             type="button"
           >

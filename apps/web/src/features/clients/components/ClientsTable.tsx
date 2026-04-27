@@ -31,7 +31,7 @@ export function ClientsTable({
   const endItem = Math.min(currentPage * pageSize, totalItems);
 
   return (
-    <section className="overflow-hidden rounded-xl border border-[var(--border)] bg-white">
+    <section className="overflow-hidden rounded-lg border border-[var(--border)] bg-[var(--card)]">
       <div className="flex items-center justify-between gap-3 px-4 py-3 sm:px-5">
         <div>
           <p className="text-sm font-medium text-[var(--foreground)]">
@@ -44,7 +44,7 @@ export function ClientsTable({
           </p>
         </div>
         <button
-          className="inline-flex min-h-10 items-center justify-center gap-2 rounded-lg border border-[var(--border)] bg-white px-3.5 text-sm font-medium text-[var(--foreground)] hover:border-[var(--accent)] hover:text-[var(--accent)]"
+          className="inline-flex min-h-10 items-center justify-center gap-2 rounded-lg border border-[var(--border)] bg-[var(--card)] px-3.5 text-sm font-medium text-[var(--foreground)] hover:border-[var(--accent)] hover:text-[var(--accent)]"
           onClick={onExport}
           type="button"
         >
@@ -114,7 +114,7 @@ export function ClientsTable({
                 <td className="px-6 py-4 align-top">
                   <div className="flex flex-wrap gap-2">
                     <Link
-                      className="inline-flex min-h-8 items-center justify-center rounded-md border border-[var(--border)] bg-white px-3 text-xs font-medium text-[var(--foreground)] hover:border-[var(--accent)] hover:text-[var(--accent)]"
+                      className="inline-flex min-h-8 items-center justify-center rounded-md border border-[var(--border)] bg-[var(--card)] px-3 text-xs font-medium text-[var(--foreground)] hover:border-[var(--accent)] hover:text-[var(--accent)]"
                       href={`/clients/${client.id}`}
                     >
                       {messages.common.actions.view}
@@ -141,7 +141,7 @@ export function ClientsTable({
         </p>
         <div className="flex items-center gap-2">
           <button
-            className="inline-flex min-h-8 items-center justify-center rounded-md border border-[var(--border)] bg-white px-3 text-xs font-medium text-[var(--foreground)] disabled:cursor-not-allowed disabled:opacity-50"
+            className="inline-flex min-h-8 items-center justify-center rounded-md border border-[var(--border)] bg-[var(--card)] px-3 text-xs font-medium text-[var(--foreground)] disabled:cursor-not-allowed disabled:opacity-50"
             disabled={currentPage <= 1}
             onClick={() => {
               onPageChange(currentPage - 1);
@@ -154,7 +154,7 @@ export function ClientsTable({
             {currentPage}
           </span>
           <button
-            className="inline-flex min-h-8 items-center justify-center rounded-md border border-[var(--border)] bg-white px-3 text-xs font-medium text-[var(--foreground)] disabled:cursor-not-allowed disabled:opacity-50"
+            className="inline-flex min-h-8 items-center justify-center rounded-md border border-[var(--border)] bg-[var(--card)] px-3 text-xs font-medium text-[var(--foreground)] disabled:cursor-not-allowed disabled:opacity-50"
             disabled={currentPage >= totalPages}
             onClick={() => {
               onPageChange(currentPage + 1);

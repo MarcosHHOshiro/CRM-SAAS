@@ -17,7 +17,7 @@ export function OpportunitiesTable({ opportunities }: OpportunitiesTableProps) {
   const { locale, messages } = useTranslation();
 
   return (
-    <section className="overflow-hidden rounded-[1.4rem] border border-[var(--border)] bg-white shadow-[var(--shadow-soft)]">
+    <section className="overflow-hidden rounded-lg border border-[var(--border)] bg-[var(--card)] shadow-[var(--shadow-soft)]">
       <div className="flex items-center justify-between gap-3 border-b border-[var(--border)] px-5 py-4">
         <div>
           <p className="text-sm font-semibold text-[var(--foreground)]">
@@ -90,7 +90,7 @@ export function OpportunitiesTable({ opportunities }: OpportunitiesTableProps) {
                 <td className="px-6 py-5 align-top">
                   <div className="flex flex-wrap gap-2">
                     <Link
-                      className="inline-flex min-h-9 items-center justify-center rounded-lg border border-[var(--border)] bg-white px-3 text-sm font-semibold text-[var(--foreground)] hover:border-[var(--accent)] hover:text-[var(--accent)]"
+                      className="inline-flex min-h-9 items-center justify-center rounded-lg border border-[var(--border)] bg-[var(--card)] px-3 text-sm font-semibold text-[var(--foreground)] hover:border-[var(--accent)] hover:text-[var(--accent)]"
                       href={`/opportunities/${opportunity.id}`}
                     >
                       {messages.common.actions.view}

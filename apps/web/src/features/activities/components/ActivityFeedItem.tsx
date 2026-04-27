@@ -16,7 +16,7 @@ export function ActivityFeedItem({ activity }: ActivityFeedItemProps) {
   const { locale, messages } = useTranslation();
 
   return (
-    <article className="rounded-[1.6rem] border border-[var(--border)] bg-[var(--card-strong)] p-5 shadow-[var(--shadow-soft)]">
+    <article className="rounded-lg border border-[var(--border)] bg-[var(--card-strong)] p-5 shadow-[var(--shadow-soft)]">
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div className="flex flex-wrap gap-2">
           <ActivityTypeBadge type={activity.type} />

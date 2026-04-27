@@ -11,12 +11,12 @@ export function FeaturePlaceholder({
 }: FeaturePlaceholderProps) {
   return (
     <section className="grid gap-5 lg:grid-cols-[1.5fr_1fr]">
-      <article className="rounded-[2rem] border border-[var(--border)] bg-[var(--card-strong)] p-6 shadow-[var(--shadow-soft)]">
+      <article className="rounded-lg border border-[var(--border)] bg-[var(--card-strong)] p-6 shadow-[var(--shadow-soft)]">
         <p className="text-sm font-semibold uppercase tracking-[0.2em] text-[var(--accent)]">Coming next</p>
         <h2 className="mt-4 text-2xl font-semibold text-[var(--foreground)]">{title}</h2>
         <p className="mt-4 max-w-2xl text-sm leading-7 text-[var(--foreground-muted)]">{description}</p>
       </article>
-      <aside className="rounded-[2rem] border border-[var(--border)] bg-[var(--card)] p-6 shadow-[var(--shadow-soft)]">
+      <aside className="rounded-lg border border-[var(--border)] bg-[var(--card)] p-6 shadow-[var(--shadow-soft)]">
         <h3 className="text-sm font-semibold uppercase tracking-[0.2em] text-[var(--foreground-muted)]">
           Foundation ready
         </h3>

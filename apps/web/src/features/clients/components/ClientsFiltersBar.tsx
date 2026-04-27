@@ -32,7 +32,7 @@ export function ClientsFiltersBar({
   const { locale, messages } = useTranslation();
 
   return (
-    <section className="rounded-xl border border-[var(--border)] bg-[color:rgba(255,255,255,0.72)] px-3 py-3 sm:px-4">
+    <section className="rounded-lg border border-[var(--border)] bg-[var(--card)] px-3 py-3 sm:px-4">
       <form
         className="grid gap-3 xl:grid-cols-[minmax(0,1.7fr)_1fr_1fr_1fr_auto_auto] xl:items-end"
         onSubmit={onSubmit}
@@ -42,7 +42,7 @@ export function ClientsFiltersBar({
             {locale === 'pt-BR' ? 'Buscar' : 'Search'}
           </span>
           <input
-            className="min-h-10 rounded-lg border border-[var(--border)] bg-white px-3 text-sm text-[var(--foreground)] outline-none placeholder:text-[var(--foreground-muted)] focus:border-[var(--accent)] focus:shadow-[0_0_0_3px_rgba(255,92,53,0.12)]"
+            className="min-h-10 rounded-lg border border-[var(--border)] bg-[var(--card)] px-3 text-sm text-[var(--foreground)] outline-none placeholder:text-[var(--foreground-muted)] focus:border-[var(--accent)] focus:shadow-[0_0_0_3px_rgba(255,92,53,0.12)]"
             name="search"
             onChange={onChangeSearch}
             placeholder={messages.clients.search.fieldPlaceholder}
@@ -55,7 +55,7 @@ export function ClientsFiltersBar({
             {locale === 'pt-BR' ? 'Status' : 'Status'}
           </span>
           <select
-            className="min-h-10 rounded-lg border border-[var(--border)] bg-white px-3 text-sm text-[var(--foreground)] outline-none focus:border-[var(--accent)] focus:shadow-[0_0_0_3px_rgba(255,92,53,0.12)]"
+            className="min-h-10 rounded-lg border border-[var(--border)] bg-[var(--card)] px-3 text-sm text-[var(--foreground)] outline-none focus:border-[var(--accent)] focus:shadow-[0_0_0_3px_rgba(255,92,53,0.12)]"
             name="ownership"
             onChange={onChangeOwnership}
             value={ownershipValue}
@@ -73,7 +73,7 @@ export function ClientsFiltersBar({
             {locale === 'pt-BR' ? 'Segmento' : 'Segment'}
           </span>
           <select
-            className="min-h-10 rounded-lg border border-[var(--border)] bg-white px-3 text-sm text-[var(--foreground)] outline-none focus:border-[var(--accent)] focus:shadow-[0_0_0_3px_rgba(255,92,53,0.12)]"
+            className="min-h-10 rounded-lg border border-[var(--border)] bg-[var(--card)] px-3 text-sm text-[var(--foreground)] outline-none focus:border-[var(--accent)] focus:shadow-[0_0_0_3px_rgba(255,92,53,0.12)]"
             name="origin"
             onChange={onChangeOrigin}
             value={originValue}
@@ -89,7 +89,7 @@ export function ClientsFiltersBar({
             {locale === 'pt-BR' ? 'Data' : 'Date'}
           </span>
           <select
-            className="min-h-10 rounded-lg border border-[var(--border)] bg-white px-3 text-sm text-[var(--foreground)] outline-none focus:border-[var(--accent)] focus:shadow-[0_0_0_3px_rgba(255,92,53,0.12)]"
+            className="min-h-10 rounded-lg border border-[var(--border)] bg-[var(--card)] px-3 text-sm text-[var(--foreground)] outline-none focus:border-[var(--accent)] focus:shadow-[0_0_0_3px_rgba(255,92,53,0.12)]"
             name="period"
             onChange={onChangePeriod}
             value={periodValue}
@@ -111,7 +111,7 @@ export function ClientsFiltersBar({
         </button>
 
         <button
-          className="inline-flex min-h-10 items-center justify-center rounded-lg border border-[var(--border)] bg-white px-4 text-sm font-medium text-[var(--foreground)] hover:border-[var(--accent)] hover:text-[var(--accent)]"
+          className="inline-flex min-h-10 items-center justify-center rounded-lg border border-[var(--border)] bg-[var(--card)] px-4 text-sm font-medium text-[var(--foreground)] hover:border-[var(--accent)] hover:text-[var(--accent)]"
           onClick={onReset}
           type="button"
         >

@@ -121,7 +121,7 @@ export function OrganizationSettingsPage() {
           organization={organization}
         />
 
-        <section className="rounded-[2rem] border border-[var(--border)] bg-[var(--card)] p-6 shadow-[var(--shadow-soft)]">
+        <section className="rounded-lg border border-[var(--border)] bg-[var(--card)] p-6 shadow-[var(--shadow-soft)]">
           <p className="text-sm font-semibold uppercase tracking-[0.2em] text-[var(--accent)]">
             Resumo do workspace
           </p>

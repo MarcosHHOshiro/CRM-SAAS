@@ -28,10 +28,10 @@ export function UsersTable({
   const { locale, messages } = useTranslation();
 
   return (
-    <section className="overflow-hidden rounded-[2rem] border border-[var(--border)] bg-[var(--card)] shadow-[var(--shadow-soft)]">
+    <section className="overflow-hidden rounded-lg border border-[var(--border)] bg-[var(--card)] shadow-[var(--shadow-soft)]">
       <div className="overflow-x-auto">
         <table className="w-full min-w-[760px] text-left">
-          <thead className="border-b border-[var(--border)] bg-white/65">
+          <thead className="border-b border-[var(--border)] bg-[var(--card-strong)]">
             <tr className="text-xs uppercase tracking-[0.16em] text-[var(--foreground-muted)]">
               <th className="px-6 py-4 font-semibold">{messages.users.table.user}</th>
               <th className="px-6 py-4 font-semibold">{messages.users.table.role}</th>
@@ -74,7 +74,7 @@ export function UsersTable({
                     <div className="flex flex-wrap gap-2">
                       {canEdit ? (
                         <Link
-                          className="inline-flex min-h-10 items-center justify-center rounded-full border border-[var(--border)] bg-white/80 px-4 text-sm font-semibold text-[var(--foreground)] hover:border-[var(--accent)] hover:text-[var(--accent)]"
+                          className="inline-flex min-h-10 items-center justify-center rounded-full border border-[var(--border)] bg-[var(--card-strong)] px-4 text-sm font-semibold text-[var(--foreground)] hover:border-[var(--accent)] hover:text-[var(--accent)]"
                           href={`/users/${user.id}/edit`}
                         >
                           {messages.common.actions.edit}
@@ -85,7 +85,7 @@ export function UsersTable({
                         </span>
                       )}
                       <button
-                        className="inline-flex min-h-10 items-center justify-center rounded-full border border-[var(--border)] bg-white/80 px-4 text-sm font-semibold text-[var(--foreground)] hover:border-[var(--accent)] hover:text-[var(--accent)] disabled:cursor-not-allowed disabled:opacity-70"
+                        className="inline-flex min-h-10 items-center justify-center rounded-full border border-[var(--border)] bg-[var(--card-strong)] px-4 text-sm font-semibold text-[var(--foreground)] hover:border-[var(--accent)] hover:text-[var(--accent)] disabled:cursor-not-allowed disabled:opacity-70"
                         disabled={!canToggleStatus || isUpdatingStatusUserId === user.id}
                         onClick={() => onToggleStatus(user)}
                         type="button"

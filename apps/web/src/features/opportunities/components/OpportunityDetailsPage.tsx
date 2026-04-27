@@ -82,13 +82,13 @@ export function OpportunityDetailsPage() {
       />
       <section className="flex flex-wrap gap-3">
         <Link
-          className="inline-flex min-h-11 items-center justify-center rounded-full border border-[var(--border)] bg-white/80 px-5 text-sm font-semibold text-[var(--foreground)] hover:border-[var(--accent)] hover:text-[var(--accent)]"
+          className="inline-flex min-h-11 items-center justify-center rounded-full border border-[var(--border)] bg-[var(--card-strong)] px-5 text-sm font-semibold text-[var(--foreground)] hover:border-[var(--accent)] hover:text-[var(--accent)]"
           href="/opportunities"
         >
           {messages.common.actions.backToList}
         </Link>
         <Link
-          className="inline-flex min-h-11 items-center justify-center rounded-full border border-[var(--border)] bg-white/80 px-5 text-sm font-semibold text-[var(--foreground)] hover:border-[var(--accent)] hover:text-[var(--accent)]"
+          className="inline-flex min-h-11 items-center justify-center rounded-full border border-[var(--border)] bg-[var(--card-strong)] px-5 text-sm font-semibold text-[var(--foreground)] hover:border-[var(--accent)] hover:text-[var(--accent)]"
           href="/opportunities/pipeline"
         >
           {messages.opportunities.details.openPipeline}
@@ -101,7 +101,7 @@ export function OpportunityDetailsPage() {
         </Link>
       </section>
 
-      <section className="rounded-[2rem] border border-[var(--border)] bg-[var(--card)] p-6 shadow-[var(--shadow-soft)]">
+      <section className="rounded-lg border border-[var(--border)] bg-[var(--card)] p-6 shadow-[var(--shadow-soft)]">
         <SelectField
           label={messages.opportunities.details.moveStage}
           name="stage"

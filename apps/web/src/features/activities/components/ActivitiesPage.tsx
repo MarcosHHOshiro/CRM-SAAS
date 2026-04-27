@@ -212,7 +212,7 @@ export function ActivitiesPage() {
 
       <div className="grid gap-6 xl:grid-cols-[0.85fr_1.15fr]">
         <section className="space-y-4">
-          <div className="rounded-[2rem] border border-[var(--border)] bg-[var(--card)] p-6 shadow-[var(--shadow-soft)]">
+          <div className="rounded-lg border border-[var(--border)] bg-[var(--card)] p-6 shadow-[var(--shadow-soft)]">
             <p className="text-sm font-semibold uppercase tracking-[0.2em] text-[var(--accent)]">
               {messages.activities.page.createEyebrow}
             </p>
@@ -235,7 +235,7 @@ export function ActivitiesPage() {
         </section>
 
         <section className="space-y-4">
-          <div className="rounded-[2rem] border border-[var(--border)] bg-[var(--card)] p-6 shadow-[var(--shadow-soft)]">
+          <div className="rounded-lg border border-[var(--border)] bg-[var(--card)] p-6 shadow-[var(--shadow-soft)]">
             <p className="text-sm font-semibold uppercase tracking-[0.2em] text-[var(--accent)]">
               {messages.activities.page.recentEyebrow}
             </p>

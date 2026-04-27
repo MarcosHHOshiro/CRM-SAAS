@@ -79,7 +79,7 @@ export function OrganizationSettingsForm({
 
   return (
     <form
-      className="rounded-[2rem] border border-[var(--border)] bg-[var(--card)] p-6 shadow-[var(--shadow-soft)]"
+      className="rounded-lg border border-[var(--border)] bg-[var(--card)] p-6 shadow-[var(--shadow-soft)]"
       onSubmit={handleSubmit}
     >
       <div className="grid gap-5 md:grid-cols-2">
@@ -92,7 +92,7 @@ export function OrganizationSettingsForm({
           placeholder="Northwind Sales"
           value={values.name}
         />
-        <div className="rounded-[1.5rem] border border-[var(--border)] bg-white/60 px-4 py-3 text-sm leading-6 text-[var(--foreground-muted)]">
+        <div className="rounded-lg border border-[var(--border)] bg-[var(--card-dark)] px-4 py-3 text-sm leading-6 text-[var(--foreground-muted)]">
           <p className="font-semibold text-[var(--foreground)]">Slug da organizacao</p>
           <p className="mt-2">{organization.slug}</p>
         </div>

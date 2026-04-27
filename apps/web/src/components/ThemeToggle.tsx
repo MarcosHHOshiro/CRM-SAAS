@@ -60,65 +60,73 @@ export function ThemeToggle({
   const actionLabel =
     theme === 'dark' ? messages.common.theme.switchToLight : messages.common.theme.switchToDark;
   const isDark = theme === 'dark';
-  const knobStyle = compact
-    ? {
-        transform: `translate(${isDark ? '2rem' : '0rem'}, -50%)`,
-      }
-    : {
-        transform: `translate(${isDark ? 'calc(100% + 0.1rem)' : '0rem'}, -50%)`,
-      };
+  const options = [
+    {
+      icon: <SunIcon />,
+      label: messages.common.theme.light,
+      mode: 'light',
+    },
+    {
+      icon: <MoonIcon />,
+      label: messages.common.theme.dark,
+      mode: 'dark',
+    },
+  ] satisfies Array<{ icon: React.ReactNode; label: string; mode: ThemeMode }>;
+
+  if (compact || !showLabels) {
+    return (
+      <button
+        aria-label={actionLabel}
+        className={`inline-flex h-10 w-10 items-center justify-center rounded-lg border border-[var(--border)] bg-[var(--card)] text-[var(--foreground-muted)] shadow-[var(--shadow-soft)] hover:border-[var(--accent)] hover:text-[var(--accent)] ${className}`.trim()}
+        onClick={() => {
+          applyTheme(nextTheme);
+          setTheme(nextTheme);
+        }}
+        title={actionLabel}
+        type="button"
+      >
+        {isDark ? <SunIcon /> : <MoonIcon />}
+      </button>
+    );
+  }
 
   return (
-    <button
-      aria-label={actionLabel}
-      className={`group relative inline-flex items-center overflow-hidden border border-[var(--border)] bg-[var(--card)] text-[var(--foreground)] shadow-[var(--shadow-soft)] hover:border-[var(--accent)] ${
-        compact
-          ? 'h-10 w-[4.4rem] rounded-full px-1.5'
-          : !showLabels
-            ? 'h-10 w-[4.8rem] rounded-full px-1.5'
-          : fullWidth
-            ? 'min-h-[3.1rem] w-full rounded-full px-2 py-1.5'
-            : 'min-h-[3.1rem] w-[10.25rem] rounded-full px-2 py-1.5'
+    <div
+      aria-label={messages.common.theme.toggle}
+      className={`grid grid-cols-2 gap-1 rounded-lg border border-[var(--border)] bg-[var(--card-dark)] p-1 shadow-[var(--shadow-soft)] ${
+        fullWidth ? 'w-full' : 'w-[10.5rem]'
       } ${className}`.trim()}
-      onClick={() => {
-        applyTheme(nextTheme);
-        setTheme(nextTheme);
-      }}
-      title={actionLabel}
-      type="button"
+      role="group"
     >
-      <span
-        className={`pointer-events-none absolute rounded-full border border-[var(--border)] bg-[var(--card-dark)] ${
-          compact || !showLabels
-            ? 'inset-y-[6px] left-2 right-2'
-            : 'inset-y-[6px] left-2 right-2'
-        }`}
-      />
-      <span
-        aria-hidden="true"
-        className={`pointer-events-none absolute top-1/2 left-2 rounded-full border border-[var(--border)] bg-[var(--card-strong)] text-[var(--accent)] shadow-[var(--shadow-soft)] transition-transform duration-200 ${
-          compact || !showLabels
-            ? 'h-[1.875rem] w-[1.875rem]'
-            : 'h-[2rem] w-[calc(50%-0.28rem)]'
-        }`}
-        style={knobStyle}
-      >
-        <span className="flex h-full w-full items-center justify-center">
-          {isDark ? <SunIcon /> : <MoonIcon />}
-        </span>
-      </span>
-      {compact || !showLabels ? (
-        <span className="sr-only">{messages.common.theme.toggle}</span>
-      ) : (
-        <span className="relative z-10 grid flex-1 grid-cols-2 items-center text-[0.66rem] font-semibold uppercase tracking-[0.16em]">
-          <span className={`text-center transition-colors ${isDark ? 'text-[var(--foreground-muted)]' : 'text-[var(--foreground)]'}`}>
-            {messages.common.theme.light}
-          </span>
-          <span className={`text-center transition-colors ${isDark ? 'text-[var(--foreground)]' : 'text-[var(--foreground-muted)]'}`}>
-            {messages.common.theme.dark}
-          </span>
-        </span>
-      )}
-    </button>
+      {options.map((option) => {
+        const isSelected = theme === option.mode;
+
+        return (
+          <button
+            aria-pressed={isSelected}
+            className={`inline-flex min-h-9 items-center justify-center gap-2 rounded-md px-3 text-xs font-semibold transition-colors ${
+              isSelected
+                ? 'bg-[var(--card)] text-[var(--foreground)] shadow-[var(--shadow-soft)] ring-1 ring-[var(--border)]'
+                : 'text-[var(--foreground-muted)] hover:bg-[color:rgb(var(--card-rgb)/0.55)] hover:text-[var(--foreground)]'
+            }`}
+            key={option.mode}
+            onClick={() => {
+              applyTheme(option.mode);
+              setTheme(option.mode);
+            }}
+            type="button"
+          >
+            <span
+              className={`${
+                isSelected ? 'text-[var(--accent)]' : 'text-[var(--foreground-muted)]'
+              }`}
+            >
+              {option.icon}
+            </span>
+            <span>{option.label}</span>
+          </button>
+        );
+      })}
+    </div>
   );
 }

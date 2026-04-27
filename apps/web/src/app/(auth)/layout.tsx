@@ -72,8 +72,8 @@ export default async function AuthLayout({ children }: AuthLayoutProps) {
             </p>
 
             <div className="mt-12 grid gap-4 md:grid-cols-2">
-              <article className="rounded-2xl border border-[var(--border)] bg-[var(--card)] p-5 shadow-[var(--shadow-soft)]">
-                <div className="flex h-11 w-11 items-center justify-center rounded-xl border border-[var(--border)] bg-[var(--card-dark)] text-[var(--foreground-muted)]">
+              <article className="rounded-lg border border-[var(--border)] bg-[var(--card)] p-5 shadow-[var(--shadow-soft)]">
+                <div className="flex h-11 w-11 items-center justify-center rounded-lg border border-[var(--border)] bg-[var(--card-dark)] text-[var(--foreground-muted)]">
                   <InfoCardIcon kind="modules" />
                 </div>
                 <p className="mt-5 text-base font-semibold tracking-[-0.02em] text-[var(--foreground)]">
@@ -82,8 +82,8 @@ export default async function AuthLayout({ children }: AuthLayoutProps) {
                 <p className="mt-2 text-sm leading-6 text-[var(--foreground-muted)]">{stats[0].label}</p>
               </article>
 
-              <article className="rounded-2xl border border-[var(--border)] bg-[var(--card)] p-5 shadow-[var(--shadow-soft)]">
-                <div className="flex h-11 w-11 items-center justify-center rounded-xl border border-[var(--border)] bg-[var(--card-dark)] text-[var(--foreground-muted)]">
+              <article className="rounded-lg border border-[var(--border)] bg-[var(--card)] p-5 shadow-[var(--shadow-soft)]">
+                <div className="flex h-11 w-11 items-center justify-center rounded-lg border border-[var(--border)] bg-[var(--card-dark)] text-[var(--foreground-muted)]">
                   <InfoCardIcon kind="security" />
                 </div>
                 <p className="mt-5 text-base font-semibold tracking-[-0.02em] text-[var(--foreground)]">

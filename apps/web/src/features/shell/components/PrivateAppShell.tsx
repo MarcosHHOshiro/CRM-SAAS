@@ -138,7 +138,7 @@ export function PrivateAppShell({ children, session }: PrivateAppShellProps) {
             <ThemeToggle compact />
             <button
               aria-expanded={isSidebarOpen}
-              className="inline-flex min-h-10 items-center justify-center rounded-xl border border-[var(--border)] bg-[var(--card)] px-3.5 text-sm font-medium text-[var(--foreground)] hover:border-[var(--accent)] hover:text-[var(--accent)]"
+              className="inline-flex min-h-10 items-center justify-center rounded-lg border border-[var(--border)] bg-[var(--card)] px-3.5 text-sm font-medium text-[var(--foreground)] hover:border-[var(--accent)] hover:text-[var(--accent)]"
               onClick={() => {
                 setIsSidebarOpen((currentValue) => !currentValue);
               }}
@@ -170,7 +170,7 @@ export function PrivateAppShell({ children, session }: PrivateAppShellProps) {
           }`}
         >
           <div className="flex h-full flex-col">
-            <div className="rounded-xl border border-[var(--border)] bg-[var(--card)] px-3 py-3">
+            <div className="rounded-lg border border-[var(--border)] bg-[var(--card)] px-3 py-3">
               <div className="flex items-center justify-between gap-2">
                 <div className="flex min-w-0 items-center gap-3">
                   <div className="flex h-9 w-9 items-center justify-center rounded-lg border border-[color:rgba(255,92,53,0.26)] bg-[var(--accent-soft)] text-xs font-semibold text-[var(--accent)]">
@@ -266,7 +266,7 @@ export function PrivateAppShell({ children, session }: PrivateAppShellProps) {
             </nav>
 
             <div
-              className={`mt-auto rounded-xl border border-[var(--border)] bg-[var(--card)] py-3 ${
+              className={`mt-auto rounded-lg border border-[var(--border)] bg-[var(--card)] py-3 ${
                 isDesktopSidebarCollapsed ? 'px-2' : 'px-3'
               }`}
             >

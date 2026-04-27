@@ -18,7 +18,9 @@ export function getPreferredTheme(defaultTheme: ThemeMode = 'light'): ThemeMode 
     if (isThemeMode(storedTheme)) {
       return storedTheme;
     }
-  } catch {}
+  } catch {
+    // Local storage can be unavailable in restricted browser contexts.
+  }
 
   const cookieTheme = document.cookie
     .split('; ')
@@ -46,7 +48,9 @@ export function applyTheme(theme: ThemeMode) {
 
   try {
     window.localStorage.setItem(THEME_STORAGE_KEY, theme);
-  } catch {}
+  } catch {
+    // Persisting the theme is best-effort; the DOM update above is enough for this session.
+  }
 
   document.cookie = `${THEME_COOKIE_NAME}=${theme}; path=/; max-age=31536000; samesite=lax`;
 }

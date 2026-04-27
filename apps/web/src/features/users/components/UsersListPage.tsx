@@ -147,13 +147,13 @@ export function UsersListPage() {
 
       <section className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_auto]">
         <div className="grid gap-4 sm:grid-cols-3">
-          <div className="rounded-[1.7rem] border border-[var(--border)] bg-[var(--card)] px-5 py-4 shadow-[var(--shadow-soft)]">
+          <div className="rounded-lg border border-[var(--border)] bg-[var(--card)] px-5 py-4 shadow-[var(--shadow-soft)]">
               <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--foreground-muted)]">
               {messages.users.list.total}
             </p>
             <p className="mt-3 text-3xl font-semibold text-[var(--foreground)]">{users.length}</p>
           </div>
-          <div className="rounded-[1.7rem] border border-[var(--border)] bg-[var(--card)] px-5 py-4 shadow-[var(--shadow-soft)]">
+          <div className="rounded-lg border border-[var(--border)] bg-[var(--card)] px-5 py-4 shadow-[var(--shadow-soft)]">
             <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--foreground-muted)]">
               {messages.users.list.active}
             </p>
@@ -161,7 +161,7 @@ export function UsersListPage() {
               {activeUsersCount}
             </p>
           </div>
-          <div className="rounded-[1.7rem] border border-[var(--border)] bg-[var(--card)] px-5 py-4 shadow-[var(--shadow-soft)]">
+          <div className="rounded-lg border border-[var(--border)] bg-[var(--card)] px-5 py-4 shadow-[var(--shadow-soft)]">
             <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--foreground-muted)]">
               {messages.users.list.inactive}
             </p>
@@ -170,7 +170,7 @@ export function UsersListPage() {
             </p>
           </div>
         </div>
-        <section className="flex items-center justify-between gap-4 rounded-[1.7rem] border border-[var(--border)] bg-[var(--card)] px-5 py-4 shadow-[var(--shadow-soft)]">
+        <section className="flex items-center justify-between gap-4 rounded-lg border border-[var(--border)] bg-[var(--card)] px-5 py-4 shadow-[var(--shadow-soft)]">
           <div className="max-w-sm">
             <p className="text-sm font-semibold text-[var(--foreground)]">
               {messages.users.list.ctaTitle}

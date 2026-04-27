@@ -112,7 +112,7 @@ export function ActivityForm({
 
   return (
     <form
-      className="rounded-[2rem] border border-[var(--border)] bg-[var(--card)] p-6 shadow-[var(--shadow-soft)]"
+      className="rounded-lg border border-[var(--border)] bg-[var(--card)] p-6 shadow-[var(--shadow-soft)]"
       onSubmit={handleSubmit}
     >
       <div className="grid gap-4 md:grid-cols-2">

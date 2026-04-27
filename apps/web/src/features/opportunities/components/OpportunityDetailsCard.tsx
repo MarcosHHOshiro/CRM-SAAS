@@ -20,7 +20,7 @@ export function OpportunityDetailsCard({
 
   return (
     <div className="space-y-6">
-      <section className="rounded-[2rem] border border-[var(--border)] bg-[var(--card)] p-6 shadow-[var(--shadow-soft)]">
+      <section className="rounded-lg border border-[var(--border)] bg-[var(--card)] p-6 shadow-[var(--shadow-soft)]">
         <div className="flex flex-wrap items-start justify-between gap-4">
           <div>
             <p className="text-sm font-semibold uppercase tracking-[0.2em] text-[var(--accent)]">
@@ -37,23 +37,23 @@ export function OpportunityDetailsCard({
         </div>
 
         <div className="mt-6 grid gap-4 sm:grid-cols-2">
-          <article className="rounded-[1.4rem] border border-[var(--border)] bg-[var(--card-strong)] p-4">
+          <article className="rounded-lg border border-[var(--border)] bg-[var(--card-strong)] p-4">
             <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[var(--foreground-muted)]">{messages.opportunities.details.client}</p>
             <p className="mt-3 text-sm text-[var(--foreground)]">{opportunity.client.name}</p>
           </article>
-          <article className="rounded-[1.4rem] border border-[var(--border)] bg-[var(--card-strong)] p-4">
+          <article className="rounded-lg border border-[var(--border)] bg-[var(--card-strong)] p-4">
             <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[var(--foreground-muted)]">{messages.opportunities.details.estimatedValue}</p>
             <p className="mt-3 text-sm text-[var(--foreground)]">
               {formatOpportunityCurrency(opportunity.estimatedValue, locale)}
             </p>
           </article>
-          <article className="rounded-[1.4rem] border border-[var(--border)] bg-[var(--card-strong)] p-4">
+          <article className="rounded-lg border border-[var(--border)] bg-[var(--card-strong)] p-4">
             <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[var(--foreground-muted)]">{messages.opportunities.details.expectedClose}</p>
             <p className="mt-3 text-sm text-[var(--foreground)]">
               {formatOpportunityDate(opportunity.expectedCloseDate, locale, messages)}
             </p>
           </article>
-          <article className="rounded-[1.4rem] border border-[var(--border)] bg-[var(--card-strong)] p-4">
+          <article className="rounded-lg border border-[var(--border)] bg-[var(--card-strong)] p-4">
             <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[var(--foreground-muted)]">{messages.opportunities.details.createdAt}</p>
             <p className="mt-3 text-sm text-[var(--foreground)]">
               {formatOpportunityDate(opportunity.createdAt, locale, messages)}
@@ -61,7 +61,7 @@ export function OpportunityDetailsCard({
           </article>
         </div>
 
-        <div className="mt-4 rounded-[1.4rem] border border-[var(--border)] bg-[var(--card-strong)] p-4">
+        <div className="mt-4 rounded-lg border border-[var(--border)] bg-[var(--card-strong)] p-4">
           <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[var(--foreground-muted)]">{messages.opportunities.details.notes}</p>
           <p className="mt-3 text-sm leading-7 text-[var(--foreground)]">
             {opportunity.notes || messages.opportunities.details.noNotes}
@@ -69,12 +69,12 @@ export function OpportunityDetailsCard({
         </div>
       </section>
 
-      <section className="rounded-[2rem] border border-[var(--border)] bg-[var(--card)] p-6 shadow-[var(--shadow-soft)]">
+      <section className="rounded-lg border border-[var(--border)] bg-[var(--card)] p-6 shadow-[var(--shadow-soft)]">
         <p className="text-sm font-semibold uppercase tracking-[0.2em] text-[var(--accent)]">
           {messages.opportunities.details.ownershipEyebrow}
         </p>
         {opportunity.owner ? (
-          <div className="mt-4 rounded-[1.5rem] border border-[var(--border)] bg-[var(--card-strong)] p-5">
+          <div className="mt-4 rounded-lg border border-[var(--border)] bg-[var(--card-strong)] p-5">
             <p className="text-lg font-semibold text-[var(--foreground)]">
               {opportunity.owner.name}
             </p>
@@ -86,12 +86,12 @@ export function OpportunityDetailsCard({
             </p>
           </div>
         ) : (
-          <div className="mt-4 rounded-[1.5rem] border border-dashed border-[var(--border)] bg-white/55 p-5 text-sm text-[var(--foreground-muted)]">
+          <div className="mt-4 rounded-lg border border-dashed border-[var(--border)] bg-[color:rgb(var(--card-dark-rgb)/0.6)] p-5 text-sm text-[var(--foreground-muted)]">
             {messages.opportunities.details.unassigned}
           </div>
         )}
 
-        <div className="mt-4 rounded-[1.5rem] border border-[var(--border)] bg-[var(--card-strong)] p-5">
+        <div className="mt-4 rounded-lg border border-[var(--border)] bg-[var(--card-strong)] p-5">
           <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[var(--foreground-muted)]">{messages.opportunities.details.clientAccount}</p>
           <p className="mt-3 text-sm leading-7 text-[var(--foreground)]">
             {opportunity.client.company

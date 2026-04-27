@@ -8,7 +8,7 @@ type AuthCardProps = Readonly<{
 
 export function AuthCard({ children, description, title }: AuthCardProps) {
   return (
-    <div className="w-full rounded-2xl border border-[var(--border)] bg-[var(--card)] p-7 shadow-[var(--shadow-soft)] sm:p-9">
+    <div className="w-full rounded-lg border border-[var(--border)] bg-[var(--card)] p-7 shadow-[var(--shadow-soft)] sm:p-9">
       <div>
         <h1 className="text-[1.9rem] font-medium tracking-[-0.025em] text-[var(--foreground)] sm:text-[2.15rem]">
           {title}

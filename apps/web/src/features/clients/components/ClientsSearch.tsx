@@ -16,7 +16,7 @@ export function ClientsSearch({ onChange, onReset, onSubmit, value }: ClientsSea
   const { messages } = useTranslation();
 
   return (
-    <section className="rounded-[2rem] border border-[var(--border)] bg-[var(--card)] p-6 shadow-[var(--shadow-soft)]">
+    <section className="rounded-lg border border-[var(--border)] bg-[var(--card)] p-6 shadow-[var(--shadow-soft)]">
       <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
         <div>
           <p className="text-sm font-semibold uppercase tracking-[0.2em] text-[var(--accent)]">{messages.clients.search.eyebrow}</p>
@@ -49,7 +49,7 @@ export function ClientsSearch({ onChange, onReset, onSubmit, value }: ClientsSea
             {messages.common.actions.apply}
           </button>
           <button
-            className="inline-flex min-h-12 items-center justify-center rounded-full border border-[var(--border)] bg-white/80 px-5 text-sm font-semibold text-[var(--foreground)] hover:border-[var(--accent)] hover:text-[var(--accent)]"
+            className="inline-flex min-h-12 items-center justify-center rounded-full border border-[var(--border)] bg-[var(--card-strong)] px-5 text-sm font-semibold text-[var(--foreground)] hover:border-[var(--accent)] hover:text-[var(--accent)]"
             onClick={onReset}
             type="button"
           >

@@ -12,7 +12,7 @@ export function ActivitiesErrorState({
   const { messages } = useTranslation();
 
   return (
-    <section className="rounded-[2rem] border border-[color:rgba(181,69,69,0.16)] bg-[color:rgba(181,69,69,0.06)] p-8 shadow-[var(--shadow-soft)]">
+    <section className="rounded-lg border border-[color:rgba(181,69,69,0.16)] bg-[color:rgba(181,69,69,0.06)] p-8 shadow-[var(--shadow-soft)]">
       <p className="text-sm font-semibold uppercase tracking-[0.2em] text-[var(--danger)]">
         {messages.activities.error.eyebrow}
       </p>

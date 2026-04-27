@@ -29,7 +29,7 @@ export function PaginationControls({
   const endItem = Math.min(currentPage * pageSize, totalItems);
 
   return (
-    <section className="flex flex-col gap-4 rounded-[1.2rem] border border-[var(--border)] bg-[var(--card)] px-5 py-4 shadow-[var(--shadow-soft)] sm:flex-row sm:items-center sm:justify-between">
+    <section className="flex flex-col gap-4 rounded-lg border border-[var(--border)] bg-[var(--card)] px-5 py-4 shadow-[var(--shadow-soft)] sm:flex-row sm:items-center sm:justify-between">
       <div>
         <p className="text-sm font-semibold text-[var(--foreground)]">
           {locale === 'pt-BR'

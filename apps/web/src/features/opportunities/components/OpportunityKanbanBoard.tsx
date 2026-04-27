@@ -55,7 +55,7 @@ function OpportunityKanbanCard({ opportunity }: OpportunityKanbanCardProps) {
   }
 
   return (
-    <article className="rounded-[1.6rem] border border-[var(--border)] bg-[var(--card-strong)] p-4 shadow-[var(--shadow-soft)]">
+    <article className="rounded-lg border border-[var(--border)] bg-[var(--card-strong)] p-4 shadow-[var(--shadow-soft)]">
       <div className="flex flex-wrap gap-2">
         <OpportunityStageBadge stage={opportunity.stage} />
         <OpportunityStatusBadge status={opportunity.status} />
@@ -97,19 +97,19 @@ export function OpportunityKanbanBoard({ groups }: OpportunityKanbanBoardProps) 
         {groups.map((group) => (
           <section
             key={group.stage}
-            className="flex min-h-[28rem] flex-col rounded-[2rem] border border-[var(--border)] bg-[var(--card)] p-4 shadow-[var(--shadow-soft)]"
+            className="flex min-h-[28rem] flex-col rounded-lg border border-[var(--border)] bg-[var(--card)] p-4 shadow-[var(--shadow-soft)]"
           >
             <div className="flex items-center justify-between gap-3">
               <h2 className="text-sm font-semibold uppercase tracking-[0.16em] text-[var(--foreground)]">
                 {stageLabels[group.stage]}
               </h2>
-              <span className="rounded-full bg-white/80 px-3 py-1 text-xs font-semibold text-[var(--foreground-muted)]">
+              <span className="rounded-full bg-[var(--card-strong)] px-3 py-1 text-xs font-semibold text-[var(--foreground-muted)]">
                 {group.opportunities.length}
               </span>
             </div>
             <div className="mt-4 flex-1 space-y-4">
               {group.opportunities.length === 0 ? (
-                <div className="rounded-[1.5rem] border border-dashed border-[var(--border)] bg-white/55 p-4 text-sm text-[var(--foreground-muted)]">
+                <div className="rounded-lg border border-dashed border-[var(--border)] bg-[color:rgb(var(--card-dark-rgb)/0.6)] p-4 text-sm text-[var(--foreground-muted)]">
                   {messages.opportunities.empty.emptyStage}
                 </div>
               ) : (

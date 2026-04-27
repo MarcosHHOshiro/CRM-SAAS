@@ -95,7 +95,7 @@ export function ToastProvider({ children }: ToastProviderProps) {
         {toasts.map((toast) => (
           <div
             key={toast.id}
-            className={`pointer-events-auto rounded-[1.6rem] border px-4 py-4 backdrop-blur ${toastToneClasses[toast.tone]}`}
+            className={`pointer-events-auto rounded-lg border px-4 py-4 backdrop-blur ${toastToneClasses[toast.tone]}`}
             role="status"
           >
             <div className="flex items-start gap-3">

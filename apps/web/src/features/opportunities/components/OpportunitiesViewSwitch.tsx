@@ -14,7 +14,7 @@ export function OpportunitiesViewSwitch({ view }: OpportunitiesViewSwitchProps) 
   ] as const;
 
   return (
-    <div className="inline-flex rounded-xl border border-[var(--border)] bg-white p-1 shadow-[var(--shadow-soft)]">
+    <div className="inline-flex rounded-lg border border-[var(--border)] bg-[var(--card)] p-1 shadow-[var(--shadow-soft)]">
       {items.map((item) => {
         const active = item.value === view;
 

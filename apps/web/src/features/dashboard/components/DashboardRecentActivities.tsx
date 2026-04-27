@@ -13,31 +13,42 @@ type DashboardRecentActivitiesProps = Readonly<{
   activities: DashboardActivity[];
 }>;
 
+function ActivityPulseIcon() {
+  return (
+    <svg aria-hidden="true" className="h-7 w-7" fill="none" viewBox="0 0 24 24">
+      <path d="M3.5 12h4l2.1-5 4.8 10 2.1-5H20.5" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.8" />
+    </svg>
+  );
+}
+
 export function DashboardRecentActivities({ activities }: DashboardRecentActivitiesProps) {
   const { locale, messages } = useTranslation();
 
   return (
-    <section className="rounded-[2rem] border border-[var(--border)] bg-[var(--card)] p-6 shadow-[var(--shadow-soft)]">
+    <section className="rounded-lg border border-[var(--border)] bg-[var(--card)] p-6 shadow-[var(--shadow-soft)]">
       <div className="flex items-start justify-between gap-4">
         <div>
-          <p className="text-sm font-semibold uppercase tracking-[0.2em] text-[var(--accent)]">
+          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--accent)]">
             {messages.dashboard.recentActivities.eyebrow}
           </p>
-          <h2 className="mt-3 text-2xl font-semibold text-[var(--foreground)]">
+          <h2 className="mt-5 text-xl font-semibold text-[var(--foreground)]">
             {messages.dashboard.recentActivities.title}
           </h2>
           <p className="mt-2 text-sm leading-6 text-[var(--foreground-muted)]">
             {messages.dashboard.recentActivities.description}
           </p>
         </div>
-        <span className="rounded-full border border-[var(--border)] bg-white/80 px-3 py-1 text-xs font-semibold uppercase tracking-[0.14em] text-[var(--foreground-muted)]">
+        <span className="rounded-full border border-[var(--border)] bg-[var(--card-strong)] px-3 py-1 text-xs font-semibold text-[var(--foreground-muted)]">
           {activities.length} {messages.dashboard.recentActivities.items}
         </span>
       </div>
 
       {activities.length === 0 ? (
-        <div className="mt-6 rounded-[1.6rem] border border-dashed border-[var(--border)] bg-white/55 px-5 py-8 text-center">
-          <h3 className="text-lg font-semibold text-[var(--foreground)]">{messages.dashboard.recentActivities.emptyTitle}</h3>
+        <div className="mt-6 rounded-lg border border-dashed border-[var(--border)] bg-[color:rgb(var(--card-dark-rgb)/0.6)] px-5 py-10 text-center">
+          <span className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-[var(--card)] text-[var(--foreground-muted)] shadow-[var(--shadow-soft)]">
+            <ActivityPulseIcon />
+          </span>
+          <h3 className="mt-4 text-lg font-semibold text-[var(--foreground)]">{messages.dashboard.recentActivities.emptyTitle}</h3>
           <p className="mt-3 text-sm leading-6 text-[var(--foreground-muted)]">
             {messages.dashboard.recentActivities.emptyDescription}
           </p>
@@ -50,7 +61,7 @@ export function DashboardRecentActivities({ activities }: DashboardRecentActivit
             return (
               <article
                 key={activity.id}
-                className="rounded-[1.5rem] border border-[var(--border)] bg-[var(--card-strong)] p-4"
+                className="rounded-lg border border-[var(--border)] bg-[var(--card-strong)] p-4"
               >
                 <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
                   <div className="min-w-0">

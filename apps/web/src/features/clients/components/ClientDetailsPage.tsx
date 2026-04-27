@@ -51,7 +51,7 @@ export function ClientDetailsPage() {
       />
       <section className="flex flex-wrap gap-3">
         <Link
-          className="inline-flex min-h-11 items-center justify-center rounded-full border border-[var(--border)] bg-white/80 px-5 text-sm font-semibold text-[var(--foreground)] hover:border-[var(--accent)] hover:text-[var(--accent)]"
+          className="inline-flex min-h-11 items-center justify-center rounded-full border border-[var(--border)] bg-[var(--card-strong)] px-5 text-sm font-semibold text-[var(--foreground)] hover:border-[var(--accent)] hover:text-[var(--accent)]"
           href="/clients"
         >
           {messages.common.actions.backToList}
